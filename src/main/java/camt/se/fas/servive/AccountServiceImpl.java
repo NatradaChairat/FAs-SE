@@ -1,9 +1,11 @@
 package camt.se.fas.servive;
 
 import camt.se.fas.entity.Account;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
+@ConfigurationProperties(prefix = "server")
 public class AccountServiceImpl implements AccountService {
     @Override
     public Account addAccount(Account account) {
