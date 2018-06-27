@@ -1,0 +1,46 @@
+<h1>Register</h1>
+<h4>Step 1 of 3: Enter account information </h4>
+
+<div class="row">
+  <div class=" col-md-12">
+    <div class="form-group">
+      <p></p>
+      <form>
+
+        <div class="row pb-3">
+          <label class="col-2 text-right">Username </label>
+          <div class="col-8">
+            <input class="form-control" id="username" placeholder="eg.CAMT" [(ngModel)]="account.username" name="username" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          </div>
+        </div>
+
+        <div class="row pb-3">
+          <label class="col-2 text-right">Email </label>
+          <div class="col-8">
+            <input class="form-control" id="email" [(ngModel)]="account.email" name="email" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          </div>
+        </div>
+
+        <div class="row pb-3">
+          <label class="col-2 text-right">Password </label>
+          <div class="col-8">
+            <input class="form-control" id="password" [(ngModel)]="account.password" name="password" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          </div>
+        </div>
+
+        <div class="row pb-3">
+          <label class="col-2 text-right">Confirm password </label>
+          <div class="col-8">
+            <input class="form-control" id="confirm_password" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<button type="submit" class="btn btn-primary mx-2" (click)="register(account)">Register</button>
+
+
