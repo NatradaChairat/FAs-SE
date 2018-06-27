@@ -27,4 +27,11 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compileOnly 'org.projectlombok:lombok:1.18.0'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.1.Final'
+    compile group: 'org.springframework.data', name: 'spring-data-commons-core', version: '1.4.1.RELEASE'
+    implementation 'com.google.firebase:firebase-admin:6.2.0'
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.0.8.RELEASE'
 }
