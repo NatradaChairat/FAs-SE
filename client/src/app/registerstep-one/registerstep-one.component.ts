@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Account} from "../model/Account";
+import {Router} from "@angular/router";
+import {AccountDataServerService} from "../service/account-data-server.service";
+import {Observable} from "rxjs/index";
 
 @Component({
   selector: 'app-registerstep-one',
@@ -8,7 +11,7 @@ import {Account} from "../model/Account";
 })
 export class RegisterstepOneComponent implements OnInit {
   account: any = {};
-  constructor() { }
+  constructor(private router: Router, private accountDataServerService: AccountDataServerService) { }
 
   ngOnInit() {
     this.account = new Account();
@@ -16,6 +19,14 @@ export class RegisterstepOneComponent implements OnInit {
 
   register(account: Account){
     console.log(account);
+    this.accountDataServerService.sendAccount(account)
+      .subscribe(data =>{
+        return true;
+        },
+        error => {
+        console.error("Error saving account");
+        return Observable.throw(error);
+        });
   }
 
 }
