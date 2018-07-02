@@ -8,6 +8,7 @@ import { FilenotfoundComponent } from './filenotfound/filenotfound.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {AccountDataServerService} from "./service/account-data-server.service";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [
     BrowserModule,AppRoutingModule,FormsModule,HttpClientModule
   ],
-  providers: [],
+  providers: [AccountDataServerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

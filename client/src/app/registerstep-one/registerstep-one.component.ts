@@ -18,15 +18,21 @@ export class RegisterstepOneComponent implements OnInit {
   }
 
   register(account: Account){
+
     console.log(account);
-    this.accountDataServerService.sendAccount(account)
+    /*this.accountDataServerService.sendAccount(account)
       .subscribe(data =>{
         return true;
         },
         error => {
-        console.error("Error saving account");
+        console.error("Error saving account" );
+
         return Observable.throw(error);
-        });
+        });*/
+
+    this.accountDataServerService.sendAccount(account)
+      .subscribe(data => console.log(data), error => console.log(error));
+
   }
 
 }

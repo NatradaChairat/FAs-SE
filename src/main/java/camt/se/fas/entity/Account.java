@@ -26,16 +26,16 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
-    @JsonView(View.Login.class)
+    /*@JsonView(View.Login.class)
     String accountId;
-    @JsonView(View.Login.class)
+    @JsonView(View.Login.class)*/
     String username;
-    @JsonView(View.Login.class)
+    @JsonView/*(View.Login.class)*/
     String password;
-    @JsonView(View.Login.class)
+    @JsonView/*(View.Login.class)*/
     String email;
 
-    @JsonView(View.Login.class)
+    /*@JsonView(View.Login.class)
     String firstname;
     @JsonView(View.Login.class)
     String lastname;
@@ -46,7 +46,7 @@ public class Account {
     @JsonView(View.Login.class)
     String phonenumber;
     @JsonView(View.Login.class)
-    String status;
+    String status;*/
 
    /* String[] videos;
     String[] images;*/
