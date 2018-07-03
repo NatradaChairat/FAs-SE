@@ -9,13 +9,15 @@ import {AppRoutingModule} from "./app-routing.module";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/account-data-server.service";
+import { ConfirmedemailComponent } from './confirmedemail/confirmedemail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterstepOneComponent,
     HomepageComponent,
-    FilenotfoundComponent
+    FilenotfoundComponent,
+    ConfirmedemailComponent
   ],
   imports: [
     BrowserModule,AppRoutingModule,FormsModule,HttpClientModule
