@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FirebaseServiceImpl implements FirebaseService {
- /*   @Autowired
-    @Qualifier("main")
-    DatabaseReference mainDatabaseReference;*/
+   /* @Autowired
+    *//*@Qualifier("main")*//*
+    DatabaseReference mainDatabaseReference;
 
     @Value("${firebase.path}")
     private String path;
 
-    /*@Override
+    @Override
     public void startFirebaseListener() {
         mainDatabaseReference.child("user").addValueEventListener(new ValueEventListener() {
             @Override

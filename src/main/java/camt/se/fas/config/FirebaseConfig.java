@@ -25,8 +25,8 @@ public class FirebaseConfig {
 
     @Value(value = "classpath:google-services.json")
     private Resource gservicesConfig;
-
-    /*@Bean
+/*
+    @Bean
     public FirebaseApp provideFirebaseOptions() throws IOException {
         //InputStream inputStream = FirebaseConfig.class.getClassLoader().getResourceAsStream(path);
         FirebaseOptions options = new FirebaseOptions.Builder().setDatabaseUrl(databaseUrl).build();
@@ -34,7 +34,7 @@ public class FirebaseConfig {
     }
 
     @Bean
-    @Qualifier("main")
+    *//*@Qualifier("main")*//*
     public DatabaseReference provideDatabaseReference(FirebaseApp firebaseApp){
         FirebaseDatabase.getInstance(firebaseApp).setPersistenceEnabled(false);
         return FirebaseDatabase.getInstance(firebaseApp).getReference();

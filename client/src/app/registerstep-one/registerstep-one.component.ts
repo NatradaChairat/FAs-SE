@@ -31,7 +31,10 @@ export class RegisterstepOneComponent implements OnInit {
         });*/
 
     this.accountDataServerService.sendAccount(account)
-      .subscribe(data => console.log(data), error => console.log(error));
+      .subscribe(data => {console.log(data);
+          /*this.router.navigate(['/waiting']);*/}
+        , error => console.log(error));
+
 
   }
 

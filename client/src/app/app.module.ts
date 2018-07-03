@@ -10,6 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/account-data-server.service";
 import { ConfirmedemailComponent } from './confirmedemail/confirmedemail.component';
+import { WaitComponent } from './wait/wait.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ConfirmedemailComponent } from './confirmedemail/confirmedemail.compone
     RegisterstepOneComponent,
     HomepageComponent,
     FilenotfoundComponent,
-    ConfirmedemailComponent
+    ConfirmedemailComponent,
+    WaitComponent
   ],
   imports: [
     BrowserModule,AppRoutingModule,FormsModule,HttpClientModule
