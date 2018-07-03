@@ -8,7 +8,7 @@ const httpOptions = {
   headers: new HttpHeaders(
     { 'Content-Type': 'application/json' ,
       'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
       'Access-Control-Allow-Methods': "POST, GET, OPTIONS",
       'Access-Control-Allow-Headers': "*"
 

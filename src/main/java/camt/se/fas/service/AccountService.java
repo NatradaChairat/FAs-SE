@@ -1,4 +1,4 @@
-package camt.se.fas.servive;
+package camt.se.fas.service;
 
 import camt.se.fas.entity.Account;
 

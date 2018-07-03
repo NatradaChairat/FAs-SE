@@ -36,6 +36,7 @@ dependencies {
     compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.0.8.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.0.6.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.0.6.RELEASE'
+    compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.1'
 
 
 }

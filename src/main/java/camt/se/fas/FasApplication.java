@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@ComponentScan({"camt.se.fas.dao"})
+@ComponentScan({"camt.se.fas.dao", "camt.se.fas.controller", "camt.se.fas.service", "camt.se.fas.config"})
 public class FasApplication {
 
     public static void main(String[] args) {
