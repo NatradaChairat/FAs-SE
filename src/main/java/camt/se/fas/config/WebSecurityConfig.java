@@ -17,28 +17,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //    protected void configure(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity
-//                // we don't need CSRF because our token is invulnerable
-//                .csrf().disable()
-//                .cors();
-//    }
-//
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("OPTIONS");
-//        config.addAllowedMethod("GET");
-//        config.addAllowedMethod("POST");
-//        config.addAllowedMethod("PUT");
-//        config.addAllowedMethod("DELETE");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

@@ -1,5 +1,0 @@
-server:
-  port: 8080
-firebase:
-  database-url: https://facialauthentication-se-camt.firebaseio.com/
-  path: message

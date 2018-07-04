@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Account} from "../model/Account";
+import {Account} from "../entity/Account";
 import {Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {Observable} from "rxjs/index";
