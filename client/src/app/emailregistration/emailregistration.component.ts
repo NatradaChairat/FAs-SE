@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {Account} from "../entity/Account";
-import {Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
-import {Observable} from "rxjs/index";
+import {Router} from "@angular/router";
+import {Account} from "../entity/Account";
 
 @Component({
-  selector: 'app-registerstep-one',
-  templateUrl: './registerstep-one.component.html',
-  styleUrls: ['./registerstep-one.component.css']
+  selector: 'app-emailregistration',
+  templateUrl: './emailregistration.component.html',
+  styleUrls: ['./emailregistration.component.css']
 })
-export class RegisterstepOneComponent implements OnInit {
+export class EmailRegistrationComponent implements OnInit {
   account: any = {};
   constructor(private router: Router, private accountDataServerService: AccountDataServerService) { }
 
@@ -37,5 +36,4 @@ export class RegisterstepOneComponent implements OnInit {
 
 
   }
-
 }
