@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 @Profile("DBDataSource")
 @Repository
@@ -98,7 +99,6 @@ public class AccountDaoImpl implements AccountDao {
                     .build();
 
             FirebaseApp.initializeApp(options);
-
             databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.child("accounts").child("accountId").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -118,10 +118,44 @@ public class AccountDaoImpl implements AccountDao {
         }
         return null;
     }
-
+    private Account _account;
     @Override
     public Account findByUsername(String username) {
-        return null;
+        try {
+            CountDownLatch done = new CountDownLatch(1);
+            InputStream serviceAccount = AccountDaoImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl(firebaseUrl)
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("account_table").orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //System.out.println(snapshot.getValue().toString());
+                    _account = snapshot.getValue(Account.class);
+                    System.out.println(" ** "+_account.toString());
+                    done.countDown();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    _account = null;
+                }
+            });
+            done.await();
+            return _account;
+
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override

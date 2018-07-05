@@ -40,6 +40,7 @@ export class AccountDataServerService{
   }
 
   getAccountByUsername(username: String){
-
+    console.log("Get Account ..");
+    return this.http.get(`${this.baseUrl}`+ `/get/`+username,httpOptions);
   }
 }
