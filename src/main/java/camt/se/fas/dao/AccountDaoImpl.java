@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 @Profile("DBDataSource")
@@ -57,6 +58,7 @@ public class AccountDaoImpl implements AccountDao {
                 public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
 
 
+
                 }
                 @Override
                 public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
@@ -88,6 +90,32 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account findById(long id) {
+        try {
+            InputStream serviceAccount = AccountDaoImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl(firebaseUrl)
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("accounts").child("accountId").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    Account account = snapshot.getValue(Account.class);
+                    System.out.println(account);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    System.out.println("No account ID");
+                }
+            });
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         return null;
     }
 

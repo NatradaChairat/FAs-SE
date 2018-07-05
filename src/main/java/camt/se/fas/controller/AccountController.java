@@ -24,7 +24,8 @@ public class AccountController {
 
     @PostMapping("/account/create")
     public ResponseEntity<Account> postAccount(@RequestBody Account account){
-        System.out.println("Post Account working .."+ account.getEmail() + "...");
+        System.out.println("Post Account working .. "+ account.getEmail());
+
         accountService.addAccount(account);
         emailService.sendEmail(account);
 
@@ -32,11 +33,14 @@ public class AccountController {
     }
 
 
-
-    @GetMapping("/get")
-    public String getTest(){
-        System.out.println("Test GET");
-        return "Sucess TEST";
+    @GetMapping("account/get/{username}")
+    public ResponseEntity getAccount(@PathVariable("username")String username){
+        System.out.println("GET Account working ..");
+        Account account = accountService.findByUsername(username);
+        if(account!=null)
+            return ResponseEntity.ok(account);
+        else
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

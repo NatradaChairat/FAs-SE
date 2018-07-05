@@ -1,46 +1,71 @@
 <h1>Register</h1>
 <h4>Step 1 of 3: Enter account information </h4>
-
-<div class="row">
-  <div class=" col-md-12">
-    <div class="form-group">
-      <p></p>
-      <form>
-
-        <div class="row pb-3">
-          <label class="col-2 text-right">Username </label>
-          <div class="col-8">
-            <input class="form-control" id="username" placeholder="eg.CAMT" [(ngModel)]="account.username" name="username" style="background-color: rgba(255, 255, 255, 0.5)" required>
+<div class="container">
+  <div class="row">
+    <div class=" col-md-12">
+      <div class="form-group">
+        <p></p>
+        <form #registerForm="ngForm" (ngSubmit)="register(account)">
+          <div class="row form-group" >
+            <label class="col-2 text-right">Username </label>
+            <div class="col-6">
+              <input type="text" class="form-control" id="username"
+                     placeholder="eg.CAMT" name="username"
+                     [(ngModel)]="account.username" #userName="ngModel"
+                     required pattern="^[a-z0-9A-Z]{6,32}$"/>
+            </div>
+            <div class="col-4">
+              <div *ngIf="!userName.valid && userName.touched">Username must be 6-32 characters, 0-9, a-Z, cannot repeat and empty</div>
+            </div>
           </div>
-        </div>
 
-        <div class="row pb-3">
-          <label class="col-2 text-right">Email </label>
-          <div class="col-8">
-            <input class="form-control" id="email" [(ngModel)]="account.email" name="email" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          <div class="row form-group">
+            <label class="col-2 text-right">Email </label>
+            <div class="col-6">
+              <input type="email" class="form-control" id="email" name="email"
+                     [(ngModel)]="account.email" #eMail="ngModel"
+                     required email />
+            </div>
+            <div class="col-4">
+              <div *ngIf="!eMail.valid && eMail.touched">Email is required</div>
+            </div>
           </div>
-        </div>
 
-        <div class="row pb-3">
-          <label class="col-2 text-right">Password </label>
-          <div class="col-8">
-            <input class="form-control" id="password" [(ngModel)]="account.password" name="password" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          <div class="row form-group">
+            <label class="col-2 text-right">Password </label>
+            <div class="col-6">
+              <input type="password" class="form-control" id="password"
+                     name="password" [(ngModel)]="account.password"
+                     #passWord="ngModel" required pattern="^[a-z0-9A-Z]{8,32}$"/>
+            </div>
+            <div class="col-4">
+              <div *ngIf="!passWord.valid && passWord.touched">Password must be 8-32 characters, 0-9, a-Z, cannot empty</div>
+            </div>
           </div>
-        </div>
 
-        <div class="row pb-3">
-          <label class="col-2 text-right">Confirm password </label>
-          <div class="col-8">
-            <input class="form-control" id="confirm_password" style="background-color: rgba(255, 255, 255, 0.5)" required>
+          <div class="row form-group">
+            <label class="col-2 text-right">Confirm password </label>
+            <div class="col-6">
+              <input type="password" class="form-control" id="confirmPassword"
+                     name="ConfirmPassword" [(ngModel)]="account.confirmPassword"
+                     #confirmPassWord="ngModel" required pattern="^[a-z0-9A-Z]{8,32}$"/>
+            </div>
+            <div class="col-4">
+              <div *ngIf="!confirmPassWord.valid && confirmPassWord.touched">Confirm-Password must be 8-32 characters, 0-9, a-Z, cannot empty</div>
+            </div>
           </div>
-        </div>
+
+          <div class="row form-group">
+            <button type="submit" class="btn btn-primary mx-2" [disabled]="!registerForm.form.valid" >Register</button>
+          </div>
 
 
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<button type="submit" class="btn btn-primary mx-2" (click)="register(account)">Register</button>
+
+</div>
 
 

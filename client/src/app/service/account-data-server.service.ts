@@ -38,4 +38,8 @@ export class AccountDataServerService{
     return this.http.post(`${this.baseUrl}`+`/create`, account,httpOptions);
 
   }
+
+  getAccountByUsername(username: String){
+
+  }
 }

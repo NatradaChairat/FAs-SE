@@ -3,6 +3,7 @@ export class Account {
   accountId: String;
   username: String;
   password: String;
+  confirmPassword: String;
   email: String
 
 }
