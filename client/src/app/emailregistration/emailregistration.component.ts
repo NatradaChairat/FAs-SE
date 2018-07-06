@@ -31,26 +31,27 @@ export class EmailRegistrationComponent implements OnInit {
 
   register(account: Account){
     console.log(account);
-    console.log(this.usernameIsRepeated(account.username));
-    this.accountDataServerService.sendAccount(account)
+    console.log(this.usernameIsRepeated(account.username)+" Test");
+    /*this.accountDataServerService.sendAccount(account)
       .subscribe(data => {
         console.log(data);
-            /*this.router.navigate(['/waiting']);*/
+            /!*this.router.navigate(['/waiting']);*!/
         },error => console.log(error));
-
+*/
   }
-
+  result: Boolean;
   usernameIsRepeated(username: String): Boolean {
-    let result: Boolean;
     this.accountDataServerService.getAccountByUsername(username)
-      .subscribe(data =>{
-        console.log(data);
-        result=false;
-      },error => {
-        console.log(error);
-        result= true;
-      });
-    return result;
+      .subscribe(response =>{
+        if(response==null){
+          this.result = false;
+        }else {this.result =true;}
 
+        console.log(this.result)
+      },error => {
+        console.log("errer: "+error);
+
+      });
+    return this.result;
   }
 }
