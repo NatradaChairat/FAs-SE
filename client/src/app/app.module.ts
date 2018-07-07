@@ -7,7 +7,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {FormsModule, ReactiveFormsModule, FormGroup} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/account-data-server.service";
-import { ConfirmedemailComponent } from './confirmedemail/confirmedemail.component';
+import { ConfirmedEmailComponent } from './confirmedemail/confirmedemail.component';
 import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -19,7 +19,7 @@ import { EmailRegistrationDiologComponent } from './emailregistration-diolog/ema
     AppComponent,
     HomepageComponent,
     FilenotfoundComponent,
-    ConfirmedemailComponent,
+    ConfirmedEmailComponent,
     WaitComponent,
     EmailRegistrationComponent,
     EmailRegistrationDiologComponent

@@ -68,5 +68,20 @@ export class AccountDataServerService{
       );
   }
 
+  getStatusByAccountId(username: String, localtime:String){
+    console.log("AccountId: Request status .. "+username+ " "+localtime);
+    return this.http.get(`${this.baseUrl}`+ `/get/status/`+username+`/`+localtime, {responseType: 'text'})
+      .pipe(tap((res: any) =>{
+          if(res){
+            if(res.status == 200){
+              return [{ status: res.status, json: res }]
+            }else if(res.status ==204){
+              return [{ status: res.status, json: res }]
+            }
+          }
+        })
+      );
+  }
+
 
 }

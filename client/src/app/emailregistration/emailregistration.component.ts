@@ -46,14 +46,15 @@ export class EmailRegistrationComponent implements OnInit {
 
   onSubmit(account: Account){
     console.log(account);
-    //console.log(this.usernameIsRepeated(account)+" Test");
-    //console.log(this.emailIsRepeated(account)+" Test");
-    /*this.accountDataServerService.sendAccount(account)
-      .subscribe(data => {
-        console.log(data);
-            /!*this.router.navigate(['/waiting']);*!/
-        },error => console.log(error));*/
-    this.usernameIsRepeated(account);
+    if(account.password == account.confirmPassword){
+      this.usernameIsRepeated(account);
+    }else{
+      console.log("Confirm-Password not matching with Password");
+      this.type="Error";
+      this.title= "Can not register the account to the system"
+      this.detail="Confirm-Password not matching with Password"
+      this.openDialog();
+    }
   }
 
   usernameIsRepeated(account:Account) {
@@ -62,7 +63,6 @@ export class EmailRegistrationComponent implements OnInit {
         data => {
           console.log(data);
           if(data==null) {
-            //this.register(account)
             this.emailIsRepeated(account);
           }else{
             console.log("Repeated data: username");
