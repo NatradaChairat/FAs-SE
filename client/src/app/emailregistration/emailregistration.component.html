@@ -1,11 +1,11 @@
 <h1>Register</h1>
 <h4>Step 1 of 3: Enter account information </h4>
-<div class="container">
+<div class="container mat-app-background">
   <div class="row">
     <div class=" col-md-12">
       <div class="form-group">
         <p></p>
-        <form #registerForm="ngForm" (ngSubmit)="register(account)">
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit(account)">
           <div class="row form-group" >
             <label class="col-2 text-right">Username </label>
             <div class="col-6">

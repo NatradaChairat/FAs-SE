@@ -8,6 +8,7 @@ public interface AccountService {
     Account addAccount(Account account);
     Account findById(long id);
     Account findByUsername(String username);
-    Account findByEmail(String email);
+    String findAccountByUsername(String username);
+    String findAccountByEmail(String email);
     List<Account> getAccount();
 }

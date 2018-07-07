@@ -23,25 +23,42 @@ public class AccountController {
     public void setEmailService(EmailService emailService){this.emailService = emailService;}
 
     @PostMapping("/account/create")
-    public ResponseEntity<Account> postAccount(@RequestBody Account account){
+    public ResponseEntity<Account> uploadAccount(@RequestBody Account account){
         System.out.println("Post Account working .. "+ account.getEmail());
-
         accountService.addAccount(account);
         emailService.sendEmail(account);
-
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
 
-    @GetMapping("account/get/{username}")
-    public ResponseEntity getAccount(@PathVariable("username")String username){
+    //maybe changes to request method
+    @GetMapping("account/get/username/{username}")
+    public ResponseEntity getRepeatUsername (@PathVariable("username")String username){
         System.out.println("GET Account working ..");
-        Account account = accountService.findByUsername(username);
-        if(account!=null)
-            return ResponseEntity.ok(account);
-        else
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        String result = accountService.findAccountByUsername(username);
+        if(result!=null){
+            System.out.println("username is repeated");
+            return ResponseEntity.ok(result);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
+        }else{
+            System.out.println("username is not repeated");
+            return /*ResponseEntity.ok(result);*/ ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
+
+    @GetMapping("account/get/email/{email}")
+    public ResponseEntity getRepeatEmail (@PathVariable("email")String email){
+        System.out.println("GET Account working ..");
+        String result = accountService.findAccountByEmail(email);
+        if(result!=null){
+            System.out.println("email is repeated");
+            return ResponseEntity.ok(result);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
+        }else{
+            System.out.println("email is not repeated");
+            return /*ResponseEntity.ok(result);*/ ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+
 
 
 

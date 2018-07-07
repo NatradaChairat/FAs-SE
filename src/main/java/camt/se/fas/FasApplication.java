@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@ComponentScan({"camt.se.fas.dao", "camt.se.fas.controller", "camt.se.fas.service", "camt.se.fas.config", "camt.se.fas.repository"})
+@ComponentScan({"camt.se.fas.controller", "camt.se.fas.service", "camt.se.fas.config"})
 @EnableAutoConfiguration
 public class FasApplication {
 

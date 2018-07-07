@@ -9,7 +9,10 @@ import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/account-data-server.service";
 import { ConfirmedemailComponent } from './confirmedemail/confirmedemail.component';
 import { WaitComponent } from './wait/wait.component';
-import { EmailRegistrationComponent } from './emailregistration/emailregistration.component';
+import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
+import { EmailRegistrationDiologComponent } from './emailregistration-diolog/emailregistration-diolog.component';
 
 @NgModule({
   declarations: [
@@ -18,12 +21,16 @@ import { EmailRegistrationComponent } from './emailregistration/emailregistratio
     FilenotfoundComponent,
     ConfirmedemailComponent,
     WaitComponent,
-    EmailRegistrationComponent
+    EmailRegistrationComponent,
+    EmailRegistrationDiologComponent
+  ],
+  entryComponents: [
+    EmailRegistrationDiologComponent
   ],
   imports: [
-    BrowserModule,AppRoutingModule,FormsModule,HttpClientModule,ReactiveFormsModule
+    BrowserModule,AppRoutingModule,FormsModule,HttpClientModule,ReactiveFormsModule,BrowserAnimationsModule,MatDialogModule
   ],
-  providers: [AccountDataServerService],
+  providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

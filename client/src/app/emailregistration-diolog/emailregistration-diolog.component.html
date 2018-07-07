@@ -1,0 +1,10 @@
+<h4 mat-dialog-title>{{data.type}}</h4>
+<div mat-dialog-content>
+  <div>{{data.title}} </div>
+  <div>
+    : {{data.detail}}
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" [mat-dialog-close]="true">Ok</button>
+</div>
