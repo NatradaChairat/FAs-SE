@@ -11,6 +11,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 @Service
@@ -22,8 +23,10 @@ public class EmailServiceImpl implements EmailService {
     public Boolean sendEmail(Account account) {
         String[] receiver = { account.getEmail() }; // list of recipient email addresses
         String subject = "Facial Authentication: Verification email";
+        String params = ""+account.getEmail()+"/"+account.getUsername()+"/"+LocalDateTime.now();
+        System.out.println("Setting param: "+params);
         String body = "Email Address: "+ account.getEmail()+"\nUsername: "+account.getUsername()+
-                "\nClick the link to verify email: Http://localhost:4200/comfirmedemail"/*+account.getAccountId()*/;
+                "\nClick the link to verify email: Http://localhost:4200/confirmedemail/"+params/*+account.getAccountId()*/;
 
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";

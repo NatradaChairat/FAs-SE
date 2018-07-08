@@ -23,12 +23,13 @@ export class ConfirmedEmailComponent implements OnInit {
   ngOnInit() {
     console.log(window.location.href);
     this.route.params.subscribe((params: Params) => {
+      this.email = params['email'];
       this.username = params['username'];
       this.localtime = params['localtime'];
       console.log(this.username+ " "+ this.localtime);
     });
 
-    this.accountDataServerService.getStatusByAccountId(this.username,this.localtime)
+    this.accountDataServerService.getStatusByAccountId(this.email,this.username,this.localtime)
       .subscribe(data =>{});
     /*this.route.paramMap.pipe(switchMap((params:Params)=> {
       this.accountDataServerService.getStatusByAccountId(params['username'],params['localtime'])

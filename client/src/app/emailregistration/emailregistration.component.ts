@@ -82,6 +82,7 @@ export class EmailRegistrationComponent implements OnInit {
           console.log(data);
           if(data==null){
             this.register(account)
+            window.location.href = "http://localhost:4200/waiting";
           }else {
             console.log("Repeated data: email");
             this.type="Error";

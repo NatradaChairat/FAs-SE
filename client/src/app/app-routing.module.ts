@@ -11,7 +11,7 @@ const appRoutes: Routes = [
   {path: 'homepage', component: HomepageComponent},
   {path: 'emailregistration', component: EmailRegistrationComponent},
   {path: 'waiting', component: WaitComponent},
-  {path: 'confirmedemail/:username/:localtime', component: ConfirmedEmailComponent},
+  {path: 'confirmedemail/:email/:username/:localtime', component: ConfirmedEmailComponent},
   {path: '**', component: FilenotfoundComponent}
 ];
 

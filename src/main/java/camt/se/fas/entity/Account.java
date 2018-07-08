@@ -53,4 +53,9 @@ public class Account {
 
     List<String> videos;
     List<String> images;
+
+
+    public Account(String username, String password){
+
+    }
 }

@@ -5,10 +5,12 @@ import camt.se.fas.entity.Account;
 import java.util.List;
 
 public interface AccountService {
-    Account addAccount(Account account);
-    Account findById(long id);
-    Account findByUsername(String username);
+    Boolean addAccountOfRegisterStepOne(Account account);
+    Boolean addUsernamePasswordToDB(String accountId, Account account);
+    Boolean addStatusToDB(String accountId, String status);
+    Boolean addEmailPhonenumberToDB(String accountId,Account account);
     String findAccountByUsername(String username);
     String findAccountByEmail(String email);
+    Boolean updateStatusByEmail(String email, String status);
     List<Account> getAccount();
 }
