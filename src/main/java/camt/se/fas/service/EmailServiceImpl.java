@@ -20,12 +20,12 @@ public class EmailServiceImpl implements EmailService {
     private static String PASSWORD = "Fas_1234"; // GMail password
 
     @Override
-    public Boolean sendEmail(Account account) {
-        String[] receiver = { account.getEmail() }; // list of recipient email addresses
+    public Boolean sendEmail(String email, String username) {
+        String[] receiver = { email }; // list of recipient email addresses
         String subject = "Facial Authentication: Verification email";
-        String params = ""+account.getEmail()+"/"+account.getUsername()+"/"+LocalDateTime.now();
+        String params = ""+email+"/"+username+"/"+LocalDateTime.now();
         System.out.println("Setting param: "+params);
-        String body = "Email Address: "+ account.getEmail()+"\nUsername: "+account.getUsername()+
+        String body = "Email Address: "+ email+"\nUsername: "+username+
                 "\nClick the link to verify email: Http://localhost:4200/confirmedemail/"+params/*+account.getAccountId()*/;
 
         Properties props = System.getProperties();

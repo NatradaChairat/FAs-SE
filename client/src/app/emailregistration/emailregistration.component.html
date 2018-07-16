@@ -36,10 +36,10 @@
             <div class="col-6">
               <input type="password" class="form-control" id="password"
                      name="password" [(ngModel)]="account.password"
-                     #passWord="ngModel" required pattern="^[a-z0-9A-Z]{8,32}$"/>
+                     #passWord="ngModel" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$"/>
             </div>
             <div class="col-4">
-              <div *ngIf="!passWord.valid && passWord.touched">Password must be 8-32 characters, 0-9, a-Z, cannot empty</div>
+              <div *ngIf="!passWord.valid && passWord.touched">Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
             </div>
           </div>
 
@@ -48,10 +48,10 @@
             <div class="col-6">
               <input type="password" class="form-control" id="confirmPassword"
                      name="ConfirmPassword" [(ngModel)]="account.confirmPassword"
-                     #confirmPassWord="ngModel" required pattern="^[a-z0-9A-Z]{8,32}$"/>
+                     #confirmPassWord="ngModel" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$"/>
             </div>
             <div class="col-4">
-              <div *ngIf="!confirmPassWord.valid && confirmPassWord.touched">Confirm-Password must be 8-32 characters, 0-9, a-Z, cannot empty</div>
+              <div *ngIf="!confirmPassWord.valid && confirmPassWord.touched">Confirm-Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
             </div>
           </div>
 

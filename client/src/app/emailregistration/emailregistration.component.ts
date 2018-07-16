@@ -7,7 +7,7 @@ import {Config} from "protractor";
 import {HttpErrorResponse} from "@angular/common/http";
 import {throwError} from "rxjs/internal/observable/throwError";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
-import {EmailRegistrationDiologComponent} from "../emailregistration-diolog/emailregistration-diolog.component";
+import {EmailregistrationDialogComponent} from "../emailregistration-dialog/emailregistration-dialog.component";
 
 export interface DialogData{
   type: string;
@@ -34,7 +34,7 @@ export class EmailRegistrationComponent implements OnInit {
   }
 
   openDialog():void{
-    const dialogRef = this.dialog.open(EmailRegistrationDiologComponent, {
+    const dialogRef = this.dialog.open(EmailregistrationDialogComponent, {
       width: '350px',
       data: {type: this.type,title:this.title, detail: this.detail}
     });
@@ -82,7 +82,8 @@ export class EmailRegistrationComponent implements OnInit {
           console.log(data);
           if(data==null){
             this.register(account)
-            window.location.href = "http://localhost:4200/waiting";
+
+            //window.location.href = "http://localhost:4200/waiting";
           }else {
             console.log("Repeated data: email");
             this.type="Error";
@@ -98,6 +99,11 @@ export class EmailRegistrationComponent implements OnInit {
     this.accountDataServerService.sendAccount(account)
       .subscribe(data => {
         console.log(data);
+          setTimeout(() =>
+          {
+            this.router.navigate(['/waiting']);
+          },
+          5000);
         /!*this.router.navigate(['/waiting']);*!/
       },error => console.log(error));
   }

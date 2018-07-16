@@ -1,10 +1,12 @@
 package camt.se.fas.service;
 
+import camt.se.fas.dao.AccountDao;
 import camt.se.fas.entity.Account;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-@ConfigurationProperties(prefix = "server")
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -28,8 +29,17 @@ public class AccountServiceImpl implements AccountService {
 
     DatabaseReference databaseReference;
 
+    @Autowired
+    AccountDao accountDao;
+
+    @Override
+    public Account testDao() {
+        return accountDao.findByUsername("");
+    }
+
     @Override
     public Boolean addAccountOfRegisterStepOne(Account account) {
+        System.out.println(account.toString());
         try {
             InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
             FirebaseOptions options = new FirebaseOptions.Builder()
@@ -54,12 +64,22 @@ public class AccountServiceImpl implements AccountService {
                     System.out.println("Get KEY: " + newKey);
                     System.out.println("saveAccount is working | accountId " + newKey);
 
-                    addUsernamePasswordToDB(newKey, account);
-                    addStatusToDB(newKey,"registered");
-                    addEmailPhonenumberToDB(newKey, account);
+                    String a = addUsernamePasswordToDB(newKey, account);
+                    String b = addStatusToDB(newKey,"registered");
+                    String c = addEmailPhonenumberToDB(newKey, account);
+                    try {
+                        Thread.sleep(3000);
+                        System.out.println("1: "+a+" 2: "+b+" 3: "+c);
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 @Override
-                public void onCancelled (DatabaseError error){ }
+                public void onCancelled (DatabaseError error){
+
+                }
             });
             return true;
         }catch (IOException e){
@@ -69,7 +89,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean addUsernamePasswordToDB(String accountId, Account account) {
+    public String addUsernamePasswordToDB(String accountId, Account account) {
         System.out.println("addUsernamePasswordToDB working ");
         DatabaseReference usersRef = databaseReference.child("account_table");
         Map<String, Object> accountTableMap = new HashMap<>();
@@ -77,28 +97,28 @@ public class AccountServiceImpl implements AccountService {
         accountTableMap.put("password", account.getPassword());
         accountTableMap.put("studentId", account.getStudentId());
         usersRef.child(accountId).setValueAsync(accountTableMap);
-        return null;
+        return usersRef.child(accountId).getKey().toString();
     }
 
     @Override
-    public Boolean addStatusToDB(String accountId, String status) {
+    public String addStatusToDB(String accountId, String status) {
         System.out.println("addStatusToDB working ");
         DatabaseReference usersRef = databaseReference.child("account_status_table");
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put(accountId, status);
         usersRef.updateChildrenAsync(accountTableMap);
-        return true;
+        return usersRef.child(accountId).getKey();
     }
 
     @Override
-    public Boolean addEmailPhonenumberToDB(String accountId, Account account) {
+    public String addEmailPhonenumberToDB(String accountId, Account account) {
         System.out.println("addEmailPhonenumberToDB working ");
         DatabaseReference usersRef = databaseReference.child("account_contact_table");
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put("email", account.getEmail());
         accountTableMap.put("phonenumber", account.getPhonenumber());
         usersRef.child(accountId).updateChildrenAsync(accountTableMap);
-        return null;
+        return usersRef.child(accountId).getKey().toString();
     }
 
 
@@ -180,14 +200,18 @@ public class AccountServiceImpl implements AccountService {
         try {
             CountDownLatch done = new CountDownLatch(1);
             InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(credentials)
+                    //.setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(firebaseUrl)
                     .build();
             if(FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
             }
+
             databaseReference = FirebaseDatabase.getInstance().getReference();
+            System.out.println("databaseReference: ");
             databaseReference.child("account_contact_table").orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {

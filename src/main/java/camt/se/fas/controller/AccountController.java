@@ -18,24 +18,28 @@ public class AccountController {
     EmailService emailService;
 
     @Autowired
-    public void setAccountService(AccountService accountService){
+    public void setAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
     @Autowired
     public void setEmailService(EmailService emailService){this.emailService = emailService;}
 
     @PostMapping("/account/create")
-    public ResponseEntity<Account> uploadAccount(@RequestBody Account account) {
+    public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
         System.out.println("Post Account working .. "+ account.getEmail());
-        accountService.addAccountOfRegisterStepOne(account);
-        emailService.sendEmail(account);
-        return new ResponseEntity<>(account, HttpStatus.OK);
+        boolean result = accountService.addAccountOfRegisterStepOne(account);
+        if(result) {
+            emailService.sendEmail(account.getEmail(),account.getUsername());
+            return new ResponseEntity<>(account, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.CONFLICT);
+        }
     }
 
 
     //maybe changes to request method
     @GetMapping("account/get/username/{username}")
-    public ResponseEntity getRepeatUsername (@PathVariable("username")String username){
+    public ResponseEntity getAccountByUsername (@PathVariable("username")String username){
         System.out.println("GET Account working ..");
         String result = accountService.findAccountByUsername(username);
         if(result!=null){
@@ -48,7 +52,7 @@ public class AccountController {
     }
 
     @GetMapping("account/get/email/{email}")
-    public ResponseEntity getRepeatEmail (@PathVariable("email")String email){
+    public ResponseEntity getAccountByEmail (@PathVariable("email")String email){
         System.out.println("GET Account working ..");
         String result = accountService.findAccountByEmail(email.toLowerCase());
         if(result!=null){
@@ -61,11 +65,12 @@ public class AccountController {
     }
 
     @GetMapping("account/get/status/{email}/{username}/{localtime}")
-    public ResponseEntity getAccountByEmail(@PathVariable("email")String email, @PathVariable("username")String username, @PathVariable("localtime")String localtime){
+    public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("email")String email, @PathVariable("username")String username, @PathVariable("localtime")String localtime){
         System.out.println("GET Account working .."+username+" "+localtime);
         //String result = accountService.findStatusByAccountId(accountId);
         LocalDateTime _localtime = LocalDateTime.parse(localtime);
-        if(LocalDateTime.now().isBefore(_localtime.plusMinutes(20))){
+        if(LocalDateTime.now().isBefore(
+                _localtime.plusMinutes(12))){
             System.out.println("Result: "+LocalDateTime.now().isBefore(_localtime.plusMinutes(20))+" Now: "+LocalDateTime.now() + " Deadline: "+_localtime.plusMinutes(20));
             //String result= accountService.findAccountIdByUsername(username);
             Boolean result = accountService.updateStatusByEmail(email,"activated");
@@ -81,10 +86,25 @@ public class AccountController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         }else{
+            emailService.sendEmail(email,username);
             return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
         }
     }
 
+
+    @GetMapping("account/test")
+    public ResponseEntity testDao (){
+        Account account = accountService.testDao();
+        if (account != null)
+
+            return ResponseEntity.ok(account);
+
+        else
+
+            //http code 204
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 
 

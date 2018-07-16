@@ -35,10 +35,10 @@ export class AccountDataServerService{
     /*let httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json' , 'Access-Control-Allow-Origin': '*'})};
     let body = JSON.stringify(account);
     return this.http.post<Account>('http://localhost:8080/account',body,httpOptions);*/
-    return this.http.post(`${this.baseUrl}`+`/create`, account,httpOptions);
+    return this.http.post(`${this.baseUrl}`+`/create`, account,{responseType: 'text'});
   }
 
-  getAccountByUsername(username: String){
+  getAccountByUsername(username: String): Observable<Object>{
     console.log("Username: Request Account .. "+username);
     return this.http.get(`${this.baseUrl}`+ `/get/username/`+username, {responseType: 'text'})
       .pipe(tap((res: any) =>{
@@ -53,7 +53,7 @@ export class AccountDataServerService{
       );
   }
 
-  getAccountByEmail(email: String){
+  getAccountByEmail(email: String): Observable<Object>{
     console.log("Email: Request Account .. "+email);
     return this.http.get(`${this.baseUrl}`+ `/get/email/`+email, {responseType: 'text'})
       .pipe(tap((res: any) =>{
@@ -68,7 +68,7 @@ export class AccountDataServerService{
       );
   }
 
-  getStatusByAccountId(email:string, username: String, localtime:String){
+  updateStatusByEmailUsername(email:string, username: string, localtime:String): Observable<Object>{
     console.log("AccountId: Request status .. "+email+" "+username+ " "+localtime);
     return this.http.get(`${this.baseUrl}`+ `/get/status/`+email+`/`+username+`/`+localtime, {responseType: 'text'})
       .pipe(tap((res: any) =>{

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmailregistrationDiologComponent } from './emailregistration-diolog.component';
+import { EmailregistrationDiologComponent } from './emailregistration-dialog.component';
 
 describe('EmailregistrationDiologComponent', () => {
   let component: EmailregistrationDiologComponent;

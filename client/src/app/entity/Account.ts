@@ -1,9 +1,8 @@
 export class Account {
-  id: number;
-  accountId: String;
-  username: String;
-  password: String;
-  confirmPassword: String;
-  email: String
+  accountId: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
 
 }

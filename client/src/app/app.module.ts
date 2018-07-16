@@ -12,7 +12,7 @@ import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
-import { EmailRegistrationDiologComponent } from './emailregistration-diolog/emailregistration-diolog.component';
+import { EmailregistrationDialogComponent } from './emailregistration-dialog/emailregistration-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,10 +22,10 @@ import { EmailRegistrationDiologComponent } from './emailregistration-diolog/ema
     ConfirmedEmailComponent,
     WaitComponent,
     EmailRegistrationComponent,
-    EmailRegistrationDiologComponent
+    EmailregistrationDialogComponent
   ],
   entryComponents: [
-    EmailRegistrationDiologComponent
+    EmailregistrationDialogComponent
   ],
   imports: [
     BrowserModule,AppRoutingModule,FormsModule,HttpClientModule,ReactiveFormsModule,BrowserAnimationsModule,MatDialogModule

@@ -29,7 +29,7 @@ export class ConfirmedEmailComponent implements OnInit {
       console.log(this.username+ " "+ this.localtime);
     });
 
-    this.accountDataServerService.getStatusByAccountId(this.email,this.username,this.localtime)
+    this.accountDataServerService.updateStatusByEmailUsername(this.email,this.username,this.localtime)
       .subscribe(data =>{});
     /*this.route.paramMap.pipe(switchMap((params:Params)=> {
       this.accountDataServerService.getStatusByAccountId(params['username'],params['localtime'])

@@ -1,5 +1,6 @@
 package camt.se.fas;
 
+import camt.se.fas.service.AccountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

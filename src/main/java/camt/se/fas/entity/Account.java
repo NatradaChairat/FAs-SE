@@ -23,9 +23,9 @@ import java.util.List;
 @Builder
 @JsonIgnoreType
 public class Account {
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+    long id;*/
     @JsonView/*(View.Login.class)*/
     String accountId;
     @JsonView/*(View.Login.class)*/
@@ -39,6 +39,8 @@ public class Account {
     String firstname;
     @JsonView/*(View.Login.class)*/
     String lastname;
+
+
     @JsonView/*(View.Login.class)*/
     String studentId;
     @JsonView/*(View.Login.class)*/
@@ -54,8 +56,4 @@ public class Account {
     List<String> videos;
     List<String> images;
 
-
-    public Account(String username, String password){
-
-    }
 }
