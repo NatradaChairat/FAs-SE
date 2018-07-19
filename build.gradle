@@ -42,6 +42,6 @@ dependencies {
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.1'
     // https://mvnrepository.com/artifact/org.powermock/powermock-core
     testCompile group: 'org.powermock', name: 'powermock-core', version: '1.7.4'
-
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 }

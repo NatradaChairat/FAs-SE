@@ -13,6 +13,7 @@ import {EmailRegistrationComponent} from './emailregistration/emailregistration.
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
 import { EmailregistrationDialogComponent } from './emailregistration-dialog/emailregistration-dialog.component';
+import { InforegistrationComponent } from './inforegistration/inforegistration.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { EmailregistrationDialogComponent } from './emailregistration-dialog/ema
     ConfirmedEmailComponent,
     WaitComponent,
     EmailRegistrationComponent,
-    EmailregistrationDialogComponent
+    EmailregistrationDialogComponent,
+    InforegistrationComponent
   ],
   entryComponents: [
     EmailregistrationDialogComponent

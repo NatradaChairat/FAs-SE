@@ -3,6 +3,8 @@ package camt.se.fas.controller;
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 @RestController("/account")
 //@RequestMapping({"/account"})
 public class AccountController {
+    Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
     AccountService accountService;
     EmailService emailService;
 
@@ -27,12 +30,14 @@ public class AccountController {
     @PostMapping("/account/create")
     public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
         System.out.println("Post Account working .. "+ account.getEmail());
-        boolean result = accountService.addAccountOfRegisterStepOne(account);
-        if(result) {
-            emailService.sendEmail(account.getEmail(),account.getUsername());
+        //boolean result = accountService.addAccountOfRegisterStepOne(account);
+        Account _account = accountService.addOnlyAccount(account);
+        LOGGER.info("Return account:"+account);
+        if(_account.getAccountId() != null) {
+            emailService.sendEmail(_account.getEmail(),_account.getUsername());
             return new ResponseEntity<>(account, HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(null,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
         }
     }
 
@@ -40,26 +45,29 @@ public class AccountController {
     //maybe changes to request method
     @GetMapping("account/get/username/{username}")
     public ResponseEntity getAccountByUsername (@PathVariable("username")String username){
-        System.out.println("GET Account working ..");
-        String result = accountService.findAccountByUsername(username);
-        if(result!=null){
-            System.out.println("username is repeated");
-            return ResponseEntity.ok(result);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
+        LOGGER.info("GET Account from Username working");
+        //String result = accountService.findAccountByUsername(username);
+        Account account = accountService.findAccountByUsername(username);
+        LOGGER.info("Return account:"+account);
+        if(account!=null){
+            LOGGER.info("Result: Username is repeated");
+            return ResponseEntity.ok(account);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
         }else{
-            System.out.println("username is not repeated");
+            LOGGER.info("Result: Username is not repeated");
             return /*ResponseEntity.ok(result);*/ ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
 
     @GetMapping("account/get/email/{email}")
     public ResponseEntity getAccountByEmail (@PathVariable("email")String email){
-        System.out.println("GET Account working ..");
-        String result = accountService.findAccountByEmail(email.toLowerCase());
-        if(result!=null){
-            System.out.println("email is repeated");
-            return ResponseEntity.ok(result);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
+        LOGGER.info("GET Account from Email working");
+        Account account = accountService.findAccountByEmail(email.toLowerCase());
+        LOGGER.info("Return account:"+account);
+        if(account!=null){
+            LOGGER.info("Result: Email is repeated");
+            return ResponseEntity.ok(account);/*ResponseEntity.status(HttpStatus.NO_CONTENT).build();*/
         }else{
-            System.out.println("email is not repeated");
+            LOGGER.info("Result: Email is not repeated");
             return /*ResponseEntity.ok(result);*/ ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
@@ -94,8 +102,11 @@ public class AccountController {
 
     @GetMapping("account/test")
     public ResponseEntity testDao (){
-        Account account = accountService.testDao();
-        if (account != null)
+         Account account = accountService.testDao();
+        //Account account = null;
+
+        System.out.println(account);
+        if (account.getAccountId() != null)
 
             return ResponseEntity.ok(account);
 

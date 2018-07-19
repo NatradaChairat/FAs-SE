@@ -6,6 +6,8 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,6 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 @Service
 public class AccountServiceImpl implements AccountService {
+    Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class.getName());
 
     @Value("${firebase.database-url}")
     String firebaseUrl;
@@ -34,10 +37,34 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account testDao() {
-        return accountDao.findByUsername("");
+        return accountDao.findLastAccountId();
     }
 
     @Override
+    public Account addOnlyAccount(Account account) {
+        LOGGER.info("Get Last AccountId: "+ accountDao.findLastAccountId());
+        String keyOnlyNumber = accountDao.findLastAccountId().getAccountId().substring(2);
+        LOGGER.info("Get KEY: " + keyOnlyNumber);
+        int keyNumber = Integer.parseInt(keyOnlyNumber);
+        LOGGER.info("Get KEY number: " + keyNumber);
+        String nextKey = "FA" + String.format("%05d", keyNumber + 1);
+        LOGGER.info("Get Next KEY: " + nextKey);
+
+        if(nextKey != "FA100000") {
+            account.setAccountId(nextKey);
+            String account1 = accountDao.addUsernamePassword(account);
+            String account2 = accountDao.addStatus(account, "registered");
+            String account3 = accountDao.addEmailPhonenumber(account);
+            LOGGER.info("Added: "+account1 + ", " + account2 + ", " + account3);
+            if(account1==account2 && account1==account3){
+                return account;
+            }
+            return null;
+        }else return null;
+
+    }
+
+    /*@Override
     public Boolean addAccountOfRegisterStepOne(Account account) {
         System.out.println(account.toString());
         try {
@@ -52,6 +79,7 @@ public class AccountServiceImpl implements AccountService {
             databaseReference = FirebaseDatabase.getInstance().getReference();
             //ref last of object in account_table
             databaseReference.child("account_table").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     System.out.println("Key: " + snapshot.getKey() + "value: " + snapshot.getValue());
@@ -119,43 +147,15 @@ public class AccountServiceImpl implements AccountService {
         accountTableMap.put("phonenumber", account.getPhonenumber());
         usersRef.child(accountId).updateChildrenAsync(accountTableMap);
         return usersRef.child(accountId).getKey().toString();
-    }
-
-
-    /*@Override
-    public Account findByAccountId(String accountId) {
-        try {
-            InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl(firebaseUrl)
-                    .build();
-
-            FirebaseApp.initializeApp(options);
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.child("account_table").child(accountId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    Account account = snapshot.getValue(Account.class);
-                    System.out.println(account);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    System.out.println("No account ID");
-                }
-            });
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return null;
     }*/
 
-    private String result;
+
+    //private String result;
     @Override
-    public String findAccountByUsername(String username) {
-        try {
+    public Account findAccountByUsername(String username) {
+        Account _account = accountDao.findAccountByUsername(username);
+        return _account;
+        /*try {
             CountDownLatch done = new CountDownLatch(1);
             InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
             FirebaseOptions options = new FirebaseOptions.Builder()
@@ -170,7 +170,7 @@ public class AccountServiceImpl implements AccountService {
             databaseReference.child("account_table").orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    System.out.println("get: "+snapshot.getValue());
+                    System.out.println("FindByUsername Get: "+snapshot.getValue());
                     if(snapshot.getValue()!=null){
                         result = snapshot.getValue().toString();
                     }
@@ -192,12 +192,14 @@ public class AccountServiceImpl implements AccountService {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return null;
-        }
+        }*/
     }
 
     @Override
-    public String findAccountByEmail(String email) {
-        try {
+    public Account findAccountByEmail(String email) {
+        Account _account = accountDao.findAccountByEmail(email);
+        return _account;
+        /*try {
             CountDownLatch done = new CountDownLatch(1);
             InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -212,10 +214,10 @@ public class AccountServiceImpl implements AccountService {
 
             databaseReference = FirebaseDatabase.getInstance().getReference();
             System.out.println("databaseReference: ");
-            databaseReference.child("account_contact_table").orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
+            databaseReference.child("account_contact_table").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    System.out.println("get: "+snapshot.getValue());
+                    System.out.println("FindbyEmail Get: "+snapshot.getValue());
                     if(snapshot.getValue()!=null){
                         result = snapshot.getValue().toString();
                         done.countDown();
@@ -241,7 +243,7 @@ public class AccountServiceImpl implements AccountService {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return null;
-        }
+        }*/
     }
 
     @Override
@@ -262,7 +264,7 @@ public class AccountServiceImpl implements AccountService {
                     System.out.println(snapshot.getValue());
                     String accountId = snapshot.getValue().toString().substring(1,8);
                     System.out.println("accountId: "+accountId);
-                    addStatusToDB(accountId,status);
+                    //addStatusToDB(accountId,status);
                 }
 
                 @Override
