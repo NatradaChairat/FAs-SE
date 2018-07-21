@@ -10,7 +10,7 @@ import {AccountDataServerService} from "./service/account-data-server.service";
 import { ConfirmedEmailComponent } from './confirmedemail/confirmedemail.component';
 import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
 import { EmailregistrationDialogComponent } from './emailregistration-dialog/emailregistration-dialog.component';
 import { InforegistrationComponent } from './inforegistration/inforegistration.component';
@@ -30,7 +30,14 @@ import { InforegistrationComponent } from './inforegistration/inforegistration.c
     EmailregistrationDialogComponent
   ],
   imports: [
-    BrowserModule,AppRoutingModule,FormsModule,HttpClientModule,ReactiveFormsModule,BrowserAnimationsModule,MatDialogModule
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    NoopAnimationsModule
   ],
   providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
   bootstrap: [AppComponent]

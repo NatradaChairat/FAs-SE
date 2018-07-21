@@ -8,6 +8,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {throwError} from "rxjs/internal/observable/throwError";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {EmailregistrationDialogComponent} from "../emailregistration-dialog/emailregistration-dialog.component";
+import {Overlay} from "@angular/cdk/overlay";
 
 export interface DialogData{
   type: string;
@@ -21,13 +22,13 @@ export interface DialogData{
   styleUrls: ['./emailregistration.component.css']
 })
 export class EmailRegistrationComponent implements OnInit {
-  registerForm: FormGroup;
+  emailRegisterForm: FormGroup;
   account: any = {};
   type: string;
   title: string;
   detail: string;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog) {}
+  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog, private overlay: Overlay) {}
 
   ngOnInit() {
     this.account = new Account();
@@ -36,6 +37,9 @@ export class EmailRegistrationComponent implements OnInit {
   openDialog():void{
     const dialogRef = this.dialog.open(EmailregistrationDialogComponent, {
       width: '350px',
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+      disableClose: true,
+      hasBackdrop: false,
       data: {type: this.type,title:this.title, detail: this.detail}
     });
 

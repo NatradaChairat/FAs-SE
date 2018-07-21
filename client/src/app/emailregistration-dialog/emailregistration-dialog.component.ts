@@ -11,7 +11,9 @@ export class EmailregistrationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<EmailRegistrationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    dialogRef.disableClose =true;
+  }
 
   onClick(): void {
     this.dialogRef.close();
