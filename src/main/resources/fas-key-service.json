@@ -1,12 +1,3 @@
 {
-  "type": "service_account",
-  "project_id": "facialauthentication-camt",
-  "private_key_id": "be85ca1c2454235d9d326dcab03629425829e3ad",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDEWBYX0rQ1jFN7\n1jOKctLUEZR2omow+hXSjFgoBWPsP6NNxKAhPOSi4jquQ8c3i+d/E3gjwIZUrhOg\nR9KD6+sop6kEg/q0OXTSX+4zuCSkhEr3UrCcrN9gpw3zkHB4sms8aqKt+Ibb6pVZ\nViEPQKsuJZfxhBgrEq8/8kmJo6jyPK72sSxoARY/1XvRsROGZ+TuC/9IuryDMvDX\nvkRUDs3dZlYbnoBLSycRwbkW5laS8/CHln7IZLA7i+xyI7QNmrPybEvlYdTe9mEP\n/QYL5SBSDBp4iKpPriM47dUzG9qPHSR10ALBAnai0I2uFtNYj+4mQO8hu2MCYMK1\ntUQz4YDNAgMBAAECggEAHZuVjqIcwAvDyw4nV4lZIYGafF6hhMvcM+krTLMDY8If\nmL/oexqjn6xdt572O6TCk/cWTCM2yS42529CiizZQ+2EdJndBFsQXWj55/Ksvoz0\ngQyHIBkxgMcFjjpfENRW4hVyfVQs10eDSKV5oW3Zt8ETgz1YJ6akUWWdO+mMtc+3\nnRTDksPhOgPtTKXJH//SwHLwoKWVl2KUoOyvmFWPV2HGu1fAJ6XlOUoHrYE/hCim\nkHlzMQ60Qjqp1qeSrRoI51Y3vFAvO9kfcOgWL3c+Y+TE0JPGTVZ3TdHAi92M+NUu\nFqrO1QqbRKalpfxo6GW49DwHcCQNDcb/bIY55fDUQQKBgQD0tIBLNpvHM6ASVhLE\npzF4R9/VJUoI0nTx4EM6d4zC48DJ5jasYvfEwzKakbjUIFaRml06wSCs5GiQImP1\nTpltFhXX2afOV0tt76vUEYL5XqBleMNH+/zE3DydkYKETqTqOoSKUt0Alz7z1Glq\npio5Rg6TYW014yFo0kKVPolyZwKBgQDNaCOZknac4hODTYh35F5q+/UDXMBkvp9K\nckQKJVHnjHnNNz2rTkPahbO0f7JaYYxgWR8yoAPo7cEYuEuXhv/guqabWq8WqJu8\nkmA1X9r0X8pBXRQ67JNE1Kbl59SnC4AzBFrwfYNl5n5oM7Ng1fA9h19e48osYkkY\nLIX/L+t6qwKBgHD1xedyfPS22yS7wQwwlgCNRUFSZluuMzfYq5AY0czBcCSDdieb\nw/57kSeTLzwU9YFfPbw6nMfS5IXsqjH6J48Yy9qJahIxb+t+4NYTg190FBzjY1oe\nc6+4bu7Z1eMXnr9VZguodsaoCvJp0oPd0s3/jgjwx4ZBpBGMRho49R/vAoGAFpqb\nME851lHaq9xgZDExYryPXetbELsZdGvWqPcqaDzBOqAVnUBjnyyPdhGHYwLRG9ky\n4bNSOtPPKBU/3FDy35wqsXXtRqUPXlUNWVJPGg1giIjhrQpTuoNcSniUoj1Vwkd8\nanKlfxU6W+U0nDdu1JaNHDgdC31VZd+gb1CqrTkCgYA/UNWxfl8w/4Py9+syl2op\nOyumfnkQMCrVunCvr2Xw3rDIAoknFfuPcEo6rRiqYNmOTJxOrbyVURV4VbLo+i13\nESKFsc9DJwrgKyWFf22tjPgZF+NwOnRFT80qFay7uz8s6hR/30UD509sVs9H8f2B\n+i+UHZ0pSa3Q9wllpkN2Ig==\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-0jhc3@facialauthentication-camt.iam.gserviceaccount.com",
-  "client_id": "111686285919942410411",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://accounts.google.com/o/oauth2/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-0jhc3%40facialauthentication-camt.iam.gserviceaccount.com"
+
 }
