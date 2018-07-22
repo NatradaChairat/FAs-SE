@@ -75,6 +75,14 @@ export class AccountDataServerService{
 
   }
 
+  getAccountByStudentId(studentId: string){
+    return this.http.get(`${this.baseUrl}`+ `/get/studentId/`+studentId);
+  }
+
+  getAccountByPhonenumber(phonenumber: string){
+    return this.http.get(`${this.baseUrl}`+ `/get/phonenumber/`+phonenumber);
+  }
+
 
   updateStatusByEmailUsername(email:string, username: string, localtime:string): Observable<Object>{
     console.log("AccountId: Request status .. "+email+" "+username+ " "+localtime);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Router, RouterEvent} from "@angular/router";
+import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {Account} from "../entity/Account";
@@ -12,17 +12,55 @@ import {Account} from "../entity/Account";
 })
 export class InforegistrationComponent implements OnInit {
   account: any = {};
+  accountId: string;
   infoRegistrerForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
+  constructor(private route:ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
 
   ngOnInit() {
     this.account = new Account();
+    this.route.params.subscribe((param: Params) =>{
+      this.accountId = param['accountId'];
+    })
+    console.log(this.accountId);
   }
 
-  onSubmit(account: Account){
+  onSubmit(account:Account){
     console.log(account);
-
+    this.accountDataServerService.getAccountByStudentId(account.studentId)
+      .subscribe(data=>{
+        console.log(data);
+        if(data==null){
+          this.checkPhonenumberIsRepeat(account);
+        }else{
+          console.log("Repeated data: StudentId");
+        }
+      });
   }
+
+  checkPhonenumberIsRepeat(account: Account){
+    this.accountDataServerService.getAccountByPhonenumber(account.phonenumber)
+      .subscribe(data=>{
+        console.log(data);
+        if(data==null){
+
+        }else{
+          console.log("Repeated data: phonenumber");
+        }
+      });
+  }
+
+  checkStudentIdIsRepeat(account: Account){
+    this.accountDataServerService.getAccountByStudentId(account.studentId)
+      .subscribe(data=>{
+        console.log(data);
+        if(data==null){
+          this.checkPhonenumberIsRepeat(account);
+        }else{
+          console.log("Repeated data: StudentId");
+        }
+      });
+  }
+
 
 
 

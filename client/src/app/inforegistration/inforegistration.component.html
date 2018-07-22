@@ -7,44 +7,77 @@
         <p></p>
         <form #infoRegisterForm="ngForm" (ngSubmit)="onSubmit(account)">
             <div class="row form-group" >
-                <label class="col-2 text-right">First Name </label>
-                <div class="col-8">
-                  <input class="form-control" id="firstName" style="background-color: rgba(255, 255, 255, 0.5)" required>
-                </div>
-
+              <label class="col-2 text-right">First Name </label>
+              <div class="col-6">
+                <input type="text" class="form-control" id="firstname"
+                         placeholder="eg. Stan" name="firstname"
+                         [(ngModel)]="account.firstname" #firstName="ngModel"
+                         required pattern="^[a-zA-Z]{2,32}$"/>
+              </div>
+              <div class="col-4">
+                  <div *ngIf="!firstName.valid && firstName.touched">Firstname must be 2-32 characters,  a-Z, cannot repeat and empty</div>
+              </div>
             </div>
 
             <div class="row form-group" >
-                <label class="col-2 text-right">Last Name </label>
-                <div class="col-8">
-                  <input class="form-control" id="lastName" style="background-color: rgba(255, 255, 255, 0.5)" required>
-                </div>
+              <label class="col-2 text-right">Last Name </label>
+              <div class="col-6">
+                <input type="text" class="form-control" id="lastname"
+                       placeholder="eg. Smith" name="lastname"
+                       [(ngModel)]="account.lastname" #lastName="ngModel"
+                       required pattern="^[a-zA-Z]{2,32}$"/>
+              </div>
+              <div class="col-4">
+                <div *ngIf="!lastName.valid && lastName.touched">Lastname must be 2-32 characters,  a-Z, cannot repeat and empty</div>
+              </div>
             </div>
 
             <div class="row form-group" >
-                <label class="col-2 text-right">Student ID </label>
-                <div class="col-8">
-                  <input class="form-control" id="studentID" style="background-color: rgba(255, 255, 255, 0.5)" required>
-                </div>
+              <label class="col-2 text-right">Student ID </label>
+              <div class="col-6">
+                <input type="text" class="form-control" id="studentID"
+                       placeholder="eg. 582115000" name="studentId"
+                       [(ngModel)]="account.studentId" #studentID="ngModel"
+                       required pattern="^[0-9]{9}$"/>
+              </div>
+              <div class="col-4">
+                <div *ngIf="!studentID.valid && studentID.touched">Student ID must be 9 characters, only 0-9, cannot repeat and empty</div>
+              </div>
             </div>
 
             <div class="row form-group" >
-                <label class="col-2 text-right">Date of birth</label>
-                <div class="col-8">
-                  <input class="form-control" id="dateOfBirth" style="background-color: rgba(255, 255, 255, 0.5)" required>
-                </div>
+              <label class="col-2 text-right">Date of birth</label>
+              <div class="col-6">
+                <input type="date" class="form-control" id="dateOfBirth"
+                       name="dateOfBirth"
+                       [(ngModel)]="account.dateOfBirth" #dateOfBirth="ngModel"
+                       required>
+              </div>
+              <div class="col-4">
+                <div *ngIf="!dateOfBirth.valid && dateOfBirth.touched">Date of Birth cannot empty</div>
+              </div>
             </div>
 
             <div class="row form-group" >
-                <label class="col-2 text-right">Phone number </label>
-                <div class="col-8">
-                  <input class="form-control" id="phoneNumber" style="background-color: rgba(255, 255, 255, 0.5)" required>
-                </div>
+              <label class="col-2 text-right">Phone number </label>
+              <div class="col-6">
+                <input type="text" class="form-control" id="phonenumber"
+                       placeholder="eg. 0929998877" name="phonenumber"
+                       [(ngModel)]="account.phonenumber" #phoneNumber="ngModel"
+                       required pattern="^[0-9]{9,10}$"/>
+              </div>
+              <div class="col-4">
+                <div *ngIf="!phoneNumber.valid && phoneNumber.touched">Phonenumber must be only 0-9, cannot repeat and empty</div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <button type="submit" class="btn btn-primary mx-2" >Next</button>
             </div>
 
         </form>
       </div>
     </div>
   </div>
-  <button type="button" class="btn btn-primary mx-2" >Next</button>
+
 </div>

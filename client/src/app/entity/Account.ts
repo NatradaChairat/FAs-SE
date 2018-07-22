@@ -5,6 +5,12 @@ export class Account {
   confirmPassword: string;
   email: string;
 
+  firstname:string;
+  lastname:string;
+  studentId:string;
+  dateOfBirth:string;
+  phonenumber:string;
+
 
 
 }
