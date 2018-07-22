@@ -22,7 +22,13 @@ export class ConfirmedEmailComponent implements OnInit {
 
   ngOnInit() {
     console.log(window.location.href);
-    this.route.params.subscribe((params: Params) => {
+    this.route.params.subscribe((params: Params) =>{
+      this.accountDataServerService.getAccountByParam(params['key'], params['localtime'])
+        .subscribe(data=>{
+          console.log("Data: "+data);
+        })
+    });
+    /*this.route.params.subscribe((params: Params) => {
       this.email = params['email'];
       this.username = params['username'];
       this.localtime = params['localtime'];
@@ -30,7 +36,7 @@ export class ConfirmedEmailComponent implements OnInit {
     });
 
     this.accountDataServerService.updateStatusByEmailUsername(this.email,this.username,this.localtime)
-      .subscribe(data =>{});
+      .subscribe(data =>{});*/
     /*this.route.paramMap.pipe(switchMap((params:Params)=> {
       this.accountDataServerService.getStatusByAccountId(params['username'],params['localtime'])
         .subscribe(result =>{

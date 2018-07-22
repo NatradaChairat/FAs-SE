@@ -68,7 +68,13 @@ export class AccountDataServerService{
       );
   }
 
-  updateStatusByEmailUsername(email:string, username: string, localtime:String): Observable<Object>{
+  getAccountByParam(param: string, localTime: string){
+    console.log("Get param: "+param+" time "+localTime);
+    return this.http.get(`${this.baseUrl}`+`/get/status/`+param);
+  }
+
+
+  updateStatusByEmailUsername(email:string, username: string, localtime:string): Observable<Object>{
     console.log("AccountId: Request status .. "+email+" "+username+ " "+localtime);
     return this.http.get(`${this.baseUrl}`+ `/get/status/`+email+`/`+username+`/`+localtime, {responseType: 'text'})
       .pipe(tap((res: any) =>{
@@ -82,6 +88,8 @@ export class AccountDataServerService{
         })
       );
   }
+
+
 
 
 }
