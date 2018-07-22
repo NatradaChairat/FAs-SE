@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
@@ -12,6 +12,7 @@ import {Account} from "../entity/Account";
 })
 export class InforegistrationComponent implements OnInit {
   account: any = {};
+  infoRegistrerForm: FormGroup;
   constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
 
   ngOnInit() {

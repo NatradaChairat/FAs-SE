@@ -7,11 +7,11 @@ import {throwError} from "rxjs/internal/observable/throwError";
 
 const httpOptions = {
   headers: new HttpHeaders(
-    { 'Content-Type': 'application/json ; charset=utf-8; text/plain',
+    { 'Content-Type': 'application/json ; charset=utf-8; text/plain ',
       'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': 'http://localhost:4200',
-      'Access-Control-Allow-Methods': "POST, GET, OPTIONS",
-      'Access-Control-Allow-Headers': "*",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+      'Access-Control-Allow-Headers': "Origin, Content-Type, X-Auth-Token",
 
     })
 };
@@ -69,8 +69,10 @@ export class AccountDataServerService{
   }
 
   getAccountByParam(param: string, localTime: string){
-    console.log("Get param: "+param+" time "+localTime);
-    return this.http.get(`${this.baseUrl}`+`/get/status/`+param);
+    console.log("Get param: "+encodeURIComponent(param)+"/"+encodeURIComponent(localTime));
+    return this.http.get(`${this.baseUrl}`+`/get/status/`+encodeURIComponent(param)+`/`+localTime/*encodeURIComponent(localTime)*/,httpOptions)
+      ;
+
   }
 
 
@@ -88,6 +90,22 @@ export class AccountDataServerService{
         })
       );
   }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
 
 
 

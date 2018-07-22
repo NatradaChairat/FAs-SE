@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Account} from "../entity/Account";
 import {AccountDataServerService} from "../service/account-data-server.service";
-import {ActivatedRoute, ParamMap, Params} from "@angular/router";
-import {switchMap} from "rxjs/operators";
-import {Observable} from "rxjs/Observable";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {collectExternalReferences} from "@angular/compiler";
+import {error} from "util";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-confirmedemail',
@@ -11,22 +12,30 @@ import {Observable} from "rxjs/Observable";
   styleUrls: ['./confirmedemail.component.css']
 })
 export class ConfirmedEmailComponent implements OnInit {
-
-  username: string;
-  email: string;
-  localtime:string;
-
-  constructor( private route:ActivatedRoute, private accountDataServerService: AccountDataServerService) {
+  account: Account;
+  isNoData: boolean;
+  buttonDisabled = true;
+  constructor( private route:ActivatedRoute, private router: Router, private accountDataServerService: AccountDataServerService) {
 
   }
 
   ngOnInit() {
     console.log(window.location.href);
     this.route.params.subscribe((params: Params) =>{
+      console.log(params['key']+ "/"+ params['localtime'])
       this.accountDataServerService.getAccountByParam(params['key'], params['localtime'])
-        .subscribe(data=>{
-          console.log("Data: "+data);
-        })
+        .subscribe((account: Account)=>{
+          console.log(account);
+          if(account ==null){
+            console.log("null");
+            this.isNoData = true;
+          }else {
+            console.log("not null");
+            this.account = account;
+            this.buttonDisabled = false;
+          }
+        },err => {this.isNoData = true;}
+        );
     });
     /*this.route.params.subscribe((params: Params) => {
       this.email = params['email'];
@@ -46,7 +55,9 @@ export class ConfirmedEmailComponent implements OnInit {
 
   }
 
-  registerstep2(){
-    console.log("go to register step2");
+  infoRegistration(){
+    console.log("go to register step2 "+this.account.accountId);
+    this.router.navigate(['/inforegistration/'+this.account.accountId]);
+
   }
 }

@@ -17,6 +17,7 @@ export class EmailregistrationDialogComponent {
 
   onClick(): void {
     this.dialogRef.close();
+
   }
 
 }

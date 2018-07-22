@@ -1,6 +1,13 @@
+
 <h1>Register</h1>
 <h4>Step 1 of 3: Verification email</h4>
-<div class="row">
+<div [hidden] = "!isNoData">
+  <div class="alert alert-danger text-center" role="alert">
+    <h4>Your Session Has Timed Out</h4>
+    <p>The system shall sending new verify link to your email again.</p>
+  </div>
+</div>
+<div [hidden] = "isNoData" class="row">
   <div class=" col-md-12">
     <div class="form-group">
       <p>Confirm verification email</p>
@@ -9,25 +16,26 @@
         <div class="row pb-3">
           <label class="col-2 text-right">Email: </label>
           <div class="col-8">
-            <label class="col-2 text-right">{{email}}</label>
+            <label class="col-2 text-right">{{account?.email}}</label>
           </div>
         </div>
         <div class="row pb-3">
           <label class="col-2 text-right">Username: </label>
           <div class="col-8">
-            <label class="col-2 text-right">{{username}}</label>
+            <label class="col-2 text-right">{{account?.username}}</label>
           </div>
         </div>
         <hr>
         <div class="row pb-3">
           <label class="col-2 text-right"></label>
           <div class="col-8">
-            <label class="col-4 text-right">User must input information</label>
+            <label class="col-8 text-right">User must input information</label>
           </div>
         </div>
 
       </form>
     </div>
   </div>
+  <button [disabled]=buttonDisabled  type="button" class="btn btn-primary mx-2" (click)="infoRegistration()"  >Next</button>
 </div>
-<button type="button" class="btn btn-primary mx-2" (click)="registerstep2()">Next</button>
+
