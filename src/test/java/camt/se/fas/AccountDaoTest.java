@@ -1,5 +1,9 @@
 package camt.se.fas;
 
+import camt.se.fas.config.FirebaseConfig;
+import camt.se.fas.dao.AccountDao;
+import camt.se.fas.dao.AccountDaoImpl;
+import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.AccountServiceImpl;
 import com.google.api.client.googleapis.testing.TestUtils;
@@ -27,16 +31,24 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @PrepareForTest({ FirebaseDatabase.class})
 @TestPropertySource(properties = {"firebase.config.path=fas-key-service.json","firebase.database-url=https://facialauthentication-camt.firebaseio.com"})
-public class AccountServiceTest {
+public class AccountDaoTest {
 
     @Autowired
-    private AccountService accountService = new AccountServiceImpl();
+    private AccountDao accountDao = new AccountDaoImpl();
 
     @Value("${firebase.database-url}")
     String firebaseUrl;
 
     @Value("${firebase.config.path}")
     String firebaseConfigPath;
+
+    DatabaseReference databaseReference;
+
+    @Autowired
+    public void setDatabaseReference (FirebaseConfig firebaseConfig){
+        System.out.println("Setup");
+        this.databaseReference = firebaseConfig.firebaseDatabase();
+    }
 
 /*
  public static final FirebaseOptions options =
@@ -57,8 +69,8 @@ public class AccountServiceTest {
 
     @Test
     public void test_findAccountEmail_emailIsNotExited(){
-        String result = accountService.findAccountByEmail("natrada@cmu.ac.th");
-
+        Account result = accountDao.findAccountByEmail("songsangmiffy@gmail.com");
+        //Account result = accountService.findAccountByEmail("songsangmiffy@gmail.com");
         System.out.println("Test: "+result);
         Assert.assertEquals("",result);
     }

@@ -31,11 +31,16 @@ export class AccountDataServerService{
   constructor(private http: HttpClient){}
 
   sendAccount(account:Account): Observable<Object>{
-    console.log("Send Account .."+account.email+ " to Url: "+this.baseUrl);
+    console.log("Send Account .."+account+ " to Url: "+this.baseUrl);
     /*let httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json' , 'Access-Control-Allow-Origin': '*'})};
     let body = JSON.stringify(account);
     return this.http.post<Account>('http://localhost:8080/account',body,httpOptions);*/
     return this.http.post(`${this.baseUrl}`+`/create`, account,{responseType: 'text'});
+  }
+
+  sendPersonalAccount(account: Account): Observable<Object>{
+    console.log(account);
+    return this.http.post(`${this.baseUrl}`+`/update`,account);
   }
 
   getAccountByUsername(username: String): Observable<Object>{
@@ -68,7 +73,7 @@ export class AccountDataServerService{
       );
   }
 
-  getAccountByParam(param: string, localTime: string){
+  updateAccountByParam(param: string, localTime: string){
     console.log("Get param: "+encodeURIComponent(param)+"/"+encodeURIComponent(localTime));
     return this.http.get(`${this.baseUrl}`+`/get/status/`+encodeURIComponent(param)+`/`+localTime/*encodeURIComponent(localTime)*/,httpOptions)
       ;
@@ -84,7 +89,7 @@ export class AccountDataServerService{
   }
 
 
-  updateStatusByEmailUsername(email:string, username: string, localtime:string): Observable<Object>{
+  /*updateStatusByEmailUsername(email:string, username: string, localtime:string): Observable<Object>{
     console.log("AccountId: Request status .. "+email+" "+username+ " "+localtime);
     return this.http.get(`${this.baseUrl}`+ `/get/status/`+email+`/`+username+`/`+localtime, {responseType: 'text'})
       .pipe(tap((res: any) =>{
@@ -97,7 +102,7 @@ export class AccountDataServerService{
           }
         })
       );
-  }
+  }*/
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

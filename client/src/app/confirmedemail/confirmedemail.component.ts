@@ -23,7 +23,7 @@ export class ConfirmedEmailComponent implements OnInit {
     console.log(window.location.href);
     this.route.params.subscribe((params: Params) =>{
       console.log(params['key']+ "/"+ params['localtime'])
-      this.accountDataServerService.getAccountByParam(params['key'], params['localtime'])
+      this.accountDataServerService.updateAccountByParam(params['key'], params['localtime'])
         .subscribe((account: Account)=>{
           console.log(account);
           if(account ==null){

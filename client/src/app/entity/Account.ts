@@ -4,7 +4,6 @@ export class Account {
   password: string;
   confirmPassword: string;
   email: string;
-
   firstname:string;
   lastname:string;
   studentId:string;

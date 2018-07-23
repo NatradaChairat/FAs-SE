@@ -26,6 +26,9 @@ export class InforegistrationComponent implements OnInit {
 
   onSubmit(account:Account){
     console.log(account);
+    account.accountId = this.accountId;
+    account.dateOfBirth = this.account.dateOfBirth;
+    //checkStudentIdIsRepeat
     this.accountDataServerService.getAccountByStudentId(account.studentId)
       .subscribe(data=>{
         console.log(data);
@@ -42,7 +45,15 @@ export class InforegistrationComponent implements OnInit {
       .subscribe(data=>{
         console.log(data);
         if(data==null){
-
+          this.accountDataServerService.sendPersonalAccount(account)
+            .subscribe(data => {
+              console.log(data);
+              if(data!=null){
+                console.log("Data: "+data.toString());
+              }else{
+                console.log("Null");
+              }
+            });
         }else{
           console.log("Repeated data: phonenumber");
         }
