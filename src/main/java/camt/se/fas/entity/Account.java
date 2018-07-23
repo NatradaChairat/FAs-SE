@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -41,7 +42,7 @@ public class Account {
     @JsonView/*(View.Login.class)*/
     String studentId;
     @JsonView/*(View.Login.class)*/
-    String dateofbirth;
+    Date dateofbirth;
     @JsonView/*(View.Login.class)*/
     String phonenumber;
     @JsonView/*(View.Login.class)*/

@@ -2,23 +2,14 @@ package camt.se.fas.service;
 
 import camt.se.fas.dao.AccountDao;
 import camt.se.fas.entity.Account;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -41,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account addOnlyAccount(Account account) {
+    public Account addAccountOfRegistrationStep1(Account account) {
         LOGGER.info("Get Last AccountId: "+ accountDao.findLastAccountId());
         String keyOnlyNumber = accountDao.findLastAccountId().getAccountId().substring(2);
         LOGGER.info("Get KEY: " + keyOnlyNumber);
@@ -52,16 +43,34 @@ public class AccountServiceImpl implements AccountService {
 
         if(nextKey != "FA100000") {
             account.setAccountId(nextKey);
-            String account1 = accountDao.addUsernamePassword(account);
-            String account2 = accountDao.addStatus(account, "registered");
-            String account3 = accountDao.addEmailPhonenumber(account);
+            Account account1 = accountDao.addUsernamePassword(account);
+            Account account2 = accountDao.addStatus(account, "registered");
+            Account account3 = accountDao.addEmailPhonenumber(account);
             LOGGER.info("Added: "+account1 + ", " + account2 + ", " + account3);
-            if(account1==account2 && account1==account3){
+            if(account1.getAccountId()==account2.getAccountId() && account1.getAccountId()==account3.getAccountId()){
                 return account;
             }
             return null;
         }else return null;
 
+    }
+
+    @Override
+    public Account updateAccountOfRegistrationStep2(Account account) {
+        LOGGER.info("Get KEY: " + account.getAccountId());
+        Account account1 = accountDao.addEmailPhonenumber(account);
+        LOGGER.info("Get account1: " + account1);
+        Account account2 = accountDao.addUsernamePassword(account);
+        LOGGER.info("Get account2: " + account2);
+        Account account3 = accountDao.addDOBFirstnameLastname(account);
+        LOGGER.info("Get account3: " + account3);
+        return account3;
+    }
+
+    @Override
+    public Account updateStatus(Account account, String status) {
+
+        return accountDao.addStatus(account,status);
     }
 
     /*@Override
@@ -247,6 +256,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account findAccountByStudentId(String studentId) {
+        return accountDao.findAccountByStudentId(studentId);
+    }
+
+    @Override
+    public Account findAccountByPhonenumber(String phonenumber) {
+        return accountDao.findAccountByPhonenumber(phonenumber);
+    }
+
+   /* @Override
     public Boolean updateStatusByEmail(String email,String status) {
         try {
             InputStream serviceAccount = AccountServiceImpl.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
@@ -277,10 +296,16 @@ public class AccountServiceImpl implements AccountService {
             e.printStackTrace();
             return false;
         }
-    }
+    }*/
     @Override
-    public List<Account> getAccount() {
+    public List<Account> getAccounts() {
         return null;
+    }
+
+    @Override
+    public Account getAccount(String accountId) {
+        Account account = accountDao.findAccountByAccountId(accountId);
+        return account;
     }
 
 }

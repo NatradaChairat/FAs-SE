@@ -1,16 +1,19 @@
 package camt.se.fas.controller;
 
 import camt.se.fas.entity.Account;
+import camt.se.fas.service.AES;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @CrossOrigin
 @RestController("/account")
@@ -28,13 +31,25 @@ public class AccountController {
     public void setEmailService(EmailService emailService){this.emailService = emailService;}
 
     @PostMapping("/account/create")
-    public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
-        System.out.println("Post Account working .. "+ account.getEmail());
+    public ResponseEntity<?> createAccount(@RequestBody Account account) {
+        System.out.println("Post Account working .. "+ account.toString());
         //boolean result = accountService.addAccountOfRegisterStepOne(account);
-        Account _account = accountService.addOnlyAccount(account);
+        Account _account = accountService.addAccountOfRegistrationStep1(account);
         LOGGER.info("Return account:"+account);
         if(_account.getAccountId() != null) {
-            emailService.sendEmail(_account.getEmail(),_account.getUsername());
+            emailService.sendEmail(_account);
+            return new ResponseEntity<>(account, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("/account/update")
+    public ResponseEntity<?> uploadAccount(@RequestBody Account account,@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd") Date dob) {
+        System.out.println("Post Account working .. "+ account.toString() + " "+ dob);
+        Account _account = accountService.updateAccountOfRegistrationStep2(account);
+        LOGGER.info("Return account:"+_account);
+        if(_account.getAccountId() != null) {
             return new ResponseEntity<>(account, HttpStatus.OK);
         }else {
             return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
@@ -72,7 +87,35 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account/get/status/{email}/{username}/{localtime}")
+    @GetMapping("account/get/studentId/{studentId}")
+    public ResponseEntity getAccountByStudentId (@PathVariable("studentId")String studentId){
+        LOGGER.info("GET Account from StudentId working");
+        Account account = accountService.findAccountByStudentId(studentId);
+        LOGGER.info("Return account:"+account);
+        if(account!=null){
+            LOGGER.info("Result: StudentId is repeated");
+            return ResponseEntity.ok(account);
+        }else{
+            LOGGER.info("Result: StudentId is not repeated");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    @GetMapping("account/get/phonenumber/{phonenumber}")
+    public ResponseEntity getAccountByPhonenumber (@PathVariable("phonenumber")String phonenumber){
+        LOGGER.info("GET Account from Phonenumber working");
+        Account account = accountService.findAccountByPhonenumber(phonenumber);
+        LOGGER.info("Return account:"+account);
+        if(account!=null){
+            LOGGER.info("Result: Phonenumber is repeated");
+            return ResponseEntity.ok(account);
+        }else{
+            LOGGER.info("Result: Phonenumber is not repeated");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    /*@GetMapping("account/get/status/{email}/{username}/{localtime}")
     public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("email")String email, @PathVariable("username")String username, @PathVariable("localtime")String localtime){
         System.out.println("GET Account working .."+username+" "+localtime);
         //String result = accountService.findStatusByAccountId(accountId);
@@ -98,6 +141,53 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
         }
     }
+*/
+    @GetMapping("account/get/status/{key}")
+    public ResponseEntity getAccountByParam(@PathVariable("key")String key){
+        LOGGER.info("Encoded Key: "+key);
+        AES aes = new AES();
+        String decodeKey = aes.decrypt(key);
+        LOGGER.info("Decoded Key: "+decodeKey);
+        Account account =  accountService.getAccount(decodeKey);
+        LOGGER.info("Return Account "+account);
+        if(account != null) {
+            return ResponseEntity.ok(account);
+        }else return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /*@GetMapping(value="account/get/status/{key}/{localtime}", produces = "text/plain;charset=UTF-8")*/
+    @GetMapping(value="account/get/status/{key}/{localtime}")
+    /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
+    public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("key")String key, @PathVariable("localtime")String localtime){
+        LOGGER.info("Encoded Key: "+key);
+        AES aes = new AES();
+        String decodeKey = aes.decrypt(key);
+        LOGGER.info("Decoded Key: "+decodeKey);
+        //Provide for encrypt Time
+        /*String decodeTime = aes.decrypt(localtime);
+        LOGGER.info("Decoded Time: "+decodeTime);*/
+        Account account =  accountService.getAccount(decodeKey);
+        LOGGER.info("Return "+account);
+        LocalDateTime _localtime = LocalDateTime.parse(localtime);
+        LOGGER.info("_localtime "+_localtime);
+        System.out.println("Result: "+LocalDateTime.now().isBefore(_localtime.plusMinutes(15))+" Origin: "+_localtime+" Now: "+LocalDateTime.now() + " Deadline: "+_localtime.plusMinutes(20));
+        if(LocalDateTime.now().isBefore(
+                _localtime.plusMinutes(15))){
+            if(account != null){
+                Account _account = accountService.updateStatus(account, "activated");
+                _account.setEmail(account.getEmail());
+                _account.setUsername(account.getUsername());
+                LOGGER.info("Final Account "+_account);
+                return ResponseEntity.ok(_account);
+            }else{
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
+        }
+    }
+
+
 
 
     @GetMapping("account/test")

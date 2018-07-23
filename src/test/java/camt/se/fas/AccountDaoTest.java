@@ -10,8 +10,7 @@ import com.google.api.client.googleapis.testing.TestUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -69,8 +68,10 @@ public class AccountDaoTest {
 
     @Test
     public void test_findAccountEmail_emailIsNotExited(){
+        //Now, return null | addListenerForSingleValueEvent not working on Test Class
         Account result = accountDao.findAccountByEmail("songsangmiffy@gmail.com");
         //Account result = accountService.findAccountByEmail("songsangmiffy@gmail.com");
+
         System.out.println("Test: "+result);
         Assert.assertEquals("",result);
     }

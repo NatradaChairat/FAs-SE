@@ -6,6 +6,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,10 +21,10 @@ import java.io.InputStream;
 @Configuration
 @Component
 public class FirebaseConfig {
-
+    Logger LOGGER = LoggerFactory.getLogger(FirebaseConfig.class.getName());
     @Bean
     public DatabaseReference firebaseDatabase(){
-        System.out.println("DatabaseRef working");
+       LOGGER.info("firebaseDatabase() working");
         DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
         return firebase;
     }
@@ -35,7 +37,7 @@ public class FirebaseConfig {
 
     @PostConstruct
     public void init() throws IOException {
-        System.out.println("init working");
+        LOGGER.info("init() working");
         InputStream serviceAccount = FirebaseConfig.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
