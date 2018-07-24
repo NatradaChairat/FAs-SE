@@ -7,7 +7,7 @@ export class Account {
   firstname:string;
   lastname:string;
   studentId:string;
-  dateOfBirth:string;
+  dateofbirth:string;
   phonenumber:string;
 
 

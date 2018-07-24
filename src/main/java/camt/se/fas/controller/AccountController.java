@@ -45,8 +45,8 @@ public class AccountController {
     }
 
     @PostMapping("/account/update")
-    public ResponseEntity<?> uploadAccount(@RequestBody Account account,@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd") Date dob) {
-        System.out.println("Post Account working .. "+ account.toString() + " "+ dob);
+    public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
+        System.out.println("Post Account working .. "+ account.toString());
         Account _account = accountService.updateAccountOfRegistrationStep2(account);
         LOGGER.info("Return account:"+_account);
         if(_account.getAccountId() != null) {

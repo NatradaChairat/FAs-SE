@@ -42,7 +42,7 @@ public class Account {
     @JsonView/*(View.Login.class)*/
     String studentId;
     @JsonView/*(View.Login.class)*/
-    Date dateofbirth;
+    String dateofbirth;
     @JsonView/*(View.Login.class)*/
     String phonenumber;
     @JsonView/*(View.Login.class)*/
