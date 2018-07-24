@@ -1,0 +1,33 @@
+<h1>Register</h1>
+<h4>Step 2.2 of 3: Take face video with student card and the random text </h4>
+<div class="row">
+  <div class=" col-md-12">
+    <div class="form-group">
+      <p></p>
+      <form>
+
+        <div class="row pb-3">
+          <label class="col-2 text-right">Random Text: </label>
+          <div class="col-8">
+            <label class="col-2 text-right">YDCVR</label>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<div>
+  <app-webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"></app-webcam>
+  <button class="actionBtn" (click)="triggerSnapshot();">Take A Snapshot</button>
+  <button class="actionBtn" (click)="toggleWebcam();">Toggle Webcam</button>
+</div>
+
+<div class="snapshot" *ngIf="webcamImage">
+  <h2>Nice one!</h2>
+  <img [src]="webcamImage.imageAsDataUrl"/>
+</div>
+<br>
+
+<button type="button" class="btn btn-primary mx-2" (click)="registerstep3()">Next</button>

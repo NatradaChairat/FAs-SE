@@ -14,6 +14,8 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-b
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
 import { EmailregistrationDialogComponent } from './emailregistration-dialog/emailregistration-dialog.component';
 import { InforegistrationComponent } from './inforegistration/inforegistration.component';
+import { WebcamComponent } from './webcam/webcam.component';
+import { VideoregistrationComponent } from './videoregistration/videoregistration.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { InforegistrationComponent } from './inforegistration/inforegistration.c
     WaitComponent,
     EmailRegistrationComponent,
     EmailregistrationDialogComponent,
-    InforegistrationComponent
+    InforegistrationComponent,
+    WebcamComponent,
+    VideoregistrationComponent
   ],
   entryComponents: [
     EmailregistrationDialogComponent

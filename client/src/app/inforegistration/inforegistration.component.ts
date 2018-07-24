@@ -52,6 +52,7 @@ export class InforegistrationComponent implements OnInit {
                 console.log(data);
               }else{
                 console.log("Null");
+                this.router.navigate(['/videoregistration/'+this.account.accountId]);
               }
             });
         }else{
@@ -60,7 +61,7 @@ export class InforegistrationComponent implements OnInit {
       });
   }
 
-  checkStudentIdIsRepeat(account: Account){
+  /*checkStudentIdIsRepeat(account: Account){
     this.accountDataServerService.getAccountByStudentId(account.studentId)
       .subscribe(data=>{
         console.log(data);
@@ -70,7 +71,7 @@ export class InforegistrationComponent implements OnInit {
           console.log("Repeated data: StudentId");
         }
       });
-  }
+  }*/
 
 
 
