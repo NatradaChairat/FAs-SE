@@ -31,11 +31,11 @@ public class AccountController {
     public void setEmailService(EmailService emailService){this.emailService = emailService;}
 
     @PostMapping("/account/create")
-    public ResponseEntity<?> createAccount(@RequestBody Account account) {
+    public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
         System.out.println("Post Account working .. "+ account.toString());
         //boolean result = accountService.addAccountOfRegisterStepOne(account);
         Account _account = accountService.addAccountOfRegistrationStep1(account);
-        LOGGER.info("Return account:"+account);
+        LOGGER.info("Return account:"+_account);
         if(_account.getAccountId() != null) {
             emailService.sendEmail(_account);
             return new ResponseEntity<>(account, HttpStatus.OK);
@@ -45,7 +45,7 @@ public class AccountController {
     }
 
     @PostMapping("/account/update")
-    public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
+    public ResponseEntity<?> updateAccount(@RequestBody Account account) {
         System.out.println("Post Account working .. "+ account.toString());
         Account _account = accountService.updateAccountOfRegistrationStep2(account);
         LOGGER.info("Return account:"+_account);
@@ -55,7 +55,6 @@ public class AccountController {
             return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
         }
     }
-
 
     //maybe changes to request method
     @GetMapping("account/get/username/{username}")
@@ -115,6 +114,7 @@ public class AccountController {
         }
     }
 
+
     /*@GetMapping("account/get/status/{email}/{username}/{localtime}")
     public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("email")String email, @PathVariable("username")String username, @PathVariable("localtime")String localtime){
         System.out.println("GET Account working .."+username+" "+localtime);
@@ -142,7 +142,7 @@ public class AccountController {
         }
     }
 */
-    @GetMapping("account/get/status/{key}")
+    /*@GetMapping("account/get/status/{key}")
     public ResponseEntity getAccountByParam(@PathVariable("key")String key){
         LOGGER.info("Encoded Key: "+key);
         AES aes = new AES();
@@ -153,12 +153,12 @@ public class AccountController {
         if(account != null) {
             return ResponseEntity.ok(account);
         }else return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+    }*/
 
     /*@GetMapping(value="account/get/status/{key}/{localtime}", produces = "text/plain;charset=UTF-8")*/
-    @GetMapping(value="account/get/status/{key}/{localtime}")
+    @GetMapping(value="account/get/status/{key}/{starttime}")
     /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
-    public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("key")String key, @PathVariable("localtime")String localtime){
+    public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("key")String key, @PathVariable("starttime")String starttime){
         LOGGER.info("Encoded Key: "+key);
         AES aes = new AES();
         String decodeKey = aes.decrypt(key);
@@ -167,10 +167,11 @@ public class AccountController {
         /*String decodeTime = aes.decrypt(localtime);
         LOGGER.info("Decoded Time: "+decodeTime);*/
         Account account =  accountService.getAccount(decodeKey);
+
         LOGGER.info("Return "+account);
-        LocalDateTime _localtime = LocalDateTime.parse(localtime);
+        LocalDateTime _localtime = LocalDateTime.parse(starttime);
         LOGGER.info("_localtime "+_localtime);
-        System.out.println("Result: "+LocalDateTime.now().isBefore(_localtime.plusMinutes(15))+" Origin: "+_localtime+" Now: "+LocalDateTime.now() + " Deadline: "+_localtime.plusMinutes(20));
+        System.out.println("Result: "+LocalDateTime.now().isBefore(_localtime.plusMinutes(15))+" Origin: "+_localtime+" Now: "+LocalDateTime.now() + " Deadline: "+_localtime.plusMinutes(15));
         if(LocalDateTime.now().isBefore(
                 _localtime.plusMinutes(15))){
             if(account != null){
@@ -190,7 +191,9 @@ public class AccountController {
 
 
 
-    @GetMapping("account/test")
+
+
+   /* @GetMapping("account/test")
     public ResponseEntity testDao (){
          Account account = accountService.testDao();
         //Account account = null;
@@ -205,7 +208,7 @@ public class AccountController {
             //http code 204
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+    }*/
 
 
 

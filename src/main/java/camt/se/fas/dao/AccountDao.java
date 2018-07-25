@@ -3,7 +3,7 @@ package camt.se.fas.dao;
 import camt.se.fas.entity.Account;
 
 public interface AccountDao{
-    Account addUsernamePassword(Account account);
+    Account addUsernamePasswordStudentId(Account account);
     Account addStatus(Account account,String status);//
     Account addEmailPhonenumber(Account account);//
     Account addDOBFirstnameLastname(Account account);
@@ -14,6 +14,6 @@ public interface AccountDao{
     Account findLastAccountId();
     Account findAccountByAccountId(String accountId);
 
-    Account updateStatusByAccountId(String accountId, String status);
+    //Account updateStatusByAccountId(String accountId, String status);
 
 }

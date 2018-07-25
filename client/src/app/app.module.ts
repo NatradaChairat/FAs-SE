@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FilenotfoundComponent } from './filenotfound/filenotfound.component';
 import {AppRoutingModule} from "./app-routing.module";
-import {FormsModule, ReactiveFormsModule, FormGroup} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/account-data-server.service";
 import { ConfirmedEmailComponent } from './confirmedemail/confirmedemail.component';

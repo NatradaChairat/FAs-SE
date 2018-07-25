@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import sun.rmi.runtime.Log;
 
+import javax.security.sasl.SaslServer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class AccountDaoImpl implements AccountDao {
 
 
     @Override
-    public Account addUsernamePassword(Account account) {
+    public Account addUsernamePasswordStudentId(Account account) {
         Account _account = new Account();
         LOGGER.info("Add Username, Password Student Id: "+account.getUsername()+", "+account.getPassword());
         DatabaseReference usersRef = databaseReference.child("account_table");
@@ -71,6 +72,7 @@ public class AccountDaoImpl implements AccountDao {
             signal.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return null;
         }finally {
             return _account;
         }
@@ -187,6 +189,7 @@ public class AccountDaoImpl implements AccountDao {
     public Account findAccountByEmail(String email) {
         Account account = new Account();
         System.out.println("findAccount work");
+        CountDownLatch signal = new CountDownLatch(1);
         try {
             System.out.println("try work | Get ref:" + databaseReference.getRef());
             databaseReference.child("account_contact_table").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -204,15 +207,16 @@ public class AccountDaoImpl implements AccountDao {
                     String _phonenumber = snapshot.child(result).child("phonenumber").getValue().toString();
                     LOGGER.info(_phonenumber);
                     account.setPhonenumber(_phonenumber);
+                    LOGGER.info(account.toString());
+                    signal.countDown();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
 
             }
         });
-
+            signal.await();
         Thread.sleep(1000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
@@ -227,6 +231,8 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findAccountByUsername(String username){
         Account account = new Account();
+        System.out.println("Account Dao findAccountByUsername");
+        //CountDownLatch signal = new CountDownLatch(1);
         try {
             databaseReference.child("account_table").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -235,7 +241,6 @@ public class AccountDaoImpl implements AccountDao {
                     String result = snapshot.getValue().toString().substring(1, 8);
                     LOGGER.info(result);
                     account.setAccountId(result);
-
                     String _username = snapshot.child(result).child("username").getValue().toString();
                     LOGGER.info(_username);
                     account.setUsername(_username);
@@ -245,6 +250,7 @@ public class AccountDaoImpl implements AccountDao {
                     String _studentId = snapshot.child(result).child("studentId").getValue().toString();
                     LOGGER.info(_studentId);
                     account.setStudentId(_studentId);
+                    //signal.countDown();
                 }
 
                 @Override
@@ -252,7 +258,8 @@ public class AccountDaoImpl implements AccountDao {
 
                 }
             });
-            Thread.sleep(1000);
+            //signal.await();
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
         }finally {
@@ -267,6 +274,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findAccountByStudentId(String studentId) {
         Account account = new Account();
+        CountDownLatch signal = new CountDownLatch(1);
         try {
             databaseReference.child("account_table").orderByChild("studentId").equalTo(studentId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -286,6 +294,7 @@ public class AccountDaoImpl implements AccountDao {
                         String _studentId = snapshot.child(result).child("studentId").getValue().toString();
                         LOGGER.info(_studentId);
                         account.setStudentId(_studentId);
+                        signal.countDown();
                     }
 
                 }
@@ -295,6 +304,7 @@ public class AccountDaoImpl implements AccountDao {
                     System.out.println(error.getDetails());
                 }
             });
+            signal.await();
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
@@ -350,6 +360,8 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findLastAccountId(){
         Account account = new Account();
+        CountDownLatch signal = new CountDownLatch(1);
+        try {
         databaseReference.child("account_table").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -361,6 +373,7 @@ public class AccountDaoImpl implements AccountDao {
                 /*String newKey = "FA" + String.format("%05d", keyNumber + 1);
                 LOGGER.info("Get Next KEY: " + newKey);*/
                 account.setAccountId(snapshot.getValue().toString().substring(1,8));
+                signal.countDown();
             }
 
             @Override
@@ -368,8 +381,8 @@ public class AccountDaoImpl implements AccountDao {
 
             }
         });
-        try {
-            Thread.sleep(2000);
+            signal.await();
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
         }finally {
@@ -385,6 +398,7 @@ public class AccountDaoImpl implements AccountDao {
         Account account = new Account();
         account.setAccountId(accountId);
         try {
+
         databaseReference.child("account_table").orderByKey().equalTo(accountId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -419,8 +433,24 @@ public class AccountDaoImpl implements AccountDao {
             }
         });
 
-        Thread.sleep(2000);
+        databaseReference.child("account_status_table").orderByKey().equalTo(accountId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                LOGGER.info(snapshot.getValue().toString());
+                String _status = snapshot.child(accountId).getValue().toString();
+                LOGGER.info("Get Status "+_status);
+                account.setStatus(_status);
+                signal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
+
         signal.await();
+        Thread.sleep(2000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
         }finally {
@@ -431,10 +461,10 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
-    @Override
+   /* @Override
     public Account updateStatusByAccountId(String accountId, String status) {
         return null;
     }
 
-
+*/
 }

@@ -1,3 +1,4 @@
+<script src="../assets/videoScript.js"></script>
 <h1>Register</h1>
 <h4>Step 2.2 of 3: Take face video with student card and the random text </h4>
 <div class="row">
@@ -7,18 +8,27 @@
       <form>
 
         <div class="row pb-3">
-          <label class="col-2 text-right">Random Text: </label>
+          <label class="col-1 text-right">Random Text: </label>
           <div class="col-8">
-            <label class="col-2 text-right">YDCVR</label>
+            <label class="col-6">{{randomtext}}</label>
           </div>
         </div>
+        <div class="row pb-3">
+          <label class="col-1 text-right">Important! </label>
+          <div class="col-8">
+            <label class="col-6">Please, write the random text on a plain paper and holding with student card to take the video.</label>
+          </div>
+        </div>
+
+        <video id="myVideo" class="video-js vjs-default-skin"></video>
 
       </form>
     </div>
   </div>
 </div>
 
-<div>
+
+<!--<div>
   <app-webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"></app-webcam>
   <button class="actionBtn" (click)="triggerSnapshot();">Take A Snapshot</button>
   <button class="actionBtn" (click)="toggleWebcam();">Toggle Webcam</button>
@@ -28,6 +38,6 @@
   <h2>Nice one!</h2>
   <img [src]="webcamImage.imageAsDataUrl"/>
 </div>
-<br>
+<br>-->
 
 <button type="button" class="btn btn-primary mx-2" (click)="registerstep3()">Next</button>

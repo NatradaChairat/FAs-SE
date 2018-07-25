@@ -17,6 +17,17 @@ public class EmailServiceTest {
 
     @Test
     public void test_sendEmail_canSending(){
-        Assert.assertEquals(true, emailService.sendEmail("natrada_chairat50@cmu.ac.th", "Natrada"));
+        Assert.assertEquals(true, emailService.sendEmail(new Account("FA00002",
+                "Marisa1512",
+                "Zxcv4321",
+                "natrada_chairat@cmu.ac.th",
+                null,
+                null,
+                null,
+                null,
+                "092639169",
+                null,
+                null,
+                null)));
     }
 }

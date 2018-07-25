@@ -65,7 +65,6 @@ export class WebcamComponent implements OnInit,AfterViewInit,OnDestroy {
     let _canvas = this.canvas.nativeElement;
     _canvas.width = dimensions.width;
     _canvas.height = dimensions.height;
-
     _canvas.getContext('2d').drawImage(this.video.nativeElement, 0, 0);
 
     let mimeType: string = "image/jpeg";

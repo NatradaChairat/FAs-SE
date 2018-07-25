@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
     private static String USER_NAME = "camt.se.facialauthentication";  // GMail user name (just the part before "@gmail.com")
     private static String PASSWORD = "Fas_1234"; // GMail password
 
-    @Override
+   /* @Override
     public Boolean sendEmail(String email, String username) {
         String[] receiver = { email }; // list of recipient email addresses
         String subject = "Facial Authentication: Verification email";
@@ -36,9 +36,9 @@ public class EmailServiceImpl implements EmailService {
         }
         String params = ""+email+"/"+username+"/"+LocalDateTime.now();
         String secretParam = ""+encodeKey+"/"+LocalDateTime.now();
-        System.out.println("Setting param: "+secretParam/*params*/);
+        System.out.println("Setting param: "+secretParam*//*params*//*);
         String body = "Email Address: "+ email+"\nUsername: "+username+
-                "\nClick the link to verify email: Http://localhost:4200/confirmedemail/"+/*params*/secretParam;
+                "\nClick the link to verify email: Http://localhost:4200/confirmedemail/"+*//*params*//*secretParam;
 
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
@@ -81,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
             return false;
         }
 
-    }
+    }*/
 
     @Override
     public Boolean sendEmail(Account account) {
