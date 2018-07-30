@@ -5,7 +5,7 @@ import camt.se.fas.entity.Account;
 import java.util.List;
 
 public interface AccountService {
-    //Account testDao();
+    Account testDao();
     Account addAccountOfRegistrationStep1(Account account);
     Account updateAccountOfRegistrationStep2(Account account);//no unit test
     Account updateStatus(Account account, String status);

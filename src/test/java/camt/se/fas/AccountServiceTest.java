@@ -2,20 +2,14 @@ package camt.se.fas;
 
 import camt.se.fas.config.FirebaseConfig;
 import camt.se.fas.dao.AccountDao;
-import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.AccountServiceImpl;
-import com.google.api.client.googleapis.testing.TestUtils;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.concurrent.CountDownLatch;
-
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)

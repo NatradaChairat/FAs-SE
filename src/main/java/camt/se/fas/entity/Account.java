@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class Account {
 
    /* String[] videos;
     String[] images;*/
-
+    @JsonView
     List<String> videos;
+    @JsonView
     List<String> images;
 
 }

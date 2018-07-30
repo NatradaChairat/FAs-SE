@@ -24,11 +24,10 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountDao accountDao;
 
-   /* @Override
+    @Override
     public Account testDao() {
-        return accountDao.findLastAccountId();
+        return accountDao.findAccountByAccountId("FA00088");
     }
-*/
     @Override
     public Account addAccountOfRegistrationStep1(Account account) {
         LOGGER.info("Get Last AccountId: "+ accountDao.findLastAccountId());
@@ -42,18 +41,13 @@ public class AccountServiceImpl implements AccountService {
         if(nextKey != "FA100000") {
             account.setAccountId(nextKey);
             Account account1 = accountDao.addUsernamePasswordStudentId(account);
-            account.setUsername(account1.getUsername());
-            account.setPassword(account1.getPassword());
-            account.setStudentId(account1.getStudentId());
+            LOGGER.info("Added1: "+account1 );
             Account account2 = accountDao.addStatus(account, "registered");
-            account.setStatus(account2.getStatus());
+            LOGGER.info("Added2: "+ account2);
             Account account3 = accountDao.addEmailPhonenumber(account);
-            account.setEmail(account3.getEmail());
-            account.setPhonenumber(account3.getPhonenumber());
-            LOGGER.info("Added: "+account1 + ", " + account2 + ", " + account3);
-            if(account1.getAccountId()==account2.getAccountId() && account1.getAccountId()==account3.getAccountId()){
-                return account;
-            }else return null;
+            LOGGER.info("Added3: "+ account3);
+            account = account3;
+            return account;
         }else return null;
 
     }

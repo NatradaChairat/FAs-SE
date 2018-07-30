@@ -4,6 +4,7 @@ import camt.se.fas.entity.Account;
 import camt.se.fas.service.AES;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,22 +194,15 @@ public class AccountController {
 
 
 
-   /* @GetMapping("account/test")
+    @GetMapping("account/test")
     public ResponseEntity testDao (){
          Account account = accountService.testDao();
-        //Account account = null;
-
-        System.out.println(account);
-        if (account.getAccountId() != null)
-
+        if (account != null)
             return ResponseEntity.ok(account);
 
         else
-
-            //http code 204
-
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }*/
+    }
 
 
 
