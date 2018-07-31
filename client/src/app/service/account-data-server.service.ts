@@ -43,6 +43,10 @@ export class AccountDataServerService{
     return this.http.post(`${this.baseUrl}`+`/update`,account);
   }
 
+  reSendEmail(param: string): Observable<Object>{
+    return this.http.get(`${this.baseUrl}`+`/resend/email/`+encodeURIComponent(param),httpOptions)
+  }
+
   getAccountByUsername(username: String): Observable<Object>{
     console.log("Username: Request Account .. "+username);
     return this.http.get(`${this.baseUrl}`+ `/get/username/`+username, {responseType: 'text'})

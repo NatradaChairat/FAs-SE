@@ -108,7 +108,7 @@ export class EmailRegistrationComponent implements OnInit {
           {
             this.router.navigate(['/waiting']);
           },
-          5000);
+          3000);
         /!*this.router.navigate(['/waiting']);*!/
       },error => console.log(error));
   }

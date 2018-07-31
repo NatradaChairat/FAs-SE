@@ -29,12 +29,16 @@ export class ConfirmedEmailComponent implements OnInit {
           if(account ==null){
             console.log("null");
             this.isNoData = true;
+            this.reSendEmail(params['key']);
           }else {
             console.log("not null");
             this.account = account;
             this.buttonDisabled = false;
           }
-        },err => {this.isNoData = true;}
+        },err => {
+          this.isNoData = true;
+          this.reSendEmail(params['key']);
+          }
         );
     });
     /*this.route.params.subscribe((params: Params) => {
@@ -53,6 +57,18 @@ export class ConfirmedEmailComponent implements OnInit {
         })
     }));*/
 
+  }
+  reSendEmail(key: string){
+    this.accountDataServerService.reSendEmail(key).subscribe(
+      (account: Account)=>{
+        console.log("Re-Send");
+        console.log(account);
+        setTimeout(() =>
+          {
+            this.router.navigate(['/waiting']);
+          },
+          3000);
+      });
   }
 
   infoRegistration(){
