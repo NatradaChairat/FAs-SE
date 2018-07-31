@@ -1,7 +1,9 @@
 package camt.se.fas;
 
+import antlr.collections.impl.LList;
 import camt.se.fas.config.FirebaseConfig;
 import camt.se.fas.dao.AccountDao;
+import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.AccountServiceImpl;
@@ -10,19 +12,33 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.listeners.MockitoListener;
+import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.mockito.Mockito.*;
+
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@PrepareForTest({ FirebaseDatabase.class})
+@PrepareForTest({AccountService.class})
 @TestPropertySource(properties = {"firebase.config.path=fas-key-service.json","firebase.database-url=https://facialauthentication-camt.firebaseio.com"})
 public class AccountServiceTest {
 
@@ -49,6 +65,10 @@ public class AccountServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        /*databaseReference = Mockito.mock(DatabaseReference.class);
+        FirebaseDatabase mockFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
+        when(mockFirebaseDatabase.getReference()).thenReturn(databaseReference);*/
+
     }
 
     @Test
@@ -58,71 +78,67 @@ public class AccountServiceTest {
 
     @Test
     public void testFindAccountByEmail(){
-        accountDaoMock.findAccountByEmail("natrada_chairat@cmu.ac.th");
+       // System.out.println(databaseReference.getDatabase());
     }
 
     @Test
     public void findAccountByEmailTest() {
-        when(accountDaoMock.findAccountByEmail("natrada_chairat@cmu.ac.th")).thenReturn(new Account("FA00000",
-                null,
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
-                "0929639169",
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByEmail("songsangmiffy@gmail.com")).thenReturn(new Account("FA00001",
-                null,
-                null,
+        when(accountDaoMock.findAccountByEmail("songsangmiffy@gmail.com")).thenReturn(new Account("FA00000",
+                "Natrada",
+                "Zaxs1234",
                 "songsangmiffy@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                "0929639997",
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByEmail("cymerr.cymerr@gmail.com")).thenReturn(new Account("FA00002",
-                null,
-                null,
-                "cymerr.cymerr@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null));
-
-
-        Assert.assertEquals(accountService.findAccountByEmail("natrada_chairat@cmu.ac.th"), new Account("FA00000",
-                null,
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
                 "0929639169",
-                null,
-                null,
-                null));
-        Assert.assertEquals(accountService.findAccountByEmail("cymerr.cymerr@gmail.com"),new Account("FA00002",
-                null,
-                null,
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
+        when(accountDaoMock.findAccountByEmail("cymerr.cymerr@gmail.com")).thenReturn(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
                 "cymerr.cymerr@gmail.com",
                 null,
                 null,
                 null,
                 null,
                 null,
+                "activated",
                 null,
+                null));
+
+
+        Assert.assertEquals(accountService.findAccountByEmail("songsangmiffy@gmail.com"), new Account("FA00000",
+                "Natrada",
+                "Zaxs1234",
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
+        Assert.assertEquals(accountService.findAccountByEmail("cymerr.cymerr@gmail.com"),new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "activated",
                 null,
                 null));
 
@@ -135,66 +151,61 @@ public class AccountServiceTest {
     public void findAccountByUsernameTest() {
         when(accountDaoMock.findAccountByUsername("Natrada")).thenReturn(new Account("FA00000",
                 "Natrada",
-                "Gy1515po",
-                null,
-                null,
-                null,
+                "Zaxs1234",
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
                 "582115019",
-                null,
-                null,
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByUsername("Natrada112")).thenReturn(new Account("FA00001",
-                "Natrada112",
-                "Zaxs1234",
-                null,
-                null,
-                null,
-                "582113337",
-                null,
-                null,
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByUsername("Marisa1512")).thenReturn(new Account("FA00002",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
+        when(accountDaoMock.findAccountByUsername("Marisa1512")).thenReturn(new Account("FA00001",
                 "Marisa1512",
                 "Xscd1235",
+                "cymerr.cymerr@gmail.com",
                 null,
                 null,
                 null,
                 null,
                 null,
-                null,
-                null,
+                "activated",
                 null,
                 null));
 
-
-        Assert.assertEquals(accountService.findAccountByUsername("Marisa1512"), new Account("FA00002",
+        Assert.assertEquals(accountService.findAccountByUsername("Marisa1512"), new Account("FA00001",
                 "Marisa1512",
                 "Xscd1235",
+                "cymerr.cymerr@gmail.com",
                 null,
                 null,
                 null,
                 null,
                 null,
-                null,
-                null,
+                "activated",
                 null,
                 null));
-        Assert.assertEquals(accountService.findAccountByUsername("Natrada112"),new Account("FA00001",
-                "Natrada112",
+        Assert.assertEquals(accountService.findAccountByUsername("Natrada"),new Account("FA00000",
+                "Natrada",
                 "Zaxs1234",
-                null,
-                null,
-                null,
-                "582113337",
-                null,
-                null,
-                null,
-                null,
-                null));
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
 
         Assert.assertEquals(accountService.findAccountByUsername("cymerr"),null);
 
@@ -204,55 +215,37 @@ public class AccountServiceTest {
     public void findAccountByStudentIdTest() {
         when(accountDaoMock.findAccountByStudentId("582115019")).thenReturn(new Account("FA00000",
                 "Natrada",
-                "Gy1515po",
-                null,
-                null,
-                null,
+                "Zaxs1234",
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
                 "582115019",
-                null,
-                null,
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByStudentId("582113337")).thenReturn(new Account("FA00001",
-                "Natrada112",
-                "Zaxs1234",
-                null,
-                null,
-                null,
-                "582113337",
-                null,
-                null,
-                null,
-                null,
-                null));
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
 
-
-        Assert.assertEquals(accountService.findAccountByStudentId("582113337"), new Account("FA00001",
-                "Natrada112",
-                "Zaxs1234",
-                null,
-                null,
-                null,
-                "582113337",
-                null,
-                null,
-                null,
-                null,
-                null));
         Assert.assertEquals(accountService.findAccountByStudentId("582115019"),new Account("FA00000",
                 "Natrada",
-                "Gy1515po",
-                null,
-                null,
-                null,
+                "Zaxs1234",
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
                 "582115019",
-                null,
-                null,
-                null,
-                null,
-                null));
-
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
         Assert.assertEquals(accountService.findAccountByUsername("582101002"),null);
 
     }
@@ -260,56 +253,39 @@ public class AccountServiceTest {
     @Test
     public void findAccountByPhonenumberTest() {
         when(accountDaoMock.findAccountByPhonenumber("0929639169")).thenReturn(new Account("FA00000",
-                null,
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
-                "092639169",
-                null,
-                null,
-                null));
-        when(accountDaoMock.findAccountByPhonenumber("0929639997")).thenReturn(new Account("FA00001",
-                null,
-                null,
+                "Natrada",
+                "Zaxs1234",
                 "songsangmiffy@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                "0929639997",
-                null,
-                null,
-                null));
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
 
 
-
-        Assert.assertEquals(accountService.findAccountByPhonenumber("0929639997"), new Account("FA00001",
-                null,
-                null,
-                "songsangmiffy@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                "0929639997",
-                null,
-                null,
-                null));
         Assert.assertEquals(accountService.findAccountByPhonenumber("0929639169"),new Account("FA00000",
-                null,
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
-                "092639169",
-                null,
-                null,
-                null));
+                "Natrada",
+                "Zaxs1234",
+                "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
         Assert.assertEquals(accountService.findAccountByPhonenumber("053491100"),null);
 
     }
@@ -317,58 +293,54 @@ public class AccountServiceTest {
     public void getAccountTest() {
         when(accountDaoMock.findAccountByAccountId("FA00000")).thenReturn(new Account("FA00000",
                 "Natrada",
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
-                null,
-                "activated",
-                null,
-                null));
-        when(accountDaoMock.findAccountByAccountId("FA00001")).thenReturn(new Account("FA00001",
-                "Natrada112",
-                null,
+                "Zaxs1234",
                 "songsangmiffy@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                null,
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
                 "activated",
-                null,
-                null));
-
-        when(accountDaoMock.findAccountByAccountId("FA00002")).thenReturn(new Account("FA00002",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
+        when(accountDaoMock.findAccountByAccountId("FA00001")).thenReturn(new Account("FA00001",
                 "Marisa1512",
-                null,
+                "Xscd1235",
                 "cymerr.cymerr@gmail.com",
                 null,
                 null,
                 null,
                 null,
                 null,
-                "registered",
-                null,
-                null));
-
-        Assert.assertEquals(accountService.getAccount("FA00000"), new Account("FA00000",
-                "Natrada",
-                null,
-                "natrada_chairat@cmu.ac.th",
-                null,
-                null,
-                null,
-                null,
-                null,
                 "activated",
                 null,
                 null));
-        Assert.assertEquals(accountService.getAccount("FA00001"),new Account("FA00001",
-                "Natrada112",
-                null,
+
+
+        Assert.assertEquals(accountService.getAccount("FA00000"), new Account("FA00000",
+                "Natrada",
+                "Zaxs1234",
                 "songsangmiffy@gmail.com",
+                "Natrada",
+                "Chairat",
+                "582115019",
+                "1997-05-11",
+                "0929639169",
+                "activated",
+                Stream.of("video_2018-10-15 : path/video.mp4",
+                        "video_2018-12-1 : path/video.mp4")
+                        .collect(Collectors.toList()),
+                Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
+                        "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
+                        .collect(Collectors.toList())));
+        Assert.assertEquals(accountService.getAccount("FA00001"),new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
                 null,
                 null,
                 null,

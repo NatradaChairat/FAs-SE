@@ -100,21 +100,18 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findAccountByEmail(String email) {
         Account account = new Account();
-        System.out.println("findAccount work");
         CountDownLatch signal = new CountDownLatch(1);
         try {
-            System.out.println("try work | Get ref:" + databaseReference.getRef());
             databaseReference.child("account").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     if(snapshot.getValue() != null) {
-                        System.out.println("onDataChange work");
                         String result = snapshot.getValue().toString().substring(1, 8);
                         LOGGER.info(result);
                         account.setAccountId(result);
-                        String _email = snapshot.child(result).child("email").getValue().toString();
+                        /*String _email = snapshot.child(result).child("email").getValue().toString();
                         LOGGER.info(_email);
-                        account.setEmail(_email);
+                        account.setEmail(_email);*/
                         /*String _phonenumber = snapshot.child(result).child("phonenumber").getValue().toString();
                         LOGGER.info(_phonenumber);
                         account.setPhonenumber(_phonenumber);*/
@@ -132,7 +129,7 @@ public class AccountDaoImpl implements AccountDao {
         }finally {
             LOGGER.info(account.toString());
             if(account.getAccountId()!=null) {
-                return account;
+                return findAccountByAccountId(account.getAccountId());
             }else return null;
         }
     }
@@ -140,7 +137,6 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account findAccountByUsername(String username) {
         Account account = new Account();
-        System.out.println("Account Dao findAccountByUsername");
         CountDownLatch signal = new CountDownLatch(1);
         try {
             databaseReference.child("account").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -150,9 +146,9 @@ public class AccountDaoImpl implements AccountDao {
                         String result = snapshot.getValue().toString().substring(1, 8);
                         LOGGER.info(result);
                         account.setAccountId(result);
-                        String _username = snapshot.child(result).child("username").getValue().toString();
+                        /*String _username = snapshot.child(result).child("username").getValue().toString();
                         LOGGER.info(_username);
-                        account.setUsername(_username);
+                        account.setUsername(_username);*/
                         /*String _password = snapshot.child(result).child("password").getValue().toString();
                         LOGGER.info(_password);
                         account.setPassword(_password);
@@ -175,7 +171,7 @@ public class AccountDaoImpl implements AccountDao {
         }finally {
             LOGGER.info(account.toString());
             if(account.getAccountId()!=null) {
-                return account;
+                return findAccountByAccountId(account.getAccountId());
             }else return null;
         }
     }
@@ -217,7 +213,7 @@ public class AccountDaoImpl implements AccountDao {
         }finally {
             LOGGER.info(account.toString());
             if(account.getAccountId()!=null) {
-                return account;
+                return findAccountByAccountId(account.getAccountId());
             }else return null;
         }
     }
@@ -237,9 +233,9 @@ public class AccountDaoImpl implements AccountDao {
                         /*String _email = snapshot.child(result).child("email").getValue().toString();
                         LOGGER.info(_email);
                         account.setEmail(_email);*/
-                        String _phonenumber = snapshot.child(result).child("phonenumber").getValue().toString();
+                        /*String _phonenumber = snapshot.child(result).child("phonenumber").getValue().toString();
                         LOGGER.info(_phonenumber);
-                        account.setPhonenumber(_phonenumber);
+                        account.setPhonenumber(_phonenumber);*/
                     }
                     signal.countDown();
                 }
@@ -257,7 +253,7 @@ public class AccountDaoImpl implements AccountDao {
         }finally {
             LOGGER.info(account.toString());
             if(account.getAccountId()!=null) {
-                return account;
+                return findAccountByAccountId(account.getAccountId());
             }else return null;
         }
     }
