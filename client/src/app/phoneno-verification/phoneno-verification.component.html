@@ -6,10 +6,17 @@
       <p>Confirm verification email</p>
       <form #otpForm="ngForm" (ngSubmit)="onSubmit(oTP)">
 
-        <div class="row form-group pb-3">
+        <div class="row form-group pb-2">
           <label class="col-2 text-right">Phonenumber: </label>
           <div class="col-8">
             <label class="col-2 text-right">{{account?.phonenumber}}</label>
+          </div>
+        </div>
+
+        <div class="row form-group pb-2">
+          <label class="col-2 text-right">Ref code: </label>
+          <div class="col-8">
+            <label class="col-2 text-right">{{refCode}}</label>
           </div>
         </div>
 

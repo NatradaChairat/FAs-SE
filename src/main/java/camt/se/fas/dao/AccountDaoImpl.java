@@ -36,7 +36,7 @@ public class AccountDaoImpl implements AccountDao{
     @Override
     public Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
         UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
-                .setPhoneNumber(account.getPhonenumber().replaceAll("\\s+",""));
+                .setPhoneNumber(account.getPhonenumber().replaceAll("\\s+\\+",""));
         UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
         LOGGER.info("update user "+userRecord.getUid());
         LOGGER.info(account.toString());
@@ -46,7 +46,7 @@ public class AccountDaoImpl implements AccountDao{
             accountTableMap.put("studentId", account.getStudentId());
         }
         if( account.getPhonenumber() != null) {
-            accountTableMap.put("phonenumber", account.getPhonenumber());
+            accountTableMap.put("phonenumber", account.getPhonenumber().replaceAll("\\s+\\+",""));
         }
         if( account.getDateofbirth() != null) {
             accountTableMap.put("dateofbirth", account.getDateofbirth());
@@ -126,6 +126,13 @@ public class AccountDaoImpl implements AccountDao{
         UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
         LOGGER.info("findEmailByUID "+userRecord.getEmail());
         return userRecord.getEmail();
+    }
+
+    @Override
+    public String findPhonenumberByUID(String uid) throws FirebaseAuthException {
+        UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
+        LOGGER.info("findPhonenumberByUID "+userRecord.getPhoneNumber());
+        return userRecord.getPhoneNumber();
     }
 
     @Override

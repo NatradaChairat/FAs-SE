@@ -11,5 +11,6 @@ public interface AccountService {
     Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException;
     Boolean checkDuplicatedPhonenumber(String phonenumber) throws ExecutionException, InterruptedException;
     String getEmailByUID(String uid) throws FirebaseAuthException;
+    String getPhonenumberByUID(String uid) throws FirebaseAuthException;
     Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException;
 }

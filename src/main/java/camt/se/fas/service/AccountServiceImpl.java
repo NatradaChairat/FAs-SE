@@ -56,6 +56,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public String getPhonenumberByUID(String uid) throws FirebaseAuthException {
+        return accountDao.findPhonenumberByUID(uid);
+    }
+
+    @Override
     public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
         return accountDao.updateStatus(account, status);
     }

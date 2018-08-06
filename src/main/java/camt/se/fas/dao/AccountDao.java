@@ -14,6 +14,7 @@ public interface AccountDao{
 
     Boolean findAccountByAccountId(String accountId);
     String findEmailByUID(String uid) throws FirebaseAuthException;
+    String findPhonenumberByUID(String uid)throws FirebaseAuthException;
     String findIdByStudentId(String studentId) throws ExecutionException, InterruptedException;
     String findIdByphonenumber(String phonenumber) throws ExecutionException, InterruptedException;
 

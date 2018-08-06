@@ -4,21 +4,27 @@ import camt.se.fas.entity.Account;
 import camt.se.fas.service.AES;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
+import camt.se.fas.service.SMSService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.nexmo.client.NexmoClientException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
 @CrossOrigin
 @RestController("/account")
@@ -26,6 +32,7 @@ public class AccountController {
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
     AccountService accountService;
     EmailService emailService;
+    SMSService smsService;
 
     @Autowired
     public void setAccountService(AccountService accountService) {
@@ -34,6 +41,10 @@ public class AccountController {
     @Autowired
     public void setEmailService(EmailService emailService){
         this.emailService = emailService;
+    }
+    @Autowired
+    public void setSmsService(SMSService smsService){
+        this.smsService = smsService;
     }
 
     @PostMapping("/account/create")
@@ -50,6 +61,34 @@ public class AccountController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+    @GetMapping("account/send/phonenumber/{param}")
+    public ResponseEntity sendPhonenumber (@PathVariable("param")String param){
+        int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
+        String refCode = RandomStringUtils.randomAlphabetic(6);
+        try {
+        AES aes = new AES();
+        String uid = aes.decrypt(param);
+        LOGGER.info("UID "+uid);
+        String phonenumber = accountService.getPhonenumberByUID(uid);
+            smsService.sendSMS(phonenumber,refCode,otp);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("otp",String.valueOf(otp));
+            responseHeaders.set("refCode",String.valueOf(refCode));
+            responseHeaders.set("phonenumber",String.valueOf(phonenumber));
+            return ResponseEntity.ok(responseHeaders);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (NexmoClientException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+
     }
     @PostMapping("/account/update/{param}")
     public ResponseEntity updateAccount(@RequestBody Account account,@PathVariable("param")String param) {
