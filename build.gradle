@@ -36,6 +36,7 @@ dependencies {
     //implementation 'com.google.firebase:firebase-admin:6.2.0'
     implementation 'com.google.firebase:firebase-admin:6.2.0'
     implementation group: 'com.google.firebase', name: 'firebase-database', version: '16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
     compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.0.8.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.0.6.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.0.6.RELEASE'
@@ -49,6 +50,7 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-core', version: '1.7.4'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito-common', version: '1.7.4'
 
+    compile 'com.nexmo:client:3.1.0'
 
 
 

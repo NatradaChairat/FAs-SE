@@ -1,18 +1,21 @@
 package camt.se.fas.dao;
 
 import camt.se.fas.entity.Account;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.concurrent.ExecutionException;
 
 public interface AccountDao{
-    Account addUsernamePasswordStudentId(Account account);
-    Account addStatus(Account account,String status);//
-    Account addEmailPhonenumber(Account account);//
-    Account addDOBFirstnameLastname(Account account);
-    Account findAccountByEmail(String email);
-    Account findAccountByUsername(String username);
-    Account findAccountByStudentId(String studentId);
-    Account findAccountByPhonenumber(String phonenumber);
-    Account findLastAccountId();
-    Account findAccountByAccountId(String accountId);
+    String createAccount(Account account) throws FirebaseAuthException;
+    Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
+    Boolean addStatus(Account account) throws ExecutionException, InterruptedException;
+    Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException;
+
+    Boolean findAccountByAccountId(String accountId);
+    String findEmailByUID(String uid) throws FirebaseAuthException;
+    String findIdByStudentId(String studentId) throws ExecutionException, InterruptedException;
+    String findIdByphonenumber(String phonenumber) throws ExecutionException, InterruptedException;
 
     //Account updateStatusByAccountId(String accountId, String status);
 

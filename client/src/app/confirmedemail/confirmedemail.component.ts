@@ -11,17 +11,37 @@ import {catchError} from "rxjs/operators";
   templateUrl: './confirmedemail.component.html',
   styleUrls: ['./confirmedemail.component.css']
 })
+
 export class ConfirmedEmailComponent implements OnInit {
-  account: Account;
+  account: any = {};
   isNoData: boolean;
   buttonDisabled = true;
+  refParam : string;
   constructor( private route:ActivatedRoute, private router: Router, private accountDataServerService: AccountDataServerService) {
 
   }
 
   ngOnInit() {
+    this.account = new Account();
     console.log(window.location.href);
-    this.route.params.subscribe((params: Params) =>{
+    this.route.queryParams.subscribe((params: Params) =>{
+      console.log(params['id']+ "/"+ params['time'])
+      this.refParam = params['id'];
+      this.accountDataServerService.updateStatusByParam(params['id'],params['time'])
+        .subscribe((res: any)=>{
+            console.log(res);
+              this.account = res;
+              this.buttonDisabled = false;
+
+          },err => {
+            this.isNoData = true;
+            console.log(err);
+            this.reSendEmail(this.refParam);
+            //this.reSendEmail(params['key']);
+          }
+        );
+    });
+    /*this.route.params.subscribe((params: Params) =>{
       console.log(params['key']+ "/"+ params['localtime'])
       this.accountDataServerService.updateAccountByParam(params['key'], params['localtime'])
         .subscribe((account: Account)=>{
@@ -40,26 +60,12 @@ export class ConfirmedEmailComponent implements OnInit {
           this.reSendEmail(params['key']);
           }
         );
-    });
-    /*this.route.params.subscribe((params: Params) => {
-      this.email = params['email'];
-      this.username = params['username'];
-      this.localtime = params['localtime'];
-      console.log(this.username+ " "+ this.localtime);
-    });
+    });*/
 
-    this.accountDataServerService.updateStatusByEmailUsername(this.email,this.username,this.localtime)
-      .subscribe(data =>{});*/
-    /*this.route.paramMap.pipe(switchMap((params:Params)=> {
-      this.accountDataServerService.getStatusByAccountId(params['username'],params['localtime'])
-        .subscribe(result =>{
-          console.log("result");
-        })
-    }));*/
 
   }
   reSendEmail(key: string){
-    this.accountDataServerService.reSendEmail(key).subscribe(
+    this.accountDataServerService.sendEmail(key).subscribe(
       (account: Account)=>{
         console.log("Re-Send");
         console.log(account);
@@ -72,8 +78,8 @@ export class ConfirmedEmailComponent implements OnInit {
   }
 
   infoRegistration(){
-    console.log("go to register step2 "+this.account.accountId);
-    this.router.navigate(['/inforegistration/'+this.account.accountId]);
+    /*console.log("go to register step2 "+encodeURIComponent(this.refParam));*/
+    this.router.navigate(['/infoRegistration/'+encodeURIComponent(this.refParam)]);
 
   }
 }

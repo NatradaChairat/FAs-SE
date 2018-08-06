@@ -40,6 +40,7 @@ public class AES {
             String decryptedValue= new String(decValue);
             return decryptedValue;
         }catch (Exception e){
+            e.getMessage();
             return null;
         }
 

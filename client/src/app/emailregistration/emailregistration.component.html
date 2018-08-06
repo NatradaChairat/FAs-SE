@@ -6,18 +6,18 @@
       <div class="form-group">
         <p></p>
         <form #emailRegisterForm="ngForm" (ngSubmit)="onSubmit(account)">
-          <div class="row form-group" >
+          <!--<div class="row form-group" >
             <label class="col-2 text-right">Username </label>
             <div class="col-6">
               <input type="text" class="form-control" id="username"
                      placeholder="eg.CAMT" name="username"
                      [(ngModel)]="account.username" #userName="ngModel"
-                     required pattern="^[a-z0-9A-Z]{6,32}$"/>
+                     required pattern="^(?=.*[a-z])(?=.*[A-Z]).{6,32}$"/>
             </div>
             <div class="col-4">
               <div *ngIf="!userName.valid && userName.touched">Username must be 6-32 characters, 0-9, a-Z, cannot repeat and empty</div>
             </div>
-          </div>
+          </div>-->
 
           <div class="row form-group">
             <label class="col-2 text-right">Email </label>
@@ -56,7 +56,10 @@
           </div>
 
           <div class="row form-group">
-            <button type="submit" class="btn btn-primary mx-2" [disabled]="!emailRegisterForm.form.valid" >Register</button>
+            <label class="col-2 text-right"> </label>
+            <div class="col-6 text-right">
+              <button type="submit" class="btn btn-primary mx-2" [disabled]="!emailRegisterForm.form.valid" >Register</button>
+            </div>
           </div>
 
 

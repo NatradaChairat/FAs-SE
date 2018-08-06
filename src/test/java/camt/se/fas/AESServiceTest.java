@@ -25,7 +25,7 @@ public class AESServiceTest {
     */
     @Test
     public void test_encrypt_WhenCanReturnValue(){
-        Assert.assertEquals("PYw%2FvdxDKF%2FeKMM8nS%2BVtw%3D%3D",aes.encrypt("FA00000"));
+        Assert.assertEquals("3Ax22q%2BUJ4XA8XZykUwFTbKfVWKw0T6upp3QjCgJBpk%3D",aes.encrypt("ZHK6T6FfVTUnf8vJTcYDDzvIoLu1"));
         Assert.assertEquals("HWmKYsiYSnApQmubivl0ZQ%3D%3D",aes.encrypt("FA00002"));
 
     }

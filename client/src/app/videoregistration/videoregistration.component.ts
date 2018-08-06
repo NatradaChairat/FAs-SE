@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {WebcamImage} from "../webcam/domain/webcam-images";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 
 
@@ -15,10 +15,15 @@ import {Router} from "@angular/router";
 
 export class VideoregistrationComponent implements OnInit,AfterViewInit {
   randomtext: string;
-  constructor(private router:Router) { }
+  refParam: string;
+  constructor(private route:ActivatedRoute,private router:Router) { }
 
   ngOnInit() {
     this.randomtext = this.randomText();
+    this.route.params.subscribe((param: Params) =>{
+      this.refParam = (param['param']);
+    })
+    console.log(this.refParam);
     //this.loadScript('/videoScript.js')
   }
   randomText(){
@@ -79,8 +84,8 @@ export class VideoregistrationComponent implements OnInit,AfterViewInit {
     return this.trigger.asObservable();
   }*/
 
-  registerstep3(){
-    this.router.navigate(['/registerstep3']);
+  onSubmit(){
+    this.router.navigate(['phonenoVerification/'+this.refParam]);
   }
 
 }

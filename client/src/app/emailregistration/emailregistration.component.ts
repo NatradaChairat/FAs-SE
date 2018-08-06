@@ -4,11 +4,12 @@ import {Router} from "@angular/router";
 import {Account} from "../entity/Account";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Config} from "protractor";
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {throwError} from "rxjs/internal/observable/throwError";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {EmailregistrationDialogComponent} from "../emailregistration-dialog/emailregistration-dialog.component";
 import {Overlay} from "@angular/cdk/overlay";
+import {pipe} from "rxjs/internal-compatibility";
 
 export interface DialogData{
   type: string;
@@ -48,21 +49,65 @@ export class EmailRegistrationComponent implements OnInit {
     });
   }
 
-  onSubmit(account: Account){
+  onSubmit(account:Account){
+    if(this.checkMatchingPassword(account.confirmPassword, account.password)) {
+      this.accountDataServerService.sendAccount(account)
+        .subscribe((res:any)=> {
+              console.log(res.body);
+              this.sendEmail(res.body);
+          },(error:any) => {
+            if (error.status === 412) {
+              this.type = "Error";
+              this.title= "Can not register the account to the system"
+              this.detail="Email is duplicated."
+              this.openDialog();
+            }
+          });
+    }else{
+      this.type="Error";
+      this.title= "Can not register the account to the system";
+      this.detail="Confirm-Password not matching with Password";
+      this.openDialog();
+    }
+  }
+
+  checkMatchingPassword(confirmPassword: String , password: String): Boolean{
+    if(confirmPassword === password){
+      console.log("checkMatchingPassword "+true);
+      return true;
+    }else{
+      console.log("checkMatchingPassword "+false);
+      return false;
+    }
+  }
+
+  sendEmail(param: string): any{
+    this.accountDataServerService.sendEmail(param)
+      .subscribe((res: any)=>{
+        console.log("sendEmail "+res);
+        if(res){
+          setTimeout(() => {
+            this.router.navigate(['/waiting']);
+          }, 1000);
+        }else{return this.sendEmail(param);}
+      });
+  }
+
+  /*onSubmit(account: Account){
     console.log(account);
     if(account.password == account.confirmPassword){
       this.checkUsernameIsRepeat(account);
     }else{
       console.log("Confirm-Password not matching with Password");
       this.type="Error";
-      this.title= "Can not register the account to the system"
-      this.detail="Confirm-Password not matching with Password"
+      this.title= "Can not register the account to the system";
+      this.detail="Confirm-Password not matching with Password";
       this.openDialog();
     }
   }
 
   checkUsernameIsRepeat(account:Account) {
-    this.accountDataServerService.getAccountByUsername(account.username)
+   this.accountDataServerService.getAccountByUsername(account.username)
       .subscribe(
         data => {
           console.log(data);
@@ -73,7 +118,7 @@ export class EmailRegistrationComponent implements OnInit {
             this.type="Er" +
               "ror";
             this.title= "Can not register the account to the system"
-            this.detail="Username is repeated."
+            this.detail="Username is duplicated."
             this.openDialog();
           }
         }, error => this.handleError(error)
@@ -93,7 +138,7 @@ export class EmailRegistrationComponent implements OnInit {
             console.log("Repeated data: email");
             this.type="Error";
             this.title= "Can not register the account to the system"
-            this.detail="Email is repeated."
+            this.detail="Email is duplicated."
             this.openDialog();
           }
         }, error => this.handleError(error)
@@ -108,10 +153,10 @@ export class EmailRegistrationComponent implements OnInit {
           {
             this.router.navigate(['/waiting']);
           },
-          3000);
+          1000);
         /!*this.router.navigate(['/waiting']);*!/
       },error => console.log(error));
-  }
+  }*/
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

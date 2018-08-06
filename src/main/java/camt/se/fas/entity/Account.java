@@ -26,9 +26,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;*/
     @JsonView/*(View.Login.class)*/
-    String accountId;
-    @JsonView/*(View.Login.class)*/
-    String username;
+    String uid;
+    /*@JsonView*//*(View.Login.class)*//*
+    String username;*/
     @JsonView/*(View.Login.class)*/
     String password;
     @JsonView/*(View.Login.class)*/

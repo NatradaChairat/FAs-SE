@@ -1,6 +1,7 @@
-package camt.se.fas.dao;
+package camt.se.fas.dao.old;
 
 import camt.se.fas.config.FirebaseConfig;
+import camt.se.fas.dao.old.AccountDao;
 import camt.se.fas.entity.Account;
 
 import com.google.firebase.database.DataSnapshot;
@@ -10,7 +11,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,8 @@ public class AccountDaoDBImpl implements AccountDao {
 
     @Override
     public Account addUsernamePasswordStudentId(Account account) {
-        Account _account = new Account();
+        return null;
+        /*Account _account = new Account();
         LOGGER.info("Add Username, Password Student Id: "+account.getUsername()+", "+account.getPassword());
         DatabaseReference usersRef = databaseReference.child("account_table");
         Map<String, Object> accountTableMap = new HashMap<>();
@@ -44,9 +45,6 @@ public class AccountDaoDBImpl implements AccountDao {
             accountTableMap.put("studentId", account.getStudentId());
             }
             usersRef.child(account.getAccountId()).updateChildrenAsync(accountTableMap);
-            //return usersRef.child(account.getAccountId()).getKey().toString();
-            //usersRef.child(account.getAccountId()).updateChildrenAsync(accountTableMap);
-
         CountDownLatch signal = new CountDownLatch(1);
         try {
             usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,13 +69,14 @@ public class AccountDaoDBImpl implements AccountDao {
             return null;
         }finally {
             return _account;
-        }
+        }*/
 
     }
 
     @Override
     public Account addStatus(Account account,String status) {
-        LOGGER.info("Add Status: "+account.getAccountId()+", "+status);
+        return null;
+        /*LOGGER.info("Add Status: "+account.getAccountId()+", "+status);
         DatabaseReference usersRef = databaseReference.child("account_status_table");
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put(account.getAccountId(), status);
@@ -104,12 +103,13 @@ public class AccountDaoDBImpl implements AccountDao {
             e.printStackTrace();
         }finally {
             return _account;
-        }
+        }*/
     }
 
     @Override
     public Account addEmailPhonenumber(Account account) {
-        LOGGER.info("Add Email, Phonenumber: "+account.getEmail()+ ", "+account.getPhonenumber());
+        return null;
+        /*LOGGER.info("Add Email, Phonenumber: "+account.getEmail()+ ", "+account.getPhonenumber());
         DatabaseReference usersRef = databaseReference.child("account_contact_table");
         Map<String, Object> accountTableMap = new HashMap<>();
         if( account.getEmail() != null) {
@@ -142,12 +142,13 @@ public class AccountDaoDBImpl implements AccountDao {
             e.printStackTrace();
         }finally {
             return _account;
-        }
+        }*/
     }
 
     @Override
     public Account addDOBFirstnameLastname(Account account) {
-        LOGGER.info("Add DOB, Firstname, Lastname: "+account.getDateofbirth()+ ", "+account.getFirstname()+", "+account.getLastname());
+        return null;
+        /*LOGGER.info("Add DOB, Firstname, Lastname: "+account.getDateofbirth()+ ", "+account.getFirstname()+", "+account.getLastname());
         DatabaseReference usersRef = databaseReference.child("account_info_table");
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put("dateofbirth", account.getDateofbirth());
@@ -178,12 +179,13 @@ public class AccountDaoDBImpl implements AccountDao {
             e.printStackTrace();
         }finally {
             return _account;
-        }
+        }*/
     }
 
     @Override
     public Account findAccountByEmail(String email) {
-        Account account = new Account();
+        return null;
+        /*Account account = new Account();
         System.out.println("findAccount work");
         CountDownLatch signal = new CountDownLatch(1);
         try {
@@ -221,14 +223,15 @@ public class AccountDaoDBImpl implements AccountDao {
             if(account.getAccountId()!=null) {
                 return account;
             }else return null;
-        }
+        }*/
     }
 
     @Override
     public Account findAccountByUsername(String username){
-        Account account = new Account();
+        return null;
+        /*Account account = new Account();
         System.out.println("Account Dao findAccountByUsername");
-        //CountDownLatch signal = new CountDownLatch(1);
+
         try {
             databaseReference.child("account_table").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -246,7 +249,6 @@ public class AccountDaoDBImpl implements AccountDao {
                     String _studentId = snapshot.child(result).child("studentId").getValue().toString();
                     LOGGER.info(_studentId);
                     account.setStudentId(_studentId);
-                    //signal.countDown();
                 }
 
                 @Override
@@ -254,7 +256,6 @@ public class AccountDaoDBImpl implements AccountDao {
 
                 }
             });
-            //signal.await();
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage());
@@ -263,13 +264,14 @@ public class AccountDaoDBImpl implements AccountDao {
             if(account.getAccountId()!=null) {
                 return account;
             }else return null;
-        }
+        }*/
 
     }
 
     @Override
     public Account findAccountByStudentId(String studentId) {
-        Account account = new Account();
+        return null;
+        /*Account account = new Account();
         CountDownLatch signal = new CountDownLatch(1);
         try {
             databaseReference.child("account_table").orderByChild("studentId").equalTo(studentId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -309,12 +311,13 @@ public class AccountDaoDBImpl implements AccountDao {
             if(account.getAccountId()!=null) {
                 return account;
             }else return null;
-        }
+        }*/
     }
 
     @Override
     public Account findAccountByPhonenumber(String phonenumber) {
-        Account account = new Account();
+        return null;
+        /*Account account = new Account();
         CountDownLatch signal = new CountDownLatch(1);
         try {
         databaseReference.child("account_contact_table").orderByChild("phonenumber").equalTo(phonenumber).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -350,12 +353,13 @@ public class AccountDaoDBImpl implements AccountDao {
             if(account.getAccountId()!=null) {
                 return account;
             }else return null;
-        }
+        }*/
     }
 
     @Override
     public Account findLastAccountId(){
-        Account account = new Account();
+        return null;
+        /*Account account = new Account();
         CountDownLatch signal = new CountDownLatch(1);
         try {
         databaseReference.child("account_table").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -366,8 +370,8 @@ public class AccountDaoDBImpl implements AccountDao {
                 LOGGER.info("Get KEY: " + keyOnlyNumber);
                 int keyNumber = Integer.parseInt(keyOnlyNumber);
                 LOGGER.info("Get KEY number: " + keyNumber);
-                /*String newKey = "FA" + String.format("%05d", keyNumber + 1);
-                LOGGER.info("Get Next KEY: " + newKey);*/
+                *//*String newKey = "FA" + String.format("%05d", keyNumber + 1);
+                LOGGER.info("Get Next KEY: " + newKey);*//*
                 account.setAccountId(snapshot.getValue().toString().substring(1,8));
                 signal.countDown();
             }
@@ -384,12 +388,13 @@ public class AccountDaoDBImpl implements AccountDao {
         }finally {
             LOGGER.info(account.toString());
             return account;
-        }
+        }*/
     }
 
     @Override
     public Account findAccountByAccountId(String accountId) {
-        LOGGER.info("findAccountByAccountId() working");
+        return null;
+       /* LOGGER.info("findAccountByAccountId() working");
         CountDownLatch signal = new CountDownLatch(1);
         Account account = new Account();
         account.setAccountId(accountId);
@@ -454,13 +459,7 @@ public class AccountDaoDBImpl implements AccountDao {
             if(account.getEmail()!=null && account.getUsername()!=null) {
                 return account;
             }else return null;
-        }
+        }*/
     }
 
-   /* @Override
-    public Account updateStatusByAccountId(String accountId, String status) {
-        return null;
-    }
-
-*/
 }

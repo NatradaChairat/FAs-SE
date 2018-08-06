@@ -12,19 +12,100 @@ import {Account} from "../entity/Account";
 })
 export class InforegistrationComponent implements OnInit {
   account: any = {};
-  accountId: string;
+  refParam: string;
   infoRegistrerForm: FormGroup;
   constructor(private route:ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
 
   ngOnInit() {
     this.account = new Account();
     this.route.params.subscribe((param: Params) =>{
-      this.accountId = param['accountId'];
+      this.refParam = (param['param']);
     })
-    console.log(this.accountId);
+    console.log(this.refParam);
   }
 
   onSubmit(account:Account){
+    console.log(account);
+    //checkStudentIdIsRepeat
+    /*if(this.checkDuplicatedStudentId(account)){
+      console.log("Duplicated StudentID")
+    }else{
+      if(this.checkDuplicatedPhonenumber(account)){
+        console.log("Duplicated Phonenumber")
+      }else{
+        this.accountDataServerService.sendPersonalAccount(account)
+          .subscribe((res: any)=>{
+            console.log("sendPersonalAccount "+res);
+            if(res){
+              setTimeout(() => {
+                this.router.navigate(['/videoregidtration/']);
+              }, 1000);
+            }else{console.log("sendPersonalAccount "+false);}
+          });
+      }
+    }*/
+
+    /*this.checkDuplicatedStudentId(account)
+      .then( result=> {
+        if(result){
+          console.log("studentId duplicated");
+        }else{
+          this.checkDuplicatedPhonenumber(account)
+            .then( result2 => {
+              if(result2){
+                console.log("Phonenumber duplicated");
+              }else{
+                setTimeout(() => {
+                  this.router.navigate(['/videoregidtration/']);
+                }, 1000);
+              }
+            });
+        }
+      });*/
+
+    this.checkDuplicatedStudentId(account);
+
+  }
+
+  checkDuplicatedStudentId(account: Account): any{
+    this.accountDataServerService.checkDuplicatedStudentId(account.studentId)
+      .subscribe(data=>{
+        console.log(data);
+        if(data){
+          //return true;
+          console.log("Duplicated StudentID")
+        }else{
+          //return false;
+          this.checkDuplicatedPhonenumber(account);
+        }
+      });
+
+  }
+
+  checkDuplicatedPhonenumber(account: Account): any{
+    this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
+      .subscribe(data=>{
+        console.log(data);
+        if(data){
+          console.log("Duplicated Phonenumber ");
+          //return true;
+        }else{
+          //return false;
+
+          this.accountDataServerService.sendPersonalAccount(account,this.refParam)
+            .subscribe((res: any)=>{
+              console.log(res);
+              if(res){
+                setTimeout(() => {
+                  this.router.navigate(['/videoRegistration/'+this.refParam]);
+                }, 1000);
+              }else{console.log("sendPersonalAccount "+false);}
+            });
+        }
+      });
+  }
+
+  /*onSubmit(account:Account){
     console.log(account);
     account.accountId = this.accountId;
     //checkStudentIdIsRepeat
@@ -59,7 +140,7 @@ export class InforegistrationComponent implements OnInit {
           console.log("Repeated data: phonenumber");
         }
       });
-  }
+  }*/
 
   /*checkStudentIdIsRepeat(account: Account){
     this.accountDataServerService.getAccountByStudentId(account.studentId)

@@ -1,9 +1,7 @@
 package camt.se.fas;
 
-import antlr.collections.impl.LList;
 import camt.se.fas.config.FirebaseConfig;
 import camt.se.fas.dao.AccountDao;
-import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.AccountServiceImpl;
@@ -12,23 +10,14 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.listeners.MockitoListener;
-import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,6 +49,7 @@ public class AccountServiceTest {
     public void setDatabaseReference (FirebaseConfig firebaseConfig){
         System.out.println("Setup");
         this.databaseReference = firebaseConfig.firebaseDatabase();
+        System.out.println("Show DR: "+this.databaseReference.getDatabase());
     }
 
     @Before
@@ -76,12 +66,160 @@ public class AccountServiceTest {
         Assert.assertEquals("fas-key-service.json",firebaseConfigPath);
     }
 
-    @Test
-    public void testFindAccountByEmail(){
-       // System.out.println(databaseReference.getDatabase());
-    }
+    /*@Test
+    public void testaddAccountOfRegistrationStep1(){
+        when(accountDaoMock.findLastAccountId()).thenReturn((new Account("FA00001",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)));
+        when(accountDaoMock.addUsernamePasswordStudentId(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)))
+                .thenReturn(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null));
 
-    @Test
+        when(accountDaoMock.addStatus(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null), "registered"))
+                .thenReturn(new Account("FA00001",
+                        "Marisa1512",
+                        "Xscd1235",
+                        "cymerr.cymerr@gmail.com",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        "registered",
+                        null,
+                        null));
+
+        when(accountDaoMock.addEmailPhonenumber(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)))
+                .thenReturn(new Account("FA00001",
+                        "Marisa1512",
+                        "Xscd1235",
+                        "cymerr.cymerr@gmail.com",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        "registered",
+                        null,
+                        null));
+
+
+        Assert.assertEquals(accountService.addAccountOfRegistrationStep1(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)),new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "registered",
+                null,
+                null));
+
+        verify(accountDaoMock.findLastAccountId());
+        verify(accountDaoMock.addUsernamePasswordStudentId(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)));
+        verify(accountDaoMock.addStatus(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null),"registered"));
+        verify(accountDaoMock.addEmailPhonenumber(new Account("FA00001",
+                "Marisa1512",
+                "Xscd1235",
+                "cymerr.cymerr@gmail.com",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null)));
+    }*/
+
+    /*@Test
     public void findAccountByEmailTest() {
         when(accountDaoMock.findAccountByEmail("songsangmiffy@gmail.com")).thenReturn(new Account("FA00000",
                 "Natrada",
@@ -144,6 +282,9 @@ public class AccountServiceTest {
 
         Assert.assertEquals(accountService.findAccountByEmail("cymerr@gmail.com"),null);
 
+        verify(accountDaoMock).findAccountByEmail("songsangmiffy@gmail.com");
+        verify(accountDaoMock).findAccountByEmail("cymerr.cymerr@gmail.com");
+        verify(accountDaoMock).findAccountByEmail("cymerr@gmail.com");
     }
 
 
@@ -207,7 +348,11 @@ public class AccountServiceTest {
                         "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
                         .collect(Collectors.toList())));
 
-        Assert.assertEquals(accountService.findAccountByUsername("cymerr"),null);
+        Assert.assertEquals(accountService.findAccountByUsername("Siriganya"),null);
+
+        verify(accountDaoMock).findAccountByUsername("Marisa1512");
+        verify(accountDaoMock).findAccountByUsername("Natrada");
+        verify(accountDaoMock).findAccountByUsername("Siriganya");
 
     }
 
@@ -246,8 +391,10 @@ public class AccountServiceTest {
                 Stream.of("image_2018-10-15 : [image1 : path/image1.png, image2 : path/image2.png]",
                         "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
                         .collect(Collectors.toList())));
-        Assert.assertEquals(accountService.findAccountByUsername("582101002"),null);
+        Assert.assertEquals(accountService.findAccountByStudentId("582101002"),null);
 
+        verify(accountDaoMock).findAccountByStudentId("582115019");
+        verify(accountDaoMock).findAccountByStudentId("582101002");
     }
 
     @Test
@@ -269,7 +416,6 @@ public class AccountServiceTest {
                         "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
                         .collect(Collectors.toList())));
 
-
         Assert.assertEquals(accountService.findAccountByPhonenumber("0929639169"),new Account("FA00000",
                 "Natrada",
                 "Zaxs1234",
@@ -287,6 +433,9 @@ public class AccountServiceTest {
                         "image_2018-2-11 : [image1 : path2/image1.png, image2 : path2/image2.png]" )
                         .collect(Collectors.toList())));
         Assert.assertEquals(accountService.findAccountByPhonenumber("053491100"),null);
+
+        verify(accountDaoMock).findAccountByPhonenumber("0929639169");
+        verify(accountDaoMock).findAccountByPhonenumber("053491100");
 
     }
     @Test
@@ -350,9 +499,13 @@ public class AccountServiceTest {
                 null,
                 null));
 
-        Assert.assertEquals(accountService.findAccountByPhonenumber("FA99999"),null);
+        Assert.assertEquals(accountService.getAccount("FA99999"),null);
 
-    }
+        verify(accountDaoMock).findAccountByAccountId("FA00000");
+        verify(accountDaoMock).findAccountByAccountId("FA00001");
+        verify(accountDaoMock).findAccountByAccountId("FA99999");
+
+    }*/
 
 
 

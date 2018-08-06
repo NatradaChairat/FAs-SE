@@ -6,7 +6,7 @@ import { FilenotfoundComponent } from './filenotfound/filenotfound.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {AccountDataServerService} from "./service/account-data-server.service";
+import {AccountDataServerService} from "./service/old/account-data-server.service";
 import { ConfirmedEmailComponent } from './confirmedemail/confirmedemail.component';
 import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
@@ -16,6 +16,7 @@ import { EmailregistrationDialogComponent } from './emailregistration-dialog/ema
 import { InforegistrationComponent } from './inforegistration/inforegistration.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { VideoregistrationComponent } from './videoregistration/videoregistration.component';
+import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-verification.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { VideoregistrationComponent } from './videoregistration/videoregistratio
     EmailregistrationDialogComponent,
     InforegistrationComponent,
     WebcamComponent,
-    VideoregistrationComponent
+    VideoregistrationComponent,
+    PhonenoVerificationComponent
   ],
   entryComponents: [
     EmailregistrationDialogComponent
