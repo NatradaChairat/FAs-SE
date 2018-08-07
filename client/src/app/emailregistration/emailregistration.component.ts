@@ -7,7 +7,7 @@ import {Config} from "protractor";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {throwError} from "rxjs/internal/observable/throwError";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
-import {EmailregistrationDialogComponent} from "../emailregistration-dialog/emailregistration-dialog.component";
+import {DialogComponent} from "../dialog/dialog.component";
 import {Overlay} from "@angular/cdk/overlay";
 import {pipe} from "rxjs/internal-compatibility";
 
@@ -29,18 +29,16 @@ export class EmailRegistrationComponent implements OnInit {
   title: string;
   detail: string;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog, private overlay: Overlay) {}
+  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.account = new Account();
   }
 
   openDialog():void{
-    const dialogRef = this.dialog.open(EmailregistrationDialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
-      scrollStrategy: this.overlay.scrollStrategies.noop(),
       disableClose: true,
-      hasBackdrop: false,
       data: {type: this.type,title:this.title, detail: this.detail}
     });
 
@@ -53,7 +51,6 @@ export class EmailRegistrationComponent implements OnInit {
     if(this.checkMatchingPassword(account.confirmPassword, account.password)) {
       this.accountDataServerService.sendAccount(account)
         .subscribe((res:any)=> {
-              console.log(res.body);
               this.sendEmail(res.body);
           },(error:any) => {
             if (error.status === 412) {
@@ -84,7 +81,6 @@ export class EmailRegistrationComponent implements OnInit {
   sendEmail(param: string): any{
     this.accountDataServerService.sendEmail(param)
       .subscribe((res: any)=>{
-        console.log("sendEmail "+res);
         if(res){
           setTimeout(() => {
             this.router.navigate(['/waiting']);

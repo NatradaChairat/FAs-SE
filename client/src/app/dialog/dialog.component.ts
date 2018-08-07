@@ -4,15 +4,15 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 
 @Component({
   selector: 'app-emailregistration-diolog',
-  templateUrl: './emailregistration-dialog.component.html',
-  styleUrls: ['./emailregistration-dialog.component.css']
+  templateUrl: './dialog.component.html',
+  styleUrls: ['./dialog.component.css']
 })
-export class EmailregistrationDialogComponent {
+export class DialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<EmailRegistrationComponent>,
+    private dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-    dialogRef.disableClose =true;
+    //dialogRef.disableClose =true;
   }
 
   onClick(): void {

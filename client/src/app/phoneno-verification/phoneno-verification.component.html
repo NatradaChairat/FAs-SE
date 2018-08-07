@@ -4,32 +4,40 @@
   <div class=" col-md-12">
     <div class="form-group">
       <p>Confirm verification email</p>
-      <form #otpForm="ngForm" (ngSubmit)="onSubmit(oTP)">
+      <form #otpForm="ngForm" (ngSubmit)="onSubmit(model)">
 
         <div class="row form-group pb-2">
           <label class="col-2 text-right">Phonenumber: </label>
           <div class="col-8">
-            <label class="col-2 text-right">{{account?.phonenumber}}</label>
+            <label class="col-2">{{account?.phonenumber}}</label>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <label class="col-2 text-right"></label>
+          <div class="col-8">
+            <label class="col-12">The system sending your one-time password to your phone number.</label>
           </div>
         </div>
 
         <div class="row form-group pb-2">
           <label class="col-2 text-right">Ref code: </label>
           <div class="col-8">
-            <label class="col-2 text-right">{{refCode}}</label>
+            <label class="col-2">{{refCode}}</label>
           </div>
         </div>
+
 
         <div class="row form-group">
           <label class="col-2 text-right">OTP </label>
           <div class="col-6">
             <input type="email" class="form-control" id="otp" name="otp"
-                   [(ngModel)]="otp" #oTP="ngModel"
+                   [(ngModel)]="model" #oTP="ngModel"
                    required/>
           </div>
-          <div class="col-4">
-            <div *ngIf="!oTP.valid && oTP.touched">Email is required</div>
-          </div>
+          <!--<div class="col-4">
+            <div *ngIf="!oTP.valid && oTP.touched">OTP is required</div>
+          </div>-->
         </div>
         <!--<div class="row pb-3">
           <label class="col-2 text-right">Username: </label>
@@ -37,7 +45,6 @@
             <label class="col-2 text-right">{{account?.username}}</label>
           </div>
         </div>-->
-        <hr>
 
         <button [disabled]="!otpForm.form.valid"  type="submit" class="btn btn-primary mx-2" >submit</button>
 

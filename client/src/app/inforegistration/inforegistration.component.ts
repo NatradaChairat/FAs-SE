@@ -4,7 +4,12 @@ import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {Account} from "../entity/Account";
-
+import {DialogComponent} from "../dialog/dialog.component";
+export interface DialogData{
+  type: string;
+  title: string
+  detail: string;
+}
 @Component({
   selector: 'app-inforegistration',
   templateUrl: './inforegistration.component.html',
@@ -14,6 +19,9 @@ export class InforegistrationComponent implements OnInit {
   account: any = {};
   refParam: string;
   infoRegistrerForm: FormGroup;
+  type: string;
+  title: string;
+  detail: string;
   constructor(private route:ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
 
   ngOnInit() {
@@ -24,8 +32,20 @@ export class InforegistrationComponent implements OnInit {
     console.log(this.refParam);
   }
 
+  openDialog():void{
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '350px',
+      disableClose: true,
+      data: {type: this.type,title:this.title, detail: this.detail}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   onSubmit(account:Account){
-    console.log(account);
+    //console.log(account);
     //checkStudentIdIsRepeat
     /*if(this.checkDuplicatedStudentId(account)){
       console.log("Duplicated StudentID")
@@ -70,10 +90,13 @@ export class InforegistrationComponent implements OnInit {
   checkDuplicatedStudentId(account: Account): any{
     this.accountDataServerService.checkDuplicatedStudentId(account.studentId)
       .subscribe(data=>{
-        console.log(data);
+        //console.log(data);
         if(data){
           //return true;
-          console.log("Duplicated StudentID")
+          this.type = "Error";
+          this.title= "Can not submit the form."
+          this.detail="Student ID is duplicated."
+          this.openDialog();
         }else{
           //return false;
           this.checkDuplicatedPhonenumber(account);
@@ -85,16 +108,18 @@ export class InforegistrationComponent implements OnInit {
   checkDuplicatedPhonenumber(account: Account): any{
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data=>{
-        console.log(data);
+        //console.log(data);
         if(data){
-          console.log("Duplicated Phonenumber ");
           //return true;
+          this.type = "Error";
+          this.title= "Can not submit the form."
+          this.detail="Phone number is duplicated."
+          this.openDialog();
         }else{
           //return false;
-
           this.accountDataServerService.sendPersonalAccount(account,this.refParam)
             .subscribe((res: any)=>{
-              console.log(res);
+              //console.log(res);
               if(res){
                 setTimeout(() => {
                   this.router.navigate(['/videoRegistration/'+this.refParam]);

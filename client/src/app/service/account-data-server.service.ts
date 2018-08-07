@@ -46,8 +46,13 @@ export class AccountDataServerService{
   }
 
   updateStatusByParam(id: string,token: string){
-    console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
-    return this.http.get(`${this.baseUrl}`+`/get/status/?id=`+encodeURIComponent(id)+"&time="+encodeURIComponent(token));
+    //console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
+    return this.http.get(`${this.baseUrl}`+`/update/status/?id=`+encodeURIComponent(id)+"&time="+encodeURIComponent(token));
+
+  }
+
+  updateStatusByVerifyPhone(id: string){
+    return this.http.get(`${this.baseUrl}`+`/update/status/`+encodeURIComponent(id));
 
   }
 

@@ -12,7 +12,7 @@ import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
 import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
-import { EmailregistrationDialogComponent } from './emailregistration-dialog/emailregistration-dialog.component';
+import { DialogComponent } from './dialog/dialog.component';
 import { InforegistrationComponent } from './inforegistration/inforegistration.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { VideoregistrationComponent } from './videoregistration/videoregistration.component';
@@ -26,14 +26,14 @@ import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-ver
     ConfirmedEmailComponent,
     WaitComponent,
     EmailRegistrationComponent,
-    EmailregistrationDialogComponent,
+    DialogComponent,
     InforegistrationComponent,
     WebcamComponent,
     VideoregistrationComponent,
     PhonenoVerificationComponent
   ],
   entryComponents: [
-    EmailregistrationDialogComponent
+    DialogComponent
   ],
   imports: [
     BrowserModule,

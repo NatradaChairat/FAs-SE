@@ -63,12 +63,12 @@
               <label class="col-2 text-right">Phone number </label>
               <div class="col-6">
                 <input type="text" class="form-control" id="phonenumber"
-                       placeholder="eg. +66 929998877" name="phonenumber"
+                       placeholder="eg. +66929998877" name="phonenumber"
                        [(ngModel)]="account.phonenumber" #phoneNumber="ngModel"
-                       required pattern="^[\+]\d{2}[\ ]\d{9}"/>
+                       required pattern="^[\+]\d{2}\d{9}"/>
               </div>
               <div class="col-4">
-                <div *ngIf="!phoneNumber.valid && phoneNumber.touched">Phonenumber must be only 0-9, cannot repeat and empty. eg. +66 929998877</div>
+                <div *ngIf="!phoneNumber.valid && phoneNumber.touched">Phonenumber must be only 0-9, cannot repeat and empty. eg. +66929998877</div>
               </div>
             </div>
 

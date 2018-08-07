@@ -23,19 +23,16 @@ export class ConfirmedEmailComponent implements OnInit {
 
   ngOnInit() {
     this.account = new Account();
-    console.log(window.location.href);
+    //console.log(window.location.href);
     this.route.queryParams.subscribe((params: Params) =>{
-      console.log(params['id']+ "/"+ params['time'])
+      //console.log(params['id']+ "/"+ params['time'])
       this.refParam = params['id'];
       this.accountDataServerService.updateStatusByParam(params['id'],params['time'])
         .subscribe((res: any)=>{
-            console.log(res);
               this.account = res;
               this.buttonDisabled = false;
-
           },err => {
             this.isNoData = true;
-            console.log(err);
             this.reSendEmail(this.refParam);
             //this.reSendEmail(params['key']);
           }
@@ -67,8 +64,6 @@ export class ConfirmedEmailComponent implements OnInit {
   reSendEmail(key: string){
     this.accountDataServerService.sendEmail(key).subscribe(
       (account: Account)=>{
-        console.log("Re-Send");
-        console.log(account);
         setTimeout(() =>
           {
             this.router.navigate(['/waiting']);
