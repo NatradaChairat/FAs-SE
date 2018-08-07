@@ -59,10 +59,7 @@ public class AccountController {
             /*AES aes = new AES();*/
             LOGGER.info("Return account:" + aes.encrypt(uid));
             return ResponseEntity.ok(aes.encrypt(uid));
-        } catch (FirebaseAuthException e) {
-            LOGGER.error(e.getErrorCode());
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
-        } catch (Exception e) {
+        }  catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -82,13 +79,7 @@ public class AccountController {
             responseHeaders.set("refCode",String.valueOf(refCode));
             responseHeaders.set("phonenumber",String.valueOf(phonenumber));
             return ResponseEntity.ok(responseHeaders);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (NexmoClientException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (FirebaseAuthException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -128,7 +119,7 @@ public class AccountController {
             }else{
                 return ResponseEntity.ok(false);
             }
-        } catch (FirebaseAuthException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
