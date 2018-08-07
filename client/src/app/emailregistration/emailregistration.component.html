@@ -1,4 +1,5 @@
-<h1>Register</h1>
+<div class="form">
+<h2>Register</h2>
 <h4>Step 1 of 3: Enter account information </h4>
 <div class="container mat-app-background">
   <div class="row">
@@ -27,7 +28,7 @@
                      required email />
             </div>
             <div class="col-4">
-              <div *ngIf="!eMail.valid && eMail.touched">Email is required</div>
+              <div *ngIf="!eMail.valid && eMail.touched" style="color: red">Email is required</div>
             </div>
           </div>
 
@@ -39,7 +40,7 @@
                      #passWord="ngModel" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$"/>
             </div>
             <div class="col-4">
-              <div *ngIf="!passWord.valid && passWord.touched">Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
+              <div *ngIf="!passWord.valid && passWord.touched" style="color: red">Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
             </div>
           </div>
 
@@ -51,7 +52,7 @@
                      #confirmPassWord="ngModel" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$"/>
             </div>
             <div class="col-4">
-              <div *ngIf="!confirmPassWord.valid && confirmPassWord.touched">Confirm-Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
+              <div *ngIf="!confirmPassWord.valid && confirmPassWord.touched" style="color: red">Confirm-Password must be 8-32 characters and including 0-9, a-z and A-Z and cannot empty</div>
             </div>
           </div>
 
@@ -70,5 +71,4 @@
 
 
 </div>
-
-
+</div>
