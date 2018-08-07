@@ -1,7 +1,7 @@
 package camt.se.fas.controller;
 
 import camt.se.fas.entity.Account;
-import camt.se.fas.service.AES;
+import camt.se.fas.service.AESService;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
 import camt.se.fas.service.SMSService;
@@ -33,6 +33,7 @@ public class AccountController {
     AccountService accountService;
     EmailService emailService;
     SMSService smsService;
+    AESService aes;
 
     @Autowired
     public void setAccountService(AccountService accountService) {
@@ -46,12 +47,16 @@ public class AccountController {
     public void setSmsService(SMSService smsService){
         this.smsService = smsService;
     }
+    @Autowired
+    public void setAesService(AESService aesService){
+        this.aes = aesService;
+    }
 
     @PostMapping("/account/create")
     public ResponseEntity uploadAccount(@RequestBody Account account) {
         try {
             String uid = accountService.registerAccount(account);
-            AES aes = new AES();
+            /*AES aes = new AES();*/
             LOGGER.info("Return account:" + aes.encrypt(uid));
             return ResponseEntity.ok(aes.encrypt(uid));
         } catch (FirebaseAuthException e) {
@@ -67,7 +72,7 @@ public class AccountController {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
         try {
-        AES aes = new AES();
+        /*AES aes = new AES();*/
         String uid = aes.decrypt(param);
         LOGGER.info("UID "+uid);
         String phonenumber = accountService.getPhonenumberByUID(uid);
@@ -94,7 +99,7 @@ public class AccountController {
     public ResponseEntity updateAccount(@RequestBody Account account,@PathVariable("param")String param) {
         try {
             LOGGER.info(param);
-            AES aes = new AES();
+            /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("update "+uid);
             account.setUid(uid);
@@ -112,7 +117,7 @@ public class AccountController {
     @GetMapping("account/send/email/{param}")
     public ResponseEntity sendEmail (@PathVariable("param")String param){
         try {
-            AES aes = new AES();
+            /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID "+uid);
             String email = accountService.getEmailByUID(uid);
@@ -129,14 +134,35 @@ public class AccountController {
         }
     }
 
+    @GetMapping("account/update/status/{param}")
+    public ResponseEntity updateStatusByVerifyPhone (@PathVariable("param")String param){
+        try {
 
-    @RequestMapping(value="account/get/status", method=RequestMethod.GET )
+            LOGGER.info("Original Key: " +param);
+            String decodeKey = aes.decrypt(param);
+            LOGGER.info("Encoded Key: " + decodeKey);
+            Account account = new Account();
+            account.setUid(decodeKey);
+            boolean result = accountService.updateStatus(account,"verified");
+            if(result){
+                return ResponseEntity.ok(true);
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+
+    @RequestMapping(value="account/update/status", method=RequestMethod.GET )
     /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
     public ResponseEntity updateStatusAccountByConfirmEmail(@RequestParam Map<String, String> param){
         String id = param.get("id");
         String time = param.get("time");
         try {
-            AES aes = new AES();
+            /*AES aes = new AES();*/
             LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
             String decodeKey = aes.decrypt(URLEncoder.encode(id, "UTF-8"));
             LOGGER.info("Decoded Key: " + decodeKey);
@@ -155,7 +181,6 @@ public class AccountController {
                 account.setUid(decodeKey);
                 account.setEmail(email);
                 accountService.updateStatus(account,"activated");
-
                 Account _account = new Account();
                 _account.setEmail(account.getEmail());
                 return ResponseEntity.ok(_account);

@@ -1,7 +1,8 @@
 package camt.se.fas.controller.old;
 
 import camt.se.fas.entity.Account;
-import camt.se.fas.service.AES;
+
+import camt.se.fas.service.AESService;
 import camt.se.fas.service.old.AccountService;
 import camt.se.fas.service.EmailService;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class AccountController {
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
     AccountService accountService;
     EmailService emailService;
+    AESService aes;
 
     @Autowired
     public void setAccountService(AccountService accountService) {
@@ -27,6 +29,10 @@ public class AccountController {
     }
     @Autowired
     public void setEmailService(EmailService emailService){this.emailService = emailService;}
+    @Autowired
+    public void setAesService(AESService aesService){
+        this.aes = aesService;
+    }
 
     @PostMapping("/account/create")
     public ResponseEntity<?> uploadAccount(@RequestBody Account account) {
@@ -56,7 +62,7 @@ public class AccountController {
 
     @GetMapping("/account/resend/email/{key}")
     public ResponseEntity<?> reSendEmail(@PathVariable("key")String key) {
-        AES aes = new AES();
+        //AES aes = new AES();
         String decodeKey = aes.decrypt(key);
         LOGGER.info("RE Decoded Key: "+decodeKey);
         Account account =  accountService.getAccount(decodeKey);
@@ -172,7 +178,7 @@ public class AccountController {
     /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
     public ResponseEntity updateStatusAccountByConfirmEmail(@PathVariable("key")String key, @PathVariable("starttime")String starttime){
         LOGGER.info("Encoded Key: "+key);
-        AES aes = new AES();
+        //AES aes = new AES();
         String decodeKey = aes.decrypt(key);
         LOGGER.info("Decoded Key: "+decodeKey);
         //Provide for encrypt Time

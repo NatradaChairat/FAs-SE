@@ -11,13 +11,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+/*@SpringBootTest*/
 public class EmailServiceTest {
     EmailService emailService = new EmailServiceImpl();
 
     @Test
     public void test_sendEmail_canSending(){
-        Assert.assertEquals(true, emailService.sendEmail(new Account("FA00001",
+        /*Assert.assertEquals(true, emailService.sendEmail(new Account("FA00001",
                 "Marisa1512",
                 "Xscd1235",
                 "cymerr.cymerr@gmail.com",
@@ -28,7 +28,8 @@ public class EmailServiceTest {
                 null,
                 "activated",
                 null,
-                null)));
+                null)));*/
+        Assert.assertEquals(true,emailService.sendEmail("songsangmiffy@gmail.com","0IJ%2B0zK%2F7HLmBJygD80WruHpEVbty6AEcjKqvbjOW6o%3D"));
     }
 
 }

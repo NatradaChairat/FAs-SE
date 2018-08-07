@@ -1,116 +1,192 @@
 package camt.se.fas;
 
+
 import camt.se.fas.config.FirebaseConfig;
-import camt.se.fas.dao.old.AccountDaoImpl;
+import camt.se.fas.dao.AccountDao;
+import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
-import com.google.firebase.database.*;
+import com.google.firebase.auth.FirebaseAuthException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.concurrent.ExecutionException;
 
-
-//@RunWith(PowerMockRunner.class)
-//@PowerMockRunnerDelegate(JUnit4.class)
-//@PowerMockIgnore("javax.management.*")
 @RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
 @TestPropertySource(properties = {"firebase.config.path=fas-key-service.json","firebase.database-url=https://facialauthentication-camt.firebaseio.com"})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class AccountDaoTest {
-    @Value("${firebase.database-url}")
+    AccountDao accountDao = new AccountDaoImpl();
+
+    /*@Value("${firebase.database-url}")
     String firebaseUrl;
 
     @Value("${firebase.config.path}")
-    String firebaseConfigPath;
-
-
-    private DatabaseReference databaseReference;
-
-    @Mock
-    private DatabaseReference mockDatabaseRef;
+    String firebaseConfigPath;*/
+    @Configuration
+    @Import({FirebaseConfig.class})
+    static class ContextConfiguration {
+    }
 
     FirebaseConfig firebaseConfig;
-
-
-    AccountDaoImpl accountDao = new AccountDaoImpl();
-
     @Autowired
     public void setDatabaseReference (FirebaseConfig firebaseConfig) {
-        System.out.println("Setup");
-        this.databaseReference = firebaseConfig.firebaseDatabase();
-        /*InputStream serviceAccount = FirebaseConfig.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
-        testApp = FirebaseApp.initializeApp(
-                new FirebaseOptions.Builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .setDatabaseUrl(firebaseUrl)
-                        .build()
-        );*/
+        this.firebaseConfig = firebaseConfig;
     }
 
-   @Test
-   public void testValueSetup(){
-       Assert.assertEquals("fas-key-service.json",firebaseConfigPath);
-   }
 
-    @Before
-    public void setUp() {
+    /*@Test
+    public void testCreateAccount(){
+        try {
+            String result = accountDao.createAccount(new Account(null,
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null));
+            Assert.assertEquals("",result);
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        }
+    }*/
 
-        /*mockDatabaseRef = Mockito.mock(DatabaseReference.class);
-
-        FirebaseDatabase mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
-        when(mockedFirebaseDatabase.getReference()).thenReturn(mockDatabaseRef);
-
-        PowerMockito.mockStatic(FirebaseDatabase.class);
-        when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);*/
-
+    @Test
+    public void testAddStatus() {
+        try {
+            boolean result = accountDao.addStatus(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1",
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null));
+            Assert.assertEquals(true,result);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void testFindAccountByEmail(){
-       /* when(mockDatabaseRef.child(anyString())).thenReturn(mockDatabaseRef);
-        doAnswer(new Answer<Account>() {
-            @Override
-            public Account answer(InvocationOnMock invocation) throws Throwable {
-                ValueEventListener valueEventListener  = (ValueEventListener) invocation.getArguments()[0];
-                DataSnapshot mockDataSnapshot = Mockito.mock(DataSnapshot.class);
-                valueEventListener.onDataChange(mockDataSnapshot);
-                return null;
-            }
-        }).when(mockDatabaseRef).addListenerForSingleValueEvent(any(ValueEventListener.class));
-        Assert.assertEquals(null, accountDao.findAccountByEmail("Cyymerr"));*/
+    public void testFindAocIdByStudentId() {
+        try {
+            String result = accountDao.findDocIdByStudentId("582115019");
+            Assert.assertEquals("05nWOPMFAEIlzvb2fg38",result);
+            String result2 = accountDao.findDocIdByStudentId("582115000");
+            Assert.assertEquals(null,result2);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void testFindAccountByEmail2() {
-        //accountDao.setDatabaseReference(firebaseConfig);
-        when(mockDatabaseRef.child(anyString())).thenReturn(databaseReference.child("account"));
-        System.out.println(mockDatabaseRef.child(""));
-        Account account = accountDao.addUsernamePasswordStudentId(new Account("FA00002",
-                "Marisa",
-                "Xscd1235",
-                "cymerr@gmail.com",
-                null,
-                null,
-                null,
-                null,
-                null,
-                "activated",
-                null,
-                null));
+    public void testFindAocIdByPhonenumber() {
+        try {
+            String result = accountDao.findDocIdByphonenumber("+66929639169");
+            Assert.assertEquals("05nWOPMFAEIlzvb2fg38",result);
+            String result2 = accountDao.findDocIdByphonenumber("+66959919955");
+            Assert.assertEquals(null,result2);
 
-        System.out.println(account);
-
-
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+    @Test
+    public void testFindEmailByUID() {
+        try {
+            String result = accountDao.findEmailByUID("cpyEQtswYHXCiN4omI9nBrUXZpz1");
+            Assert.assertEquals("natrada_chairat@cmu.ac.th",result);
+
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testFindPhonenumberByUID() {
+        try {
+            String result = accountDao.findPhonenumberByUID("cpyEQtswYHXCiN4omI9nBrUXZpz1");
+            Assert.assertEquals("+66929639169",result);
+
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testUpdateStatus() {
+        try {
+            boolean result = accountDao.updateStatus(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1",
+                    null,
+                    null,
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null),"activated");
+            Assert.assertEquals(true,result);
+            boolean result2 = accountDao.updateStatus(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1_",
+                    null,
+                    null,
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null),"activated");
+            Assert.assertEquals(false,result2);
+
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAddAccountInfo() {
+        try {
+            boolean result = accountDao.addAccountInfo(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1",
+                    null,
+                    null,
+                    "Siriganya2", "Sensupa",
+                    "582115044","1997-11-30",
+                    "+66635168449",null,
+                    null,null));
+            Assert.assertEquals(true,result);
+            boolean result2 = accountDao.addAccountInfo(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1_",
+                    null,
+                    null,
+                    "Siriganya", "Sensupa",
+                    "582115044","1997-11-30",
+                    "+66635168449",null,
+                    null,null));
+            Assert.assertEquals(false,result2);
+
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

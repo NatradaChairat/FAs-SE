@@ -36,17 +36,16 @@ public class AccountDaoImpl implements AccountDao{
     @Override
     public Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
         UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
-                .setPhoneNumber(account.getPhonenumber().replaceAll("\\s+\\+",""));
+                .setPhoneNumber(account.getPhonenumber().replaceAll("\\s",""));
         UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
         LOGGER.info("update user "+userRecord.getUid());
-        LOGGER.info(account.toString());
         Firestore db= FirestoreClient.getFirestore();
         Map<String, Object> accountTableMap = new HashMap<>();
         if( account.getStudentId() != null) {
             accountTableMap.put("studentId", account.getStudentId());
         }
         if( account.getPhonenumber() != null) {
-            accountTableMap.put("phonenumber", account.getPhonenumber().replaceAll("\\s+\\+",""));
+            accountTableMap.put("phonenumber", account.getPhonenumber().replaceAll("\\s",""));
         }
         if( account.getDateofbirth() != null) {
             accountTableMap.put("dateofbirth", account.getDateofbirth());
@@ -60,7 +59,9 @@ public class AccountDaoImpl implements AccountDao{
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", account.getUid()).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot document : documents) {
+            LOGGER.info(document.getId());
             ApiFuture<WriteResult> referenceApiFuture = db.collection("account").document(document.getId()).update(accountTableMap);
+            LOGGER.info(referenceApiFuture.get().getUpdateTime().toString());
             if (referenceApiFuture.isDone()) {
                 return true;
             } else {
@@ -105,7 +106,7 @@ public class AccountDaoImpl implements AccountDao{
         for (DocumentSnapshot document : documents) {
             ApiFuture<WriteResult> writeResultApiFuture = db.collection("account").document(document.getId()).update(accountTableMap);
             LOGGER.info("UpdateTime " + writeResultApiFuture.get().getUpdateTime());
-            LOGGER.info("Status Result " + writeResultApiFuture.isDone());
+            //LOGGER.info("Status Result " + writeResultApiFuture.isDone());
             if(writeResultApiFuture.isDone()) {
                 return true;
             }else{
@@ -136,7 +137,7 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public String findIdByStudentId(String studentId) throws ExecutionException, InterruptedException {
+    public String findDocIdByStudentId(String studentId) throws ExecutionException, InterruptedException {
         Firestore db= FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("studentId", studentId).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -146,7 +147,7 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public String findIdByphonenumber(String phonenumber) throws ExecutionException, InterruptedException {
+    public String findDocIdByphonenumber(String phonenumber) throws ExecutionException, InterruptedException {
         Firestore db= FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("phonenumber", phonenumber).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();

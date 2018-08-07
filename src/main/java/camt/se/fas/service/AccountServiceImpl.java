@@ -1,7 +1,6 @@
 package camt.se.fas.service;
 
 import camt.se.fas.dao.AccountDao;
-import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.slf4j.Logger;
@@ -36,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException {
-        String result = accountDao.findIdByStudentId(studentId);
+        String result = accountDao.findDocIdByStudentId(studentId);
         if(result==null) {
             return false;
         }else return true;
@@ -44,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean checkDuplicatedPhonenumber(String phonenumber) throws ExecutionException, InterruptedException {
-        String result = accountDao.findIdByphonenumber(phonenumber);
+        String result = accountDao.findDocIdByphonenumber(phonenumber);
         if(result==null) {
             return false;
         }else return true;

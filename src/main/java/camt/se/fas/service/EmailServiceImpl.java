@@ -153,7 +153,7 @@ public class EmailServiceImpl implements EmailService {
         String encodeKey = null;
         String encodeLocaltime = null;
         try {
-            AES aes = new AES();
+            AESService aes = new AESServiceImpl();
             encodeKey = aes.encrypt(uid);
             encodeLocaltime = aes.encrypt(LocalDateTime.now().toString());
            /* encodeLacaltime = aes.encrypt(LocalDateTime.now().toString());

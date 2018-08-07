@@ -1,14 +1,22 @@
 package camt.se.fas;
 
-import camt.se.fas.service.AES;
+import camt.se.fas.config.FirebaseConfig;
 
+
+import camt.se.fas.service.AESService;
+import camt.se.fas.service.AESServiceImpl;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,9 +25,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class AESServiceTest {
-    AES aes = new AES();
+    @Configuration
+    //@Import({FirebaseConfig.class})
+    static class ContextConfiguration {
+    }
+    AESService aes = new AESServiceImpl();
     /*@Rule
     public final ExpectedException exception = ExpectedException.none();
     */

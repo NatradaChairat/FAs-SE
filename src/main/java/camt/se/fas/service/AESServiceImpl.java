@@ -1,5 +1,6 @@
 package camt.se.fas.service;
 
+import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -10,13 +11,14 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.Key;
 
-public class AES {
+@Service
+public class AESServiceImpl implements AESService{
     private static final String ALGO = "AES";
     private static final byte[] keyValue =
             new byte[]{'F', 'a', 'c', 'i', 'a', 'l', 'A', 'u', 't', 'h', 'e', 'n', 'C', 'A', 'M', 'T'};
 
 
-    public static String encrypt(String data){
+    public String encrypt(String data){
         try {
             Key key = generateKey();
             Cipher c = Cipher.getInstance(ALGO);
@@ -29,7 +31,7 @@ public class AES {
             return null;
         }
     }
-    public static String decrypt(String encryptedData) {
+    public String decrypt(String encryptedData) {
         try {
             Key key = generateKey();
             Cipher c = Cipher.getInstance(ALGO);
@@ -46,7 +48,7 @@ public class AES {
 
     }
 
-    private static Key generateKey() throws Exception {
+     public Key generateKey() throws Exception {
         return new SecretKeySpec(keyValue, ALGO);
     }
 

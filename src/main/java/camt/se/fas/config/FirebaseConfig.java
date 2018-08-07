@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
-@Component
+//@Component
 public class FirebaseConfig {
     Logger LOGGER = LoggerFactory.getLogger(FirebaseConfig.class.getName());
     @Bean

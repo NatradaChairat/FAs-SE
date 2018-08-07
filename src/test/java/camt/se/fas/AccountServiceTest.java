@@ -2,22 +2,29 @@ package camt.se.fas;
 
 import camt.se.fas.config.FirebaseConfig;
 import camt.se.fas.dao.AccountDao;
+import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.AccountServiceImpl;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,45 +33,120 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@PrepareForTest({AccountService.class})
 @TestPropertySource(properties = {"firebase.config.path=fas-key-service.json","firebase.database-url=https://facialauthentication-camt.firebaseio.com"})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class AccountServiceTest {
-
-    @Mock AccountDao accountDaoMock /*= mock(AccountDao.class)*/;
-    @InjectMocks AccountService accountService = new AccountServiceImpl();
-
-    /*@Autowired
-    private AccountService accountService = new AccountServiceImpl();*/
-
-    @Value("${firebase.database-url}")
-    String firebaseUrl;
-
-    @Value("${firebase.config.path}")
-    String firebaseConfigPath;
-
-    DatabaseReference databaseReference;
-
-    @Autowired
-    public void setDatabaseReference (FirebaseConfig firebaseConfig){
-        System.out.println("Setup");
-        this.databaseReference = firebaseConfig.firebaseDatabase();
-        System.out.println("Show DR: "+this.databaseReference.getDatabase());
+    AccountService accountService = new AccountServiceImpl();
+    /*@Mock
+    AccountDao accountDao;*/
+    @Configuration
+    @Import({FirebaseConfig.class,AccountDaoImpl.class})
+    static class ContextConfiguration {
     }
 
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        /*databaseReference = Mockito.mock(DatabaseReference.class);
-        FirebaseDatabase mockFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
-        when(mockFirebaseDatabase.getReference()).thenReturn(databaseReference);*/
+    FirebaseConfig firebaseConfig;
+    @Autowired
+    public void setDatabaseReference (FirebaseConfig firebaseConfig) {
+        this.firebaseConfig = firebaseConfig;
+    }
+    @Test
+    public void testRegisterAccount(){
+        AccountDao accountDao = new AccountDaoImpl();
+        try {
+            //Test pass
+            when(accountDao.createAccount(new Account(null,
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null))).thenReturn("ZjGtiZndKySFhgkesF8R7WIO8pp1");
+            when(accountDao.addStatus(new Account("ZjGtiZndKySFhgkesF8R7WIO8pp1",
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null))).thenReturn(true);
+           /* verify(accountDao.addStatus(new Account(null,
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null)));*/
+            Assert.assertEquals("ZjGtiZndKySFhgkesF8R7WIO8pp1",accountService.registerAccount(new Account(null,
+                    "Zaxs1234",
+                    "Songsangmiffy@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null)));
 
+            //Test cannot add status
+            when(accountDao.createAccount(new Account(null,
+                    "Zaxs1234",
+                    "Natrada@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null))).thenReturn("something");
+            when(accountDao.addStatus(new Account("something",
+                    "Zaxs1234",
+                    "Natrada@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null))).thenReturn(false);
+            accountService.registerAccount(new Account(null,
+                    "Zaxs1234",
+                    "Natrada@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null));
+            /*verify(accountDao.addStatus(new Account(null,
+                    "Zaxs1234",
+                    "Natrada@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null)));*/
+            Assert.assertEquals(null, accountService.registerAccount(new Account(null,
+                    "Zaxs1234",
+                    "Natrada@gmail.com",
+                    null, null,
+                    null,null,
+                    null,null,
+                    null,null)));
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void testValueSetup(){
-        Assert.assertEquals("fas-key-service.json",firebaseConfigPath);
+    public void testRegisterAccountInfo(){
+        AccountDao accountDao = new AccountDaoImpl();
+        try {
+            when(accountDao.addAccountInfo(any())).thenReturn(true);
+            Assert.assertEquals(true, accountService.registerAccountInfo(any()));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        }
     }
+
+    @Test
+    public void testChckDuplicatedStudentId(){}
+    @Test
+    public void testChckDuplicatedPhonenumber(){}
 
     /*@Test
     public void testaddAccountOfRegistrationStep1(){
