@@ -124,7 +124,12 @@ export class InforegistrationComponent implements OnInit {
                 setTimeout(() => {
                   this.router.navigate(['/videoRegistration/'+this.refParam]);
                 }, 1000);
-              }else{console.log("sendPersonalAccount "+false);}
+              }
+            },error1 => {
+              this.type = "Error";
+              this.title= "Can not submit the form."
+              this.detail="Please try submit again."
+              this.openDialog();
             });
         }
       });

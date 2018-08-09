@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 public interface AccountDao{
     String createAccount(Account account) throws FirebaseAuthException;
     Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
+
+    Boolean changeAccountStatus(Account account);
     Boolean addStatus(Account account) throws ExecutionException, InterruptedException;
     Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException;
 

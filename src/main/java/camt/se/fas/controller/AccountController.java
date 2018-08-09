@@ -5,6 +5,7 @@ import camt.se.fas.service.AESService;
 import camt.se.fas.service.AccountService;
 import camt.se.fas.service.EmailService;
 import camt.se.fas.service.SMSService;
+import com.google.api.HttpBody;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.nexmo.client.NexmoClientException;
@@ -52,7 +53,7 @@ public class AccountController {
         this.aes = aesService;
     }
 
-    @PostMapping("/account/create")
+    @PostMapping("/account/create")//
     public ResponseEntity uploadAccount(@RequestBody Account account) {
         try {
             String uid = accountService.registerAccount(account);
@@ -64,42 +65,44 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    @GetMapping("account/send/phonenumber/{param}")
-    public ResponseEntity sendPhonenumber (@PathVariable("param")String param){
-        int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
-        String refCode = RandomStringUtils.randomAlphabetic(6);
-        try {
-        /*AES aes = new AES();*/
-        String uid = aes.decrypt(param);
-        LOGGER.info("UID "+uid);
-        String phonenumber = accountService.getPhonenumberByUID(uid);
-            smsService.sendSMS(phonenumber,refCode,otp);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("otp",String.valueOf(otp));
-            responseHeaders.set("refCode",String.valueOf(refCode));
-            responseHeaders.set("phonenumber",String.valueOf(phonenumber));
-            return ResponseEntity.ok(responseHeaders);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
-
-    }
-    @PostMapping("/account/update/{param}")
-    public ResponseEntity updateAccount(@RequestBody Account account,@PathVariable("param")String param) {
+    @PostMapping("/account/update/")//
+    public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
+        String encryptUID = account.getUid();
         try {
-            LOGGER.info(param);
+            LOGGER.info(encryptUID);
             /*AES aes = new AES();*/
-            String uid = aes.decrypt(param);
+            String uid = aes.decrypt(encryptUID);
             LOGGER.info("update "+uid);
             account.setUid(uid);
             boolean result = accountService.registerAccountInfo(account);
             if(result){
                 return ResponseEntity.ok(true);
             }else{
-                return ResponseEntity.ok(false);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                //return ResponseEntity.ok(false);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    @GetMapping("account/send/phonenumber/{param}")
+    public ResponseEntity sendPhonenumber (@PathVariable("param")String param){
+        int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
+        String refCode = RandomStringUtils.randomAlphabetic(6);
+        LOGGER.info("UID "+param);
+        try {
+            /*AES aes = new AES();*/
+            String uid = aes.decrypt(param);
+            LOGGER.info("UID "+uid);
+            String phonenumber = accountService.getPhonenumberByUID(uid);
+            smsService.sendSMS(phonenumber,refCode,otp);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("otp",String.valueOf(otp));
+            responseHeaders.set("refCode",String.valueOf(refCode));
+            responseHeaders.set("phonenumber",String.valueOf(phonenumber));
+            return ResponseEntity.ok(responseHeaders);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -117,7 +120,7 @@ public class AccountController {
             if(result){
                 return ResponseEntity.ok(true);
             }else{
-                return ResponseEntity.ok(false);
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,7 +129,7 @@ public class AccountController {
     }
 
     @GetMapping("account/update/status/{param}")
-    public ResponseEntity updateStatusByVerifyPhone (@PathVariable("param")String param){
+    public ResponseEntity updateStatusByVerifyPhonenumber (@PathVariable("param")String param){
         try {
 
             LOGGER.info("Original Key: " +param);
@@ -146,12 +149,11 @@ public class AccountController {
         }
     }
 
-
     @RequestMapping(value="account/update/status", method=RequestMethod.GET )
     /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
-    public ResponseEntity updateStatusAccountByConfirmEmail(@RequestParam Map<String, String> param){
-        String id = param.get("id");
-        String time = param.get("time");
+    public ResponseEntity updateStatusByVerifyEmail(@RequestParam Map<String, String> mapIdTime){
+        String id = mapIdTime.get("id");
+        String time = mapIdTime.get("time");
         try {
             /*AES aes = new AES();*/
             LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
@@ -178,9 +180,6 @@ public class AccountController {
             }else{
                 return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
             }
-        } catch (FirebaseAuthException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -70,6 +70,15 @@ public class AccountDaoImpl implements AccountDao{
         }return false;
     }
 
+    @Override
+    public Boolean changeAccountStatus(Account account) {
+        /*if(account.getU){
+
+        }
+        return null;*/
+        return null;
+    }
+
 
     @Override
     public Boolean addStatus(Account account) throws ExecutionException, InterruptedException {
