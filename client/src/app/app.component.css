@@ -1,0 +1,13 @@
+
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 100%;
+  max-height: 200px;
+  margin: 0 auto 20px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2), 0 0px 5px 0 rgba(0, 0, 0, 0.24);
+
+}
