@@ -66,7 +66,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/account/update/")//
+    @PostMapping("/account/update")//
     public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
         String encryptUID = account.getUid();
         try {
@@ -137,7 +137,9 @@ public class AccountController {
             LOGGER.info("Encoded Key: " + decodeKey);
             Account account = new Account();
             account.setUid(decodeKey);
-            boolean result = accountService.updateStatus(account,"verified");
+            account.setStatus("verified");
+            //boolean result = accountService.updateStatus(account,"verified");
+            boolean result = accountService.updateStatus(account,"");
             if(result){
                 return ResponseEntity.ok(true);
             }else{
@@ -173,7 +175,8 @@ public class AccountController {
                 Account account = new Account();
                 account.setUid(decodeKey);
                 account.setEmail(email);
-                accountService.updateStatus(account,"activated");
+                account.setStatus("activated");
+                accountService.updateStatus(account,"");
                 Account _account = new Account();
                 _account.setEmail(account.getEmail());
                 return ResponseEntity.ok(_account);

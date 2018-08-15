@@ -38,7 +38,8 @@ export class AccountDataServerService{
 
   sendPersonalAccount(account: Account, refParam: string): Observable<Object>{
     console.log(account);
-    return this.http.post(`${this.baseUrl}`+`/update/`+encodeURIComponent(refParam),account,{ observe: 'response'});
+    account.uid = refParam;
+    return this.http.post(`${this.baseUrl}`+`/update/`/*+encodeURIComponent(refParam)*/,account,{ observe: 'response'});
   }
 
   sendEmail(param: string){

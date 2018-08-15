@@ -71,19 +71,50 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public Boolean changeAccountStatus(Account account) {
-        /*if(account.getU){
+    public Boolean changeAccountStatus(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
+        if(account.getStatus().equalsIgnoreCase("registered")){
+            Firestore db= FirestoreClient.getFirestore();
+            Map<String, Object> accountTableMap = new HashMap<>();
+            accountTableMap.put("status", account.getStatus());
+            accountTableMap.put("uid", account.getUid());
+            ApiFuture<DocumentReference> documentReferenceApiFuture = db.collection("account").add(accountTableMap);
+            LOGGER.info("UpdateTime "+documentReferenceApiFuture.get().getId());
+            LOGGER.info("Status Result "+documentReferenceApiFuture.isDone());
+            if(documentReferenceApiFuture.isDone()){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            if(account.getStatus().equalsIgnoreCase("activated")){
+                UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
+                        .setEmailVerified(true);
+                UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
+                LOGGER.info("update user "+userRecord.getUid()+" "+userRecord.isEmailVerified());
+            }
+            Firestore db= FirestoreClient.getFirestore();
+            Map<String, Object> accountTableMap = new HashMap<>();
+            accountTableMap.put("status", account.getStatus());
 
+            ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", account.getUid()).get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (DocumentSnapshot document : documents) {
+                ApiFuture<WriteResult> writeResultApiFuture = db.collection("account").document(document.getId()).update(accountTableMap);
+                LOGGER.info("UpdateTime " + writeResultApiFuture.get().getUpdateTime());
+                if(writeResultApiFuture.isDone()) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }return false;
         }
-        return null;*/
-        return null;
     }
 
 
     @Override
     public Boolean addStatus(Account account) throws ExecutionException, InterruptedException {
 
-        Firestore db= FirestoreClient.getFirestore();
+        /*Firestore db= FirestoreClient.getFirestore();
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put("status", "registered");
         accountTableMap.put("uid", account.getUid());
@@ -94,13 +125,14 @@ public class AccountDaoImpl implements AccountDao{
             return true;
         }else{
             return false;
-        }
+        }*/
+        return null;
 
     }
 
     @Override
     public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
-        if(status.equalsIgnoreCase("activated")){
+      /*  if(status.equalsIgnoreCase("activated")){
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
                     .setEmailVerified(true);
             UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
@@ -121,7 +153,8 @@ public class AccountDaoImpl implements AccountDao{
             }else{
                 return false;
             }
-        }return false;
+        }return false;*/
+      return null;
 
     }
 

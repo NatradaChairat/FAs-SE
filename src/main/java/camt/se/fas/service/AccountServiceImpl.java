@@ -21,7 +21,9 @@ public class AccountServiceImpl implements AccountService {
         String uid = accountDao.createAccount(account);
         LOGGER.info("UID "+uid);
         account.setUid(uid);
-        boolean result = accountDao.addStatus(account);
+        account.setStatus("registered");
+        //boolean result = accountDao.addStatus(account);
+        boolean result = accountDao.changeAccountStatus(account);
         if(result) {
             return uid;
         }else return null;
@@ -61,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
-        return accountDao.updateStatus(account, status);
+        return accountDao.changeAccountStatus(account);
+        //return accountDao.updateStatus(account, status);
     }
 }
