@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -217,6 +218,18 @@ public class AccountController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping("account/get/account/{status}")
+    public ResponseEntity getAccountByStatus(@PathVariable("status")String status) {
+        try {
+            List<Account> accounts = accountService.getAccountByStatus(status);
+            return ResponseEntity.ok(accounts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
     }
 
 

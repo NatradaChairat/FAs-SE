@@ -37,9 +37,13 @@ export class AccountDataServerService{
   }
 
   sendPersonalAccount(account: Account, refParam: string): Observable<Object>{
-    console.log(account);
+    //console.log(account);
     account.uid = refParam;
     return this.http.post(`${this.baseUrl}`+`/update/`/*+encodeURIComponent(refParam)*/,account,{ observe: 'response'});
+  }
+
+  getAccountByStatus(status: String){
+    return this.http.get(`${this.baseUrl}`+ `/get/account/`+status,httpOptions);
   }
 
   sendEmail(param: string){
@@ -54,7 +58,6 @@ export class AccountDataServerService{
 
   updateStatusByVerifyPhone(id: string){
     return this.http.get(`${this.baseUrl}`+`/update/status/`+encodeURIComponent(id));
-
   }
 
   checkDuplicatedStudentId(studentId: string){

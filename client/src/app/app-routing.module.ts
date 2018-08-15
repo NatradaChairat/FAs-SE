@@ -8,6 +8,7 @@ import {EmailRegistrationComponent} from "./emailregistration/emailregistration.
 import {InforegistrationComponent} from "./inforegistration/inforegistration.component";
 import {VideoregistrationComponent} from "./videoregistration/videoregistration.component";
 import {PhonenoVerificationComponent} from "./phoneno-verification/phoneno-verification.component";
+import {StaffDashboardComponent} from "./staff-dashboard/staff-dashboard.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
   {path: 'waiting', component: WaitComponent},
   /*{path: 'confirmedemail/:email/:username/:localtime', component: ConfirmedEmailComponent},*/
   {path: 'confirmedemail/:key', component: ConfirmedEmailComponent},
+  {path: 'staffDashboard', component: StaffDashboardComponent},
   {path: '**', component: FilenotfoundComponent}
 ];
 

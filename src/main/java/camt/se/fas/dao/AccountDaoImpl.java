@@ -12,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -165,36 +163,59 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public String findEmailByUID(String uid) throws FirebaseAuthException {
+    public String getEmailByUID(String uid) throws FirebaseAuthException {
         UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
         LOGGER.info("findEmailByUID "+userRecord.getEmail());
         return userRecord.getEmail();
     }
 
     @Override
-    public String findPhonenumberByUID(String uid) throws FirebaseAuthException {
+    public String getPhonenumberByUID(String uid) throws FirebaseAuthException {
         UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
-        LOGGER.info("findPhonenumberByUID "+userRecord.getPhoneNumber());
+        LOGGER.info("getPhonenumberByUID "+userRecord.getPhoneNumber());
         return userRecord.getPhoneNumber();
     }
 
     @Override
-    public String findDocIdByStudentId(String studentId) throws ExecutionException, InterruptedException {
+    public Boolean findAccountByStudentId(String studentId) throws ExecutionException, InterruptedException {
         Firestore db= FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("studentId", studentId).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot document : documents) {
-            return document.getId();
-        }return null;
+            if( document.getId() != null){
+                return true;
+            }else return false;
+        }return false;
     }
 
     @Override
-    public String findDocIdByphonenumber(String phonenumber) throws ExecutionException, InterruptedException {
+    public Boolean findAccountByphonenumber(String phonenumber) throws ExecutionException, InterruptedException {
         Firestore db= FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("phonenumber", phonenumber).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot document : documents) {
-            return document.getId();
-        }return null;
+            if(document.getId() != null){
+                return true;
+            }else return false;
+        }return false;
+    }
+
+    @Override
+    public List<Account> getAccountByStatus(String status) throws ExecutionException, InterruptedException {
+        Firestore db= FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("status", status).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<Account> accounts = new ArrayList<>();
+        for (DocumentSnapshot document : documents) {
+            //LOGGER.info("GET ACCOUNT Doc " +document.get("uid"));
+            Account account = new Account();
+            account.setUid((String)document.get("uid"));
+            account.setFirstname((String)document.get("firstname"));
+            account.setLastname((String)document.get("lastname"));
+            account.setDateofbirth((String) document.get("dateofbirth"));
+            accounts.add(account);
+            LOGGER.info("GET Account "+account);
+        }
+        return accounts;
     }
 }

@@ -1,3 +1,32 @@
-<p>
-  staff-dashboard works!
-</p>
+<h2>Staff Dashboard</h2>
+<div class="row justify-content-around">
+  <div class="card col-md-5"  >
+    <div class="card-header">New Account</div>
+    <div *ngFor="let account of verifiedAccounts" class="row">
+    <!--<div class="card col-md-8"  >-->
+      <div class="card-body row" (click)="showDetail(account)">
+        <div class="col-md-8 col-sm-8">
+          <p class="card-text"> {{account.firstname }} {{account.lastname}}</p>
+        </div>
+      </div>
+  <!--</div>-->
+    </div>
+  </div>
+
+  <div class="card col-md-5"  >
+    <div class="card-header">Old Account</div>
+    <div *ngFor="let account of verifiedAccounts" class="row">
+      <!--<div class="card col-md-8"  >-->
+      <div class="card-body row" (click)="showDetail(account)">
+        <div class="col-md-8 col-sm-8">
+          <p class="card-text"> {{account.firstname }} {{account.lastname}}</p>
+        </div>
+      </div>
+      <!--</div>-->
+    </div>
+  </div>
+
+</div>
+
+
+
