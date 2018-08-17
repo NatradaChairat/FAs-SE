@@ -147,7 +147,7 @@ public class EmailServiceImpl implements EmailService {
     }*/
 
     @Override
-    public Boolean sendEmail(String email, String uid) {
+    public Boolean sendVerifyEmail(String email, String uid) {
         String[] receiver = {email}; // list of recipient email addresses
         String subject = "Facial Authentication: Verification email";
         String encodeKey = null;
@@ -195,7 +195,65 @@ public class EmailServiceImpl implements EmailService {
             Transport transport = session.getTransport("smtp");
             transport.connect(host, USER_NAME, PASSWORD);
             transport.sendMessage(message, message.getAllRecipients());
-            System.out.println("Sending success");
+            //System.out.println("Sending success");
+            transport.close();
+            return true;
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+            return false;
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean sendResultAuthenProcessEmail(String email, String status) {
+        String[] receiver = {email}; // list of recipient email addresses
+        String subject = "Facial Authentication: Result of Authentication";
+        String result= "";
+        String option= "";
+        if(status.equalsIgnoreCase("approved")) {
+            result = "accepted";
+            option = "Now, you can login by face recognize";
+        }else {
+            result = "rejected";
+            option = "You must be register you face again";
+        }
+        String body = "Email Address: " + email +
+                "\nResult of Authentication process is "+result +
+                "\n"+option;
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", USER_NAME);
+        props.put("mail.smtp.password", PASSWORD);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage message = new MimeMessage(session);
+        try {
+            message.setFrom(new InternetAddress(USER_NAME));
+            InternetAddress[] toAddress = new InternetAddress[receiver.length];
+            // To get the array of addresses
+            for( int i = 0; i < receiver.length; i++ ) {
+                toAddress[i] = new InternetAddress(receiver[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+
+            message.setSubject(subject);
+            message.setText(body);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, USER_NAME, PASSWORD);
+            transport.sendMessage(message, message.getAllRecipients());
+            //System.out.println("Sending success");
             transport.close();
             return true;
         }

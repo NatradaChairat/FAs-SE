@@ -68,8 +68,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
+    public Boolean updateStatus(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
         return accountDao.changeAccountStatus(account);
         //return accountDao.updateStatus(account, status);
+    }
+
+    @Override
+    public Account getAccountByUID(String uid) throws ExecutionException, InterruptedException {
+        return accountDao.getAccountByUID(uid);
     }
 }

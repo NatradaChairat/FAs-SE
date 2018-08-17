@@ -11,21 +11,32 @@ import {Account} from "../entity/Account";
 export class StaffDashboardComponent implements OnInit {
 
   verifiedAccounts: Account[];
+  disapprovedAccounts: Account[];
 
   constructor(private accountDataServerService: AccountDataServerService, private router: Router) { }
 
   ngOnInit() {
     this.accountDataServerService.getAccountByStatus("verified")
-      .subscribe((accounts:any) => this.verifiedAccounts = accounts,
-        (error) =>{
+      .subscribe((accounts:any) => {
+          this.verifiedAccounts = accounts;
+          this.accountDataServerService.getAccountByStatus("disapproved")
+            .subscribe((accounts:any) => {
+            this.disapprovedAccounts = accounts;
+        },(error) =>{
+              if(error.status === 401){
+                console.log("no content")
+              }
+            });
+      },(error) =>{
           if(error.status === 401){
             console.log("no content")
           }
         });
+
   }
 
-  showDetail(account: Account){
-    console.log("go show detail")
+  showDetail(url: String){
+    this.router.navigate(['detail/'+url]);
   }
 
 }

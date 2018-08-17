@@ -1,6 +1,8 @@
 package camt.se.fas.dao;
 
 import camt.se.fas.entity.Account;
+import camt.se.fas.service.AESService;
+import camt.se.fas.service.AESServiceImpl;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,10 +111,10 @@ public class AccountDaoImpl implements AccountDao{
     }
 
 
-    @Override
+    /*@Override
     public Boolean addStatus(Account account) throws ExecutionException, InterruptedException {
 
-        /*Firestore db= FirestoreClient.getFirestore();
+        *//*Firestore db= FirestoreClient.getFirestore();
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put("status", "registered");
         accountTableMap.put("uid", account.getUid());
@@ -123,14 +125,14 @@ public class AccountDaoImpl implements AccountDao{
             return true;
         }else{
             return false;
-        }*/
+        }*//*
         return null;
 
-    }
+    }*/
 
-    @Override
+   /* @Override
     public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
-      /*  if(status.equalsIgnoreCase("activated")){
+      *//*  if(status.equalsIgnoreCase("activated")){
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
                     .setEmailVerified(true);
             UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
@@ -151,14 +153,27 @@ public class AccountDaoImpl implements AccountDao{
             }else{
                 return false;
             }
-        }return false;*/
+        }return false;*//*
       return null;
 
-    }
+    }*/
 
 
     @Override
-    public Boolean findAccountByAccountId(String accountId) {
+    public Account getAccountByUID(String uid) throws ExecutionException, InterruptedException {
+        Firestore db= FirestoreClient.getFirestore();
+        Account account = new Account();
+        ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", uid).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot document : documents) {
+            //LOGGER.info("GET sub Doc " +document.getReference().collection("videos").document("2q1VfQbT2SM5S3zfH1h1").getId());
+            account.setUid((String)document.get("uid"));
+            account.setFirstname((String)document.get("firstname"));
+            account.setLastname((String)document.get("lastname"));
+            account.setDateofbirth((String) document.get("dateofbirth"));
+            LOGGER.info("GET Account "+account);
+            return account;
+        }
         return null;
     }
 
@@ -207,12 +222,13 @@ public class AccountDaoImpl implements AccountDao{
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<Account> accounts = new ArrayList<>();
         for (DocumentSnapshot document : documents) {
-            //LOGGER.info("GET ACCOUNT Doc " +document.get("uid"));
             Account account = new Account();
-            account.setUid((String)document.get("uid"));
+            AESService aesService = new AESServiceImpl();
+            String encodeUID = aesService.encrypt((String)document.get("uid"));
+            account.setUid(encodeUID);
             account.setFirstname((String)document.get("firstname"));
-            account.setLastname((String)document.get("lastname"));
-            account.setDateofbirth((String) document.get("dateofbirth"));
+            //account.setLastname((String)document.get("lastname"));
+            //account.setDateofbirth((String) document.get("dateofbirth"));
             accounts.add(account);
             LOGGER.info("GET Account "+account);
         }

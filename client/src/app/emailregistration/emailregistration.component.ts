@@ -28,6 +28,7 @@ export class EmailRegistrationComponent implements OnInit {
   type: string;
   title: string;
   detail: string;
+  confirmPass: string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog) {}
 
@@ -47,8 +48,8 @@ export class EmailRegistrationComponent implements OnInit {
     });
   }
 
-  onSubmit(account:Account){
-    if(this.checkMatchingPassword(account.confirmPassword, account.password)) {
+  onSubmit(account:Account, confirmPass: string){
+    if(this.checkMatchingPassword(confirmPass, account.password)) {
       this.accountDataServerService.sendAccount(account)
         .subscribe((res:any)=> {
               this.sendEmail(res.body);

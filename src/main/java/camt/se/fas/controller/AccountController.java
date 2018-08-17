@@ -117,8 +117,28 @@ public class AccountController {
             LOGGER.info("UID "+uid);
             String email = accountService.getEmailByUID(uid);
             LOGGER.info("Email "+email);
-            boolean result= emailService.sendEmail(email,uid);
+            boolean result= emailService.sendVerifyEmail(email,uid);
             if(result){
+                return ResponseEntity.ok(true);
+            }else{
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+    }
+
+    @GetMapping("account/send/email/{param}/{result}")
+    public ResponseEntity sendResultAuthenProcessToEmail (@PathVariable("param")String param , @PathVariable("result")String result){
+        try {
+            /*AES aes = new AES();*/
+            String uid = aes.decrypt(param);
+            LOGGER.info("UID "+uid);
+            String email = accountService.getEmailByUID(uid);
+            LOGGER.info("Email "+email);
+            boolean resultSending = emailService.sendResultAuthenProcessEmail(email,result);
+            if(resultSending){
                 return ResponseEntity.ok(true);
             }else{
                 return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
@@ -140,7 +160,7 @@ public class AccountController {
             account.setUid(decodeKey);
             account.setStatus("verified");
             //boolean result = accountService.updateStatus(account,"verified");
-            boolean result = accountService.updateStatus(account,"");
+            boolean result = accountService.updateStatus(account);
             if(result){
                 return ResponseEntity.ok(true);
             }else{
@@ -177,7 +197,7 @@ public class AccountController {
                 account.setUid(decodeKey);
                 account.setEmail(email);
                 account.setStatus("activated");
-                accountService.updateStatus(account,"");
+                accountService.updateStatus(account);
                 Account _account = new Account();
                 _account.setEmail(account.getEmail());
                 return ResponseEntity.ok(_account);
@@ -189,6 +209,23 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping("account/update/status/")
+    public ResponseEntity updateStatus(@RequestBody Account account){
+        try {
+            /*LOGGER.info("Encoded Key: " +account.getUid());
+            String decodeUID = aes.decrypt(account.getUid());
+            LOGGER.info("Decoded Key: " + decodeUID);
+            account.setUid(decodeUID);*/
+            boolean result = accountService.updateStatus(account);
+            LOGGER.info("Result "+result);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 
     @GetMapping("account/get/phonenumber/{phonenumber}")
     public ResponseEntity checkDuplicatedPhonenumber (@PathVariable("phonenumber")String phonenumber){
@@ -230,6 +267,20 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
+    }
+
+    @GetMapping("account/get/{id}")
+    public ResponseEntity getAccountByUid(@PathVariable("id")String id){
+        try {
+            LOGGER.info("Encoded Key: " +id);
+            String decodeUID = aes.decrypt(id);
+            LOGGER.info("Decoded Key: " + decodeUID);
+            Account account = accountService.getAccountByUID(decodeUID);
+            return ResponseEntity.ok(account);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
 

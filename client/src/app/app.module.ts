@@ -18,6 +18,11 @@ import { WebcamComponent } from './webcam/webcam.component';
 import { VideoregistrationComponent } from './videoregistration/videoregistration.component';
 import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-verification.component';
 import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
+import { AccountDetailComponent } from './account-detail/account-detail.component';
+import {VgCoreModule} from "videogular2/core";
+import {VgControlsModule} from "videogular2/controls";
+import {VgOverlayPlayModule} from "videogular2/overlay-play";
+import {VgBufferingModule} from "videogular2/buffering";
 
 @NgModule({
   declarations: [
@@ -32,7 +37,8 @@ import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.compo
     WebcamComponent,
     VideoregistrationComponent,
     PhonenoVerificationComponent,
-    StaffDashboardComponent
+    StaffDashboardComponent,
+    AccountDetailComponent
   ],
   entryComponents: [
     DialogComponent
@@ -45,7 +51,11 @@ import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.compo
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
   bootstrap: [AppComponent]

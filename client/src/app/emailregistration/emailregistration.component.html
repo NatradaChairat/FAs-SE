@@ -6,7 +6,7 @@
     <div class=" col-md-12">
       <div class="form-group">
         <p></p>
-        <form #emailRegisterForm="ngForm" (ngSubmit)="onSubmit(account)">
+        <form #emailRegisterForm="ngForm" (ngSubmit)="onSubmit(account, confirmPass)">
           <!--<div class="row form-group" >
             <label class="col-2 text-right">Username </label>
             <div class="col-6">
@@ -48,7 +48,7 @@
             <label class="col-2 text-right">Confirm password </label>
             <div class="col-6">
               <input type="password" class="form-control" id="confirmPassword"
-                     name="confirmPassword" [(ngModel)]="account.confirmPassword"
+                     name="confirmPassword" [(ngModel)]="confirmPass"
                      #confirmPassWord="ngModel" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$"/>
             </div>
             <div class="col-4">

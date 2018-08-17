@@ -12,12 +12,13 @@ public interface AccountDao{
     Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
 
     Boolean changeAccountStatus(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
-    Boolean addStatus(Account account) throws ExecutionException, InterruptedException;
+   /* Boolean addStatus(Account account) throws ExecutionException, InterruptedException;
     Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException;
-
-    Boolean findAccountByAccountId(String accountId);
+*/
+    Account getAccountByUID(String uid) throws ExecutionException, InterruptedException;
     String getEmailByUID(String uid) throws FirebaseAuthException;
     String getPhonenumberByUID(String uid)throws FirebaseAuthException;
+
     Boolean findAccountByStudentId(String studentId) throws ExecutionException, InterruptedException;
     Boolean findAccountByphonenumber(String phonenumber) throws ExecutionException, InterruptedException;
 
