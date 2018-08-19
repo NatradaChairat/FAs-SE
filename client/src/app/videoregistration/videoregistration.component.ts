@@ -6,6 +6,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 
 
 
+
 @Component({
   selector: 'app-videoregistration',
   templateUrl: './videoregistration.component.html',

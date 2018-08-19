@@ -25,7 +25,11 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/video.js/dist/video.min.js",
+              "node_modules/recordrtc/RecordRTC.js",
+              "node_modules/webrtc-adapter/out/adapter.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -91,7 +95,10 @@
             ],
             "exclude": [
               "**/node_modules/**"
-            ]
+            ],
+            "ssl": true,
+            "sslKey": "/node_modules/browser-sync/certs/server.key",
+            "sslCert": "/node_modules/browser-sync/certs/server.crt"
           }
         }
       }
