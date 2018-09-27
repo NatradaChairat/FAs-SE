@@ -23,6 +23,7 @@ import {VgCoreModule} from "videogular2/core";
 import {VgControlsModule} from "videogular2/controls";
 import {VgOverlayPlayModule} from "videogular2/overlay-play";
 import {VgBufferingModule} from "videogular2/buffering";
+import {FileSelectDirective} from "ng2-file-upload";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {VgBufferingModule} from "videogular2/buffering";
     VideoregistrationComponent,
     PhonenoVerificationComponent,
     StaffDashboardComponent,
-    AccountDetailComponent
+    AccountDetailComponent,
+    FileSelectDirective
   ],
   entryComponents: [
     DialogComponent

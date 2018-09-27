@@ -64,10 +64,13 @@ public class AccountDaoImpl implements AccountDao{
             LOGGER.info(referenceApiFuture.get().getUpdateTime().toString());
             if (referenceApiFuture.isDone()) {
                 return true;
+                //ApiFuture<QuerySnapshot> videoFuture = db.collection("video")
             } else {
                 return false;
             }
         }return false;
+
+
     }
 
     @Override

@@ -9,28 +9,35 @@
       <form>
 
         <div class="row pb-3">
-          <label class="col-1 text-right">Random Text: </label>
+          <label class="col-2 text-right">Random Text: </label>
           <div class="col-8">
             <label class="col-6">{{randomtext}}</label>
           </div>
         </div>
         <div class="row pb-3">
-          <label class="col-1 text-right">Important! </label>
+          <label class="col-2 text-right">Important! </label>
           <div class="col-8">
             <label class="col-6">Please, write the random text on a plain paper and holding with student card to take the video.</label>
           </div>
         </div>
-        <!-- begin video recorder code -->
-        <piperecorder id="custom-id" pipe-width="400" pipe-height="330" pipe-qualityurl="avq/300p.xml" pipe-accountHash="f688dac4391b8f380cc0069ed5a57b14" pipe-eid="1" pipe-showMenu="1" pipe-mrt="120" pipe-sis="0" pipe-asv="1" pipe-mv="0" pipe-dpv="0" pipe-ao="0" pipe-dup="0" ></piperecorder>
-        <!-- end video recorder code -->
 
-       <!-- <video id="myVideo" class="video-js vjs-default-skin"></video>-->
+        <piperecorder id="custom-id" pipe-width="400" pipe-height="330" pipe-qualityurl="avq/300p.xml" pipe-accountHash="f688dac4391b8f380cc0069ed5a57b14" pipe-eid="1" pipe-showMenu="1" pipe-mrt="120" pipe-sis="0" pipe-asv="0" pipe-mv="0" pipe-dpv="0" pipe-ao="0" pipe-dup="0" ></piperecorder>
 
       </form>
     </div>
   </div>
 </div>
 
+
+<script>
+  PipeSDK.onRecordersInserted = function(){
+    myRecorderObject =  PipeSDK.getRecorderById('f688dac4391b8f380cc0069ed5a57b14');
+    myRecorderObject.btRecordPressed = function(id){
+      var args = Array.prototype.slice.call(arguments);
+      console.log("btRecordPressed("+args.join(', ')+")");
+    }
+  }
+</script>
 
 
 <!--<div>

@@ -1,26 +1,32 @@
 package camt.se.fas.controller;
 
 import camt.se.fas.entity.Account;
-import camt.se.fas.service.AESService;
-import camt.se.fas.service.AccountService;
-import camt.se.fas.service.EmailService;
-import camt.se.fas.service.SMSService;
+import camt.se.fas.service.*;
 import com.google.api.HttpBody;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.nexmo.client.NexmoClientException;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.mail.Multipart;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.Buffer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +94,16 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping(value="/account/upload/video")
+    public ResponseEntity uploadVideo(@RequestParam("file") MultipartFile file){
+        if(file.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(null);
+    }
+
+
     @GetMapping("account/send/phonenumber/{param}")
     public ResponseEntity sendPhonenumber (@PathVariable("param")String param){
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
@@ -218,6 +234,17 @@ public class AccountController {
             LOGGER.info("Decoded Key: " + decodeUID);
             account.setUid(decodeUID);*/
             boolean result = accountService.updateStatus(account);
+            if(account.getStatus().equalsIgnoreCase("approved")){
+                FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber("d:\\FAs\\FacialAuthentication-SE\\src\\main\\resources\\kYWhsp2DmbVKsjeoo5qHRzMsfMAAagmF.mp4");
+                fFmpegFrameGrabber.start();
+                for(int i =1 ; i<=50 ; i++){
+                    Frame grabbedImage = fFmpegFrameGrabber.grab();
+                    Java2DFrameConverter frameConverter = new Java2DFrameConverter();
+                    ImageIO.write(frameConverter.convert(grabbedImage), "jpg", new File("video-frame-"+System.currentTimeMillis()+ ".jpg"));
+
+                }
+                fFmpegFrameGrabber.stop();
+            }
             LOGGER.info("Result "+result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -282,6 +309,19 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
+
+    @GetMapping("account/get")
+    public ResponseEntity calculate(){
+        PythonService pythonService = new PythonServiceImpl();
+        try {
+            pythonService.runScript("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    
 
 
 
