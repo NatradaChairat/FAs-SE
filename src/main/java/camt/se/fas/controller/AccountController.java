@@ -226,16 +226,12 @@ public class AccountController {
         }
     }
 
-    @PostMapping("account/update/status/")
-    public ResponseEntity updateStatus(@RequestBody Account account){
+    @PostMapping("account/update/status/{filepath}")
+    public ResponseEntity updateStatus(@RequestBody Account account, @PathVariable("filepath") String filepath){
         try {
-            /*LOGGER.info("Encoded Key: " +account.getUid());
-            String decodeUID = aes.decrypt(account.getUid());
-            LOGGER.info("Decoded Key: " + decodeUID);
-            account.setUid(decodeUID);*/
             boolean result = accountService.updateStatus(account);
             if(account.getStatus().equalsIgnoreCase("approved")){
-                FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber("d:\\FAs\\FacialAuthentication-SE\\src\\main\\resources\\kYWhsp2DmbVKsjeoo5qHRzMsfMAAagmF.mp4");
+                /*FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber("..resources\\kYWhsp2DmbVKsjeoo5qHRzMsfMAAagmF.mp4");
                 fFmpegFrameGrabber.start();
                 for(int i =1 ; i<=50 ; i++){
                     Frame grabbedImage = fFmpegFrameGrabber.grab();
@@ -243,7 +239,10 @@ public class AccountController {
                     ImageIO.write(frameConverter.convert(grabbedImage), "jpg", new File("video-frame-"+System.currentTimeMillis()+ ".jpg"));
 
                 }
-                fFmpegFrameGrabber.stop();
+                fFmpegFrameGrabber.stop();*/
+                VideoService videoService = new VideoServiceImpl();
+                //videoService.captureFramesFromVideo("C:\\Users\\natrada.chairat\\SEProject\\FAs\\FAs-SE\\src\\main\\resources\\iPhoneXS.mp4");
+                videoService.captureFramesFromVideo(filepath);
             }
             LOGGER.info("Result "+result);
             return ResponseEntity.ok(result);
@@ -316,6 +315,19 @@ public class AccountController {
         try {
             pythonService.runScript("");
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("account/test")
+    public ResponseEntity test(){
+        PythonService pythonService = new PythonServiceImpl();
+        try {
+            VideoService videoService = new VideoServiceImpl();
+            videoService.captureFramesFromVideo("C:\\Users\\natrada.chairat\\SEProject\\FAs\\FAs-SE\\src\\main\\resources\\iPhoneXS.mp4");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseEntity.ok().build();
