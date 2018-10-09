@@ -8,6 +8,8 @@ import {EmailRegistrationComponent} from "./emailregistration/emailregistration.
 import {InforegistrationComponent} from "./inforegistration/inforegistration.component";
 import {VideoregistrationComponent} from "./videoregistration/videoregistration.component";
 import {PhonenoVerificationComponent} from "./phoneno-verification/phoneno-verification.component";
+import {EmailLoginComponent} from "./email-login/email-login.component";
+import {FaceLoginComponent} from "./face-login/face-login.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -19,6 +21,8 @@ const appRoutes: Routes = [
   {path: 'waiting', component: WaitComponent},
   /*{path: 'confirmedemail/:email/:username/:localtime', component: ConfirmedEmailComponent},*/
   {path: 'confirmedemail/:key', component: ConfirmedEmailComponent},
+  {path: 'email-login', component: EmailLoginComponent},
+  {path: 'face-login', component: FaceLoginComponent},
   {path: '**', component: FilenotfoundComponent}
 ];
 

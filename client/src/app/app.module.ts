@@ -17,6 +17,8 @@ import { InforegistrationComponent } from './inforegistration/inforegistration.c
 import { WebcamComponent } from './webcam/webcam.component';
 import { VideoregistrationComponent } from './videoregistration/videoregistration.component';
 import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-verification.component';
+import { FaceLoginComponent } from './face-login/face-login.component';
+import { EmailLoginComponent } from './email-login/email-login.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,10 @@ import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-ver
     InforegistrationComponent,
     WebcamComponent,
     VideoregistrationComponent,
-    PhonenoVerificationComponent
+    PhonenoVerificationComponent,
+    FaceLoginComponent,
+    EmailLoginComponent
+
   ],
   entryComponents: [
     DialogComponent
