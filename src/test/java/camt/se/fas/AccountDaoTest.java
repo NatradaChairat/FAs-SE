@@ -7,13 +7,9 @@ import camt.se.fas.dao.AccountDaoImpl;
 import camt.se.fas.entity.Account;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -84,9 +80,9 @@ public class AccountDaoTest {
     @Test
     public void testFindAocIdByStudentId() {
         try {
-            String result = accountDao.findDocIdByStudentId("582115019");
+            String result = accountDao.findAccountByStudentId("582115019");
             Assert.assertEquals("05nWOPMFAEIlzvb2fg38",result);
-            String result2 = accountDao.findDocIdByStudentId("582115000");
+            String result2 = accountDao.findAccountByStudentId("582115000");
             Assert.assertEquals(null,result2);
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -98,9 +94,9 @@ public class AccountDaoTest {
     @Test
     public void testFindAocIdByPhonenumber() {
         try {
-            String result = accountDao.findDocIdByphonenumber("+66929639169");
+            String result = accountDao.findAccountByphonenumber("+66929639169");
             Assert.assertEquals("05nWOPMFAEIlzvb2fg38",result);
-            String result2 = accountDao.findDocIdByphonenumber("+66959919955");
+            String result2 = accountDao.findAccountByphonenumber("+66959919955");
             Assert.assertEquals(null,result2);
 
         } catch (ExecutionException e) {
@@ -123,7 +119,7 @@ public class AccountDaoTest {
     @Test
     public void testFindPhonenumberByUID() {
         try {
-            String result = accountDao.findPhonenumberByUID("cpyEQtswYHXCiN4omI9nBrUXZpz1");
+            String result = accountDao.getPhonenumberByUID("cpyEQtswYHXCiN4omI9nBrUXZpz1");
             Assert.assertEquals("+66929639169",result);
 
         } catch (FirebaseAuthException e) {

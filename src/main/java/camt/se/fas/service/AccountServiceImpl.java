@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -21,7 +22,9 @@ public class AccountServiceImpl implements AccountService {
         String uid = accountDao.createAccount(account);
         LOGGER.info("UID "+uid);
         account.setUid(uid);
-        boolean result = accountDao.addStatus(account);
+        account.setStatus("registered");
+        //boolean result = accountDao.addStatus(account);
+        boolean result = accountDao.changeAccountStatus(account);
         if(result) {
             return uid;
         }else return null;
@@ -35,32 +38,43 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException {
-        String result = accountDao.findDocIdByStudentId(studentId);
-        if(result==null) {
-            return false;
-        }else return true;
+        boolean result = accountDao.findAccountByStudentId(studentId);
+        if(result==true) {
+            return true;
+        }else return false;
     }
 
     @Override
     public Boolean checkDuplicatedPhonenumber(String phonenumber) throws ExecutionException, InterruptedException {
-        String result = accountDao.findDocIdByphonenumber(phonenumber);
-        if(result==null) {
-            return false;
-        }else return true;
+        boolean result = accountDao.findAccountByphonenumber(phonenumber);
+        if(result==true) {
+            return true;
+        }else return false;
     }
 
     @Override
     public String getEmailByUID(String uid) throws FirebaseAuthException {
-        return accountDao.findEmailByUID(uid);
+        return accountDao.getEmailByUID(uid);
     }
 
     @Override
     public String getPhonenumberByUID(String uid) throws FirebaseAuthException {
-        return accountDao.findPhonenumberByUID(uid);
+        return accountDao.getPhonenumberByUID(uid);
     }
 
     @Override
-    public Boolean updateStatus(Account account, String status) throws ExecutionException, InterruptedException, FirebaseAuthException {
-        return accountDao.updateStatus(account, status);
+    public List<Account> getAccountByStatus(String status) throws ExecutionException, InterruptedException {
+        return accountDao.getAccountByStatus(status);
+    }
+
+    @Override
+    public Boolean updateStatus(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
+        return accountDao.changeAccountStatus(account);
+        //return accountDao.updateStatus(account, status);
+    }
+
+    @Override
+    public Account getAccountByUID(String uid) throws ExecutionException, InterruptedException {
+        return accountDao.getAccountByUID(uid);
     }
 }

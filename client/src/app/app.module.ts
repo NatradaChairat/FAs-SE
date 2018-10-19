@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FilenotfoundComponent } from './filenotfound/filenotfound.component';
@@ -19,6 +19,14 @@ import { VideoregistrationComponent } from './videoregistration/videoregistratio
 import { PhonenoVerificationComponent } from './phoneno-verification/phoneno-verification.component';
 import { FaceLoginComponent } from './face-login/face-login.component';
 import { EmailLoginComponent } from './email-login/email-login.component';
+import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
+import { AccountDetailComponent } from './account-detail/account-detail.component';
+import {VgCoreModule} from "videogular2/core";
+import {VgControlsModule} from "videogular2/controls";
+import {VgOverlayPlayModule} from "videogular2/overlay-play";
+import {VgBufferingModule} from "videogular2/buffering";
+import {FileSelectDirective} from "ng2-file-upload";
+
 
 @NgModule({
   declarations: [
@@ -34,8 +42,10 @@ import { EmailLoginComponent } from './email-login/email-login.component';
     VideoregistrationComponent,
     PhonenoVerificationComponent,
     FaceLoginComponent,
-    EmailLoginComponent
-
+    EmailLoginComponent,
+    StaffDashboardComponent,
+    AccountDetailComponent,
+    FileSelectDirective
   ],
   entryComponents: [
     DialogComponent
@@ -48,9 +58,14 @@ import { EmailLoginComponent } from './email-login/email-login.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas:[NO_ERRORS_SCHEMA],
 })
 export class AppModule { }

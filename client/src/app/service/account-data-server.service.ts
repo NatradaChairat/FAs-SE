@@ -33,27 +33,43 @@ export class AccountDataServerService{
   constructor(private http: HttpClient){}
 
   sendAccount(account:Account): Observable<Object> {
-    return this.http.post(`${this.baseUrl}`+`/create`, account,{ observe: 'response',responseType: 'text' });
+    return this.http.post(`${this.baseUrl}`+`/create`, account,{ observe: 'response',responseType: 'text'});
   }
 
   sendPersonalAccount(account: Account, refParam: string): Observable<Object>{
-    console.log(account);
-    return this.http.post(`${this.baseUrl}`+`/update/`+encodeURIComponent(refParam),account,{ observe: 'response'});
+    //console.log(account);
+    account.uid = refParam;
+    return this.http.post(`${this.baseUrl}`+`/update/`/*+encodeURIComponent(refParam)*/,account,{ observe: 'response'});
+  }
+
+  getAccountByParam(param: string){
+    return this.http.get(`${this.baseUrl}`+`/get/`+encodeURIComponent(param),httpOptions);
+  }
+
+  getAccountByStatus(status: String){
+    return this.http.get(`${this.baseUrl}`+ `/get/account/`+status,httpOptions);
   }
 
   sendEmail(param: string){
     return this.http.get(`${this.baseUrl}`+`/send/email/`+encodeURIComponent(param),httpOptions);
   }
 
+  sendResultAuthenProcessToEmail(param: string, status: string){
+    return this.http.get(`${this.baseUrl}`+`/send/email/`+encodeURIComponent(param)+`/`+encodeURIComponent(status),httpOptions);
+  }
+
+
   updateStatusByParam(id: string,token: string){
     //console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
     return this.http.get(`${this.baseUrl}`+`/update/status/?id=`+encodeURIComponent(id)+"&time="+encodeURIComponent(token));
-
   }
 
   updateStatusByVerifyPhone(id: string){
     return this.http.get(`${this.baseUrl}`+`/update/status/`+encodeURIComponent(id));
+  }
 
+  updateStatus(account: Account): Observable<Object>{
+    return this.http.post(`${this.baseUrl}`+`/update/status/`,account);
   }
 
   checkDuplicatedStudentId(studentId: string){
@@ -67,8 +83,6 @@ export class AccountDataServerService{
   getVerifyPhonenumberCode(param: string){
     return this.http.get(`${this.baseUrl}`+`/send/phonenumber/`+encodeURIComponent(param),{observe: 'response'});
   }
-
-
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

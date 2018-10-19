@@ -28,6 +28,7 @@ export class EmailRegistrationComponent implements OnInit {
   type: string;
   title: string;
   detail: string;
+  confirmPass: string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog) {}
 
@@ -47,18 +48,18 @@ export class EmailRegistrationComponent implements OnInit {
     });
   }
 
-  onSubmit(account:Account){
-    if(this.checkMatchingPassword(account.confirmPassword, account.password)) {
+  onSubmit(account:Account, confirmPass: string){
+    if(this.checkMatchingPassword(confirmPass, account.password)) {
       this.accountDataServerService.sendAccount(account)
         .subscribe((res:any)=> {
               this.sendEmail(res.body);
           },(error:any) => {
-            if (error.status === 412) {
+            if (error.status === 400) {
               this.type = "Error";
               this.title= "Can not register the account to the system"
               this.detail="Email is duplicated."
               this.openDialog();
-            }
+            }else{console.log(error.status)}
           });
     }else{
       this.type="Error";
@@ -84,7 +85,7 @@ export class EmailRegistrationComponent implements OnInit {
         if(res){
           setTimeout(() => {
             this.router.navigate(['/waiting']);
-          }, 1000);
+          }, 500);
         }else{return this.sendEmail(param);}
       });
   }

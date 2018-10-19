@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
@@ -22,6 +22,9 @@ export class InforegistrationComponent implements OnInit {
   type: string;
   title: string;
   detail: string;
+
+  @Input() childAccount: Account;
+
   constructor(private route:ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
 
   ngOnInit() {
@@ -106,6 +109,9 @@ export class InforegistrationComponent implements OnInit {
   }
 
   checkDuplicatedPhonenumber(account: Account): any{
+    //save account to @Input
+    this.childAccount = account;
+
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data=>{
         //console.log(data);
@@ -124,7 +130,12 @@ export class InforegistrationComponent implements OnInit {
                 setTimeout(() => {
                   this.router.navigate(['/videoRegistration/'+this.refParam]);
                 }, 1000);
-              }else{console.log("sendPersonalAccount "+false);}
+              }
+            },error1 => {
+              this.type = "Error";
+              this.title= "Can not submit the form."
+              this.detail="Please try submit again."
+              this.openDialog();
             });
         }
       });

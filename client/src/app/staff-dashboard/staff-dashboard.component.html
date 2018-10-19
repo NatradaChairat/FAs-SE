@@ -1,0 +1,33 @@
+<script src="../account-detail/account-detail.component.ts"></script>
+<h2>Staff Dashboard</h2>
+<div class="row justify-content-around">
+  <div class="card col-md-5"  >
+    <div class="card-header">New Account</div>
+    <div *ngFor="let vAccount of verifiedAccounts" class="row">
+    <!--<div class="card col-md-8"  >-->
+      <div class="card-body row" (click)="showDetail(vAccount.uid)">
+        <div class="col-md-8 col-sm-8">
+          <p class="card-text"> {{vAccount.firstname }} {{vAccount.lastname}}</p>
+        </div>
+      </div>
+  <!--</div>-->
+    </div>
+  </div>
+
+  <div class="card col-md-5"  >
+    <div class="card-header">Old Account</div>
+    <div *ngFor="let dAccount of disapprovedAccounts" class="row">
+      <!--<div class="card col-md-8"  >-->
+      <div class="card-body row" (click)="showDetail(dAccount.uid)">
+        <div class="col-md-8 col-sm-8">
+          <p class="card-text"> {{dAccount.firstname }} {{dAccount.lastname}}</p>
+        </div>
+      </div>
+      <!--</div>-->
+    </div>
+  </div>
+
+</div>
+
+
+

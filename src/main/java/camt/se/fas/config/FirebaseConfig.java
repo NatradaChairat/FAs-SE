@@ -22,7 +22,7 @@ public class FirebaseConfig {
     Logger LOGGER = LoggerFactory.getLogger(FirebaseConfig.class.getName());
     @Bean
     public DatabaseReference firebaseDatabase(){
-       LOGGER.info("firebaseDatabase() working");
+        LOGGER.info("firebaseDatabase() working");
         DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
         return firebase;
     }

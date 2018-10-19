@@ -3,6 +3,9 @@ import {WebcamImage} from "../webcam/domain/webcam-images";
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {AccountDataServerService} from "../service/account-data-server.service";
+import {InforegistrationComponent} from "../inforegistration/inforegistration.component";
+
 
 
 
@@ -14,9 +17,13 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 
 
 export class VideoregistrationComponent implements OnInit,AfterViewInit {
+  account: any = {};
   randomtext: string;
   refParam: string;
-  constructor(private route:ActivatedRoute,private router:Router) { }
+
+  @ViewChild(InforegistrationComponent) viewInfoComp;
+
+  constructor(private route:ActivatedRoute,private router:Router, private accountDataServerService: AccountDataServerService) { }
 
   ngOnInit() {
     this.randomtext = this.randomText();
@@ -84,7 +91,11 @@ export class VideoregistrationComponent implements OnInit,AfterViewInit {
     return this.trigger.asObservable();
   }*/
 
+
+
   onSubmit(){
+    this.account = this.viewInfoComp.childAccount;
+    console.log(this.account);
     this.router.navigate(['phonenoVerification/'+this.refParam]);
   }
 
