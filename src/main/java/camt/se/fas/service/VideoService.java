@@ -7,4 +7,5 @@ import java.io.IOException;
 
 public interface VideoService {
     void captureFramesFromVideo(String filename) throws IOException, JCodecException, Exception;
+    boolean uploadImageToStorage();
 }

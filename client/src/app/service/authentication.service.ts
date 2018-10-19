@@ -11,7 +11,8 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post(this.authUrl, JSON.stringify({
+    return null;
+    /*return this.http.post(this.authUrl, JSON.stringify({
       username: username,
       password: password
     }), {headers: this.headers})
@@ -30,7 +31,7 @@ export class AuthenticationService {
           // return false to indicate failed login
           return false;
         }
-      }).catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+      }).catch((error: any) => Observable.throw(error.json().error || 'Server error'));*/
   }
 
   getToken(): string {

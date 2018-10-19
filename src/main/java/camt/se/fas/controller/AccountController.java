@@ -2,36 +2,22 @@ package camt.se.fas.controller;
 
 import camt.se.fas.entity.Account;
 import camt.se.fas.service.*;
-import com.google.api.HttpBody;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.nexmo.client.NexmoClientException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import javax.mail.Multipart;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.Buffer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
 @CrossOrigin
@@ -189,7 +175,6 @@ public class AccountController {
     }
 
     @RequestMapping(value="account/update/status", method=RequestMethod.GET )
-    /*public ResponseEntity updateStatusAccountByConfirmEmail2(@PathVariable("key")String key, @PathVariable("localtime")String localtime)*/
     public ResponseEntity updateStatusByVerifyEmail(@RequestParam Map<String, String> mapIdTime){
         String id = mapIdTime.get("id");
         String time = mapIdTime.get("time");
@@ -231,15 +216,7 @@ public class AccountController {
         try {
             boolean result = accountService.updateStatus(account);
             if(account.getStatus().equalsIgnoreCase("approved")){
-                /*FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber("..resources\\kYWhsp2DmbVKsjeoo5qHRzMsfMAAagmF.mp4");
-                fFmpegFrameGrabber.start();
-                for(int i =1 ; i<=50 ; i++){
-                    Frame grabbedImage = fFmpegFrameGrabber.grab();
-                    Java2DFrameConverter frameConverter = new Java2DFrameConverter();
-                    ImageIO.write(frameConverter.convert(grabbedImage), "jpg", new File("video-frame-"+System.currentTimeMillis()+ ".jpg"));
 
-                }
-                fFmpegFrameGrabber.stop();*/
                 VideoService videoService = new VideoServiceImpl();
                 //videoService.captureFramesFromVideo("C:\\Users\\natrada.chairat\\SEProject\\FAs\\FAs-SE\\src\\main\\resources\\iPhoneXS.mp4");
                 videoService.captureFramesFromVideo(filepath);

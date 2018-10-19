@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException {
         boolean result = accountDao.findAccountByStudentId(studentId);
-        if(result==true) {
+        if(result) {
             return true;
         }else return false;
     }
@@ -47,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Boolean checkDuplicatedPhonenumber(String phonenumber) throws ExecutionException, InterruptedException {
         boolean result = accountDao.findAccountByphonenumber(phonenumber);
-        if(result==true) {
+        if(result) {
             return true;
         }else return false;
     }

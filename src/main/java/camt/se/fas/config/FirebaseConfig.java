@@ -28,10 +28,13 @@ public class FirebaseConfig {
     }
 
     @Value("${firebase.database-url}")
-    String firebaseUrl;
+    String firebaseDatabaseUrl;
 
     @Value("${firebase.config.path}")
     String firebaseConfigPath;
+
+    @Value("${firebase.storage-url}")
+    String firebaseStorageUrl;
 
     @PostConstruct
     public void init() throws IOException {
@@ -39,11 +42,14 @@ public class FirebaseConfig {
         InputStream serviceAccount = FirebaseConfig.class.getClassLoader().getResourceAsStream(firebaseConfigPath);
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl(firebaseUrl)
+                .setDatabaseUrl(firebaseDatabaseUrl)
+                .setStorageBucket(firebaseStorageUrl)
                 .build();
         if(FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
         }
+
+
     }
 
     
