@@ -1,110 +1,91 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Injectable,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {WebcamInitError} from "./domain/webcam-init-error";
 import {WebcamImage} from "./domain/webcam-images";
 import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
+import {Subject} from '../../../node_modules/rxjs';
+import {WebcamUtil} from '../../../node_modules/ngx-webcam';
+import {FaceLoginComponent} from "../face-login/face-login.component";
 
 @Component({
   selector: 'app-webcam',
   templateUrl: './webcam.component.html',
   styleUrls: ['./webcam.component.css']
 })
-export class WebcamComponent implements OnInit,AfterViewInit,OnDestroy {
+
+export class WebcamComponent implements OnInit {
+
+  @Input() isSnapshot = false;
+
+// toggle webcam on/off
+  public showWebcam = true;
+  public multipleWebcamsAvailable = false;
+  public deviceId: string;
+  public errors: WebcamInitError[] = [];
+
+  // latest snapshot
+  public showWebCamImage = false;
+  @Input() webcamImage: WebcamImage = null;
+
+  // webcam snapshot trigger
+  private trigger: Subject<void> = new Subject<void>();
+  // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
+  private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
 
 
-  @Input() public width: number = 640;
-  @Input() public height: number = 480;
-  private _trigger:Observable<void>;
-  private triggerSubscription: Subscription;
-
-  private mediaStream: MediaStream = null;
-
-  @Output() public imageCapture: EventEmitter<WebcamImage> = new EventEmitter<WebcamImage>();
-  @Output() public initError: EventEmitter<WebcamInitError> = new EventEmitter<WebcamInitError>();
-  @Output() public imageClick: EventEmitter<void> = new EventEmitter<void>();
-
-  @ViewChild('video') private video: any;
-  @ViewChild('canvas') private canvas: any;
-
-  constructor() { }
-
-  ngOnInit() {
+  public ngOnInit(): void {
+    WebcamUtil.getAvailableVideoInputs()
+      .then((mediaDevices: MediaDeviceInfo[]) => {
+        this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+      });
   }
 
+   triggerSnapshot(): void {
 
-  ngAfterViewInit(): void {
-    this.initWebcam();
+      this.trigger.next();
+      this.showWebcam = false;
+      this.showWebCamImage = true;
+      this.isSnapshot = true;
+
   }
 
-  ngOnDestroy(): void {
-    this.stopMediaTracks();
-    this.unsubscribeFromSubscriptions();
+  public handleInitError(error: WebcamInitError): void {
+    this.errors.push(error);
   }
 
-
-  @Input()
-
-  public set trigger(trigger: Observable<void>) {
-    if (this.triggerSubscription) {
-      this.triggerSubscription.unsubscribe();
-    }
-    this._trigger = trigger;
-    this.triggerSubscription = this._trigger.subscribe(() => {
-      this.takeSnapshot();
-    });
+  public showNextWebcam(directionOrDeviceId: boolean|string): void {
+    // true => move forward through devices
+    // false => move backwards through devices
+    // string => move to device with given deviceId
+    this.nextWebcam.next(directionOrDeviceId);
   }
 
-  public takeSnapshot(): void {
-    let _video = this.video.nativeElement;
-    let dimensions = {width: this.width, height: this.height};
-    if (_video.videoWidth) {
-      dimensions.width = _video.videoWidth;
-      dimensions.height = _video.videoHeight;
-    }
-
-    let _canvas = this.canvas.nativeElement;
-    _canvas.width = dimensions.width;
-    _canvas.height = dimensions.height;
-    _canvas.getContext('2d').drawImage(this.video.nativeElement, 0, 0);
-
-    let mimeType: string = "image/jpeg";
-    let dataUrl: string = _canvas.toDataURL(mimeType);
-    this.imageCapture.next(new WebcamImage(dataUrl, mimeType));
+  public handleImage(webcamImage: WebcamImage): void {
+    console.info('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
   }
 
-  private initWebcam() {
-    let _video = this.video.nativeElement;
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia(<MediaStreamConstraints>{video: {facingMode: "environment"}})
-        .then((stream: MediaStream) => {
-          this.mediaStream = stream;
-          _video.srcObject = stream;
-          _video.play();
-        })
-
-        .catch((err: MediaStreamError) => {
-          this.initError.next(<WebcamInitError>{message: err.message, mediaStreamError: err});
-          console.warn("Error initializing webcam", err);
-        });
-    } else {
-      this.initError.next(<WebcamInitError> {message: "Cannot read UserMedia from MediaDevices."});
-    }
+  public cameraWasSwitched(deviceId: string): void {
+    console.log('active device: ' + deviceId);
+    this.deviceId = deviceId;
   }
 
-
-  private stopMediaTracks() {
-    if (this.mediaStream && this.mediaStream.getTracks) {
-      // getTracks() returns all media tracks (video+audio)
-      this.mediaStream.getTracks()
-        .forEach((track: MediaStreamTrack) => track.stop());
-    }
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
   }
 
-
-  private unsubscribeFromSubscriptions() {
-    if (this.triggerSubscription) {
-      this.triggerSubscription.unsubscribe();
-    }
+  public get nextWebcamObservable(): Observable<boolean|string> {
+    return this.nextWebcam.asObservable();
   }
 
 }

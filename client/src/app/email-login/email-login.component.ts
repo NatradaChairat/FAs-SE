@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthenticationService} from "../service/authentication.service";
+import {Account} from '../entity/Account';
 
 @Component({
   selector: 'app-email-login',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmailLoginComponent implements OnInit {
 
-  constructor() { }
+  email: string
+  password: string
+  constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+  }
+
+  tryLogin(email: string, password: string){
+    console.log("tryLogin")
+    this.authenticationService.login(email, password)
+      .then(res => {
+        console.log(res);
+
+      }, err => {
+        console.log(err);
+      })
   }
 
 }

@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID"
+    apiKey: "AIzaSyCCyG-WrKzIY1_ByG2fXeV8aZ5i9mg7Mqo",
+    authDomain: "facialauthentication-camt.firebaseapp.com",
+    databaseURL: "https://facialauthentication-camt.firebaseio.com",
+    projectId: "facialauthentication-camt",
+    storageBucket: "facialauthentication-camt.appspot.com",
+    messagingSenderId: "41278168735"
   }
 };
 

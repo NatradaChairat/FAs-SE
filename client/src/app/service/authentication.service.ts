@@ -1,17 +1,30 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Http, Headers, Response} from '@angular/http';
+import {AngularFireAuth} from "@angular/fire/auth";
+import * as firebase from 'firebase/app'
+import '@firebase/auth';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class AuthenticationService {
   private authUrl = 'http://localhost:8080/auth';
-  private headers = new Headers({'Content-Type': 'application/json'})
 
-  constructor(private http: Http) {
+  constructor( private angularFireAuthen: AngularFireAuth, private http: HttpClient) {
+
   }
 
-  login(username: string, password: string): Observable<boolean> {
-    return null;
+  loginWithFace(imageUrl: string){
+    console.log(imageUrl)
+    return this.http.post(`${this.authUrl}`+`/faceLogin`,imageUrl);
+
+  }
+
+  login(email: string, password: string){
+    return new Promise<any>((resolve, reject) => {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(res => {
+          resolve(res);
+        }, err => reject(err))
+    })
     /*return this.http.post(this.authUrl, JSON.stringify({
       username: username,
       password: password

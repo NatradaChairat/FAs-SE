@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 public class PythonServiceImpl implements PythonService {
     Logger LOGGER = LoggerFactory.getLogger(PythonServiceImpl.class);
     @Override
-    public String runScript(String scriptFileName) throws IOException {
+    public String runScript(String loginImage, String originalImage) throws IOException {
 
         Process process = Runtime.getRuntime().exec(new String[]{"py ", "D:/FAs/FacialAuthentication-SE/src/main/resources/calculateScript.py"});
 

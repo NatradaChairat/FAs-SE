@@ -85,7 +85,7 @@ export class EmailRegistrationComponent implements OnInit {
         if(res){
           setTimeout(() => {
             this.router.navigate(['/waiting']);
-          }, 500);
+          }, 100);
         }else{return this.sendEmail(param);}
       });
   }

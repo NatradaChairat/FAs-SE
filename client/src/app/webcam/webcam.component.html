@@ -1,5 +1,25 @@
-<script src="webcam.component.ts"></script>
-<div class="webcam-wrapper" (click)="imageClick.next();">
-  <video #video [width]="width" [height]="height" autoplay muted playsinline></video>
-  <canvas #canvas [width]="width" [height]="height"></canvas>
+<div *ngIf="showWebcam">
+  <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+          [switchCamera]="nextWebcamObservable"ß
+          (cameraSwitched)="cameraWasSwitched($event)"
+          (initError)="handleInitError($event)"
+  ></webcam>
+  <br/>
+  <button class="actionBtn" (click)="triggerSnapshot();">Take A Photo</button>
+  <br/>
+  <!--<br/>-->
+  <!--DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px">-->
+  <!--<button (click)="showNextWebcam(deviceId);">Activate</button>-->
 </div>
+<div *ngIf="showWebCamImage">
+  <div class="snapshot" *ngIf="webcamImage">
+    <img [src]="webcamImage.imageAsDataUrl"/>
+    <br/>
+    <button class="actionBtn" (click)="triggerSnapshot()" >Taking again</button>
+  </div>
+</div>
+
+<h4 *ngIf="errors.length > 0">Messages:</h4>
+<ul *ngFor="let error of errors">
+  <li>{{error | json}}</li>
+</ul>

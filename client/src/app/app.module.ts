@@ -29,6 +29,11 @@ import {FileSelectDirective} from "ng2-file-upload";
 import {AngularFireModule} from "@angular/fire";
 import {environment} from "../environments/environment";
 import {AngularFireAuthModule} from "@angular/fire/auth";
+import {AuthenticationService} from "./service/authentication.service";
+import {WebcamModule} from "ngx-webcam";
+import {FirebaseService} from "./service/firebase.service";
+import {AngularFireDatabase, AngularFireDatabaseModule} from "@angular/fire/database";
+import {AngularFireStorageModule} from "@angular/fire/storage";
 
 
 
@@ -68,9 +73,11 @@ import {AngularFireAuthModule} from "@angular/fire/auth";
     VgOverlayPlayModule,
     VgBufferingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    WebcamModule
   ],
-  providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
+  providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}, AuthenticationService, FirebaseService],
   bootstrap: [AppComponent],
   schemas:[NO_ERRORS_SCHEMA],
 })

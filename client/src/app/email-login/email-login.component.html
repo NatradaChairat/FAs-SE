@@ -2,26 +2,31 @@
   <div class="row justify-content-center" style="height: 100%">
     <div class="col align-self-center form">
 
-      <form class="form-horizontal">
+      <form class="form-horizontal" (ngSubmit)="tryLogin(email, password)">
         <div class="form-group">
           <label class="control-label col-sm-2" for="email">Email:</label>
           <div class="col-md-10">
-            <input type="email" class="form-control" id="email" placeholder="email@example.com">
+            <input type="email" class="form-control"
+                   id="email" name="email"
+                   [(ngModel)]="email" placeholder="email@example.com">
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-sm-2" for="password">Password:</label>
           <div class="col-md-10">
-            <input type="password" class="form-control" id="password" placeholder="* * * * * * * *">
+            <input type="password" class="form-control"
+                   id="password" name="password"
+                   [(ngModel)]="password" placeholder="* * * * * * * *">
           </div>
         </div>
-      </form>
 
-      <div class="row">
-        <div class="col-md-4"></div>
-        <a href="" class="col btn btn-primary">Login</a>
-        <div class="col-md-4"></div>
-      </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <button type="submit" class="btn btn-primary mx-2">Login</button>
+          <div class="col-md-4"></div>
+        </div>
+      </form>
 
     </div>
   </div>

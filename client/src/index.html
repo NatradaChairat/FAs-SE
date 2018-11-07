@@ -18,13 +18,18 @@
   <link rel="stylesheet" href="//cdn.addpipe.com/2.0/pipe.css"/>
   <script type="text/javascript" src = "//cdn.addpipe.com/2.0/pipe.js"></script>
 
-  <script>var config = {
-    apiKey: "<API_KEY>",
-    authDomain: "<PROJECT_ID>.firebaseapp.com",
-    databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
-    storageBucket: "<BUCKET>.appspot.com",
-  };
-  firebase.initializeApp(config);</script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+  <script>
+    var config = {
+      apiKey: "AIzaSyCCyG-WrKzIY1_ByG2fXeV8aZ5i9mg7Mqo",
+      authDomain: "facialauthentication-camt.firebaseapp.com",
+      databaseURL: "https://facialauthentication-camt.firebaseio.com",
+      projectId: "facialauthentication-camt",
+      storageBucket: "facialauthentication-camt.appspot.com",
+      messagingSenderId: "41278168735"
+    };
+    firebase.initializeApp(config);
+  </script>
 </head>
 <body>
   <app-root></app-root>

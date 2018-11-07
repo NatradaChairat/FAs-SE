@@ -1,26 +1,31 @@
 import sys
 import cognitive_face as CF
-import requests
 from io import BytesIO
 from PIL import Image, ImageDraw
 import requests,json
-import urllib
-import numpy as np
-import matplotlib.pyplot as plt
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-#py file.py originalfile.png image1.png image2.png
+#python3 calculateScript.py 45148831_2095645980475310_3758039432733655040_o.jpg 66ed2e64-444f-4645-b25f-30aa2bfafb1e 44994516_2093429680696940_2268254602195369984_o.jpg a5d3954d-0a88-4376-a7f3-8a28fe3e2dcb
 
-KEY = '8f046261e7b14328b440b5729fce01bb'
+KEY = 'd8572e76b66046b9ac4113d5c94f6b71'
 CF.Key.set(KEY)
 BASE_URL = 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/'  # Replace with your regional Base URL
 CF.BaseUrl.set(BASE_URL)
 
+FIREBASE_URL = 'https://firebasestorage.googleapis.com/v0/b/facialauthentication-camt.appspot.com/o/ZqWqvktTcOVmFV7N5dMswhc3tGH3%2F'
+
+print (sys.argv[1])
+print (sys.argv[2])
+print (sys.argv[3])
 
 #receive list of imagepath from command line
-image1 = sys.argv[2]
-image2 = sys.argv[3]
+image1 = FIREBASE_URL+sys.argv[1]+"?alt=media&token="+sys.argv[2]
+image2 = FIREBASE_URL+sys.argv[3]+"?alt=media&token="+sys.argv[4]
+
+# image1 = 'https://firebasestorage.googleapis.com/v0/b/facialauthentication-camt.appspot.com/o/ZqWqvktTcOVmFV7N5dMswhc3tGH3%2F45148831_2095645980475310_3758039432733655040_o.jpg?alt=media&token=66ed2e64-444f-4645-b25f-30aa2bfafb1e'
+# image2 ='https://firebasestorage.googleapis.com/v0/b/facialauthentication-camt.appspot.com/o/ZqWqvktTcOVmFV7N5dMswhc3tGH3%2F44994516_2093429680696940_2268254602195369984_o.jpg?alt=media&token=a5d3954d-0a88-4376-a7f3-8a28fe3e2dcb'
+
 img_url1 = image1
 img_url2 = image2
 faces1 = CF.face.detect(img_url1)
@@ -38,27 +43,11 @@ for url in urlList:
 all_faceid = [f['faceId'] for image in result for f in image]
 
 #original image
-original_url = sys.argv[1]
-original_result = CF.face.detect(test_url)
-original_faceId = test_result[0]['faceId']
+original_url = image1
+original_result = CF.face.detect(original_url)
+original_faceId = original_result[0]['faceId']
 
 for f in all_faceid:
   r = CF.face.verify(f, original_faceId)
   print (r)
 
-def getRectangle(faceDictionary):
-    rect = faceDictionary['faceRectangle']
-    left = rect['left']
-    top = rect['top']
-    bottom = left+ rect['height']
-    right = top+ rect['width']
-    return ((left, top), (bottom, right))
-
-
-response = requests.get(img_url2)
-img = Image.open(BytesIO(response.content))
-
-draw = ImageDraw.Draw(img)
-for face in faces3: draw.rectangle(getRectangle(face), outline='red')
-
-img.show()
