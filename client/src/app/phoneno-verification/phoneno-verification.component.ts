@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup} from "@angular/forms";
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";

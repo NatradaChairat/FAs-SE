@@ -6,14 +6,18 @@
     <div class="col-md-12 card-body row">
       <div class="col-md-4 col-sm-4">
         <p class="card-text">  Name: {{account?.firstname}} {{account?.lastname}}</p>
+        <p class="card-text">  StudentID : {{account?.studentId}}</p>
         <p class="card-text">  Date of birth: {{account?.dateofbirth}}</p>
+        <p class="card-text">  Random text: {{account?.randomText}}</p>
       </div>
       <div class="col-md-8 col-sm-8">
-        <vg-player>
+        <!--<vg-player>
           <video [vgMedia]="media" #media id="singleVideo" preload="auto" controls>
             <source src="https://firebasestorage.googleapis.com/v0/b/facialauthentication-camt.appspot.com/o/ZqWqvktTcOVmFV7N5dMswhc3tGH3%2F2018-22-10.mp4?alt=media&token=b810556b-40a6-4136-8723-e83a10d8b693" type="video/mp4">
           </video>
-        </vg-player>
+        </vg-player>-->
+
+        <img ng-src="{{account?.imageUrl}}">
       </div>
     </div>
     <!--</div>-->

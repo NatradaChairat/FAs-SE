@@ -2,7 +2,7 @@
 <h2>Staff Dashboard</h2>
 <div class="row justify-content-around">
   <div class="card col-md-5"  >
-    <div class="card-header">New Account</div>
+    <div class="card-header">New Account Authentication</div>
     <div *ngFor="let vAccount of verifiedAccounts" class="row">
     <!--<div class="card col-md-8"  >-->
       <div class="card-body row" (click)="showDetail(vAccount.uid)">
@@ -15,7 +15,7 @@
   </div>
 
   <div class="card col-md-5"  >
-    <div class="card-header">Old Account</div>
+    <div class="card-header">Rejected Account</div>
     <div *ngFor="let dAccount of disapprovedAccounts" class="row">
       <!--<div class="card col-md-8"  >-->
       <div class="card-body row" (click)="showDetail(dAccount.uid)">

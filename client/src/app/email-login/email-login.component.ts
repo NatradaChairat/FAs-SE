@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../service/authentication.service";
-import {Account} from '../entity/Account';
+import {Account} from '../model/Account.model';
 
 @Component({
   selector: 'app-email-login',

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {Router} from "@angular/router";
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Config} from "protractor";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
@@ -11,36 +11,45 @@ import {DialogComponent} from "../dialog/dialog.component";
 import {Overlay} from "@angular/cdk/overlay";
 import {pipe} from "rxjs/internal-compatibility";
 
-export interface DialogData{
-  type: string;
-  title: string
-  detail: string;
-}
 
 @Component({
   selector: 'app-emailregistration',
   templateUrl: './emailregistration.component.html',
   styleUrls: ['./emailregistration.component.css']
 })
+
 export class EmailRegistrationComponent implements OnInit {
   emailRegisterForm: FormGroup;
   account: any = {};
   type: string;
   title: string;
   detail: string;
+  isWarningMessage: boolean;
+  isOptionMessage: boolean;
+
   confirmPass: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog) {}
+  constructor(private formBuilder: FormBuilder,
+              private router: Router,
+              private accountDataServerService: AccountDataServerService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.account = new Account();
   }
 
-  openDialog():void{
+  openDialog(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: this.type,title:this.title, detail: this.detail}
+      data: {
+        type: this.type,
+        title: this.title,
+        detail: this.detail,
+        isWarningMessage: this.isWarningMessage,
+        isOptionMessage: this.isOptionMessage
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -48,45 +57,51 @@ export class EmailRegistrationComponent implements OnInit {
     });
   }
 
-  onSubmit(account:Account, confirmPass: string){
-    if(this.checkMatchingPassword(confirmPass, account.password)) {
+  onSubmit(account: Account, confirmPass: string) {
+    if (this.checkMatchingPassword(confirmPass, account.password)) {
       this.accountDataServerService.sendAccount(account)
-        .subscribe((res:any)=> {
-              this.sendEmail(res.body);
-          },(error:any) => {
-            if (error.status === 400) {
-              this.type = "Error";
-              this.title= "Can not register the account to the system"
-              this.detail="Email is duplicated."
-              this.openDialog();
-            }else{console.log(error.status)}
-          });
-    }else{
-      this.type="Error";
-      this.title= "Can not register the account to the system";
-      this.detail="Confirm-Password not matching with Password";
+        .subscribe((res: any) => {
+          this.sendEmail(res.body);
+        }, (error: any) => {
+          if (error.status === 400) {
+            this.type = "Error";
+            this.title = "Can not register the account to the system"
+            this.detail = "Email is duplicated."
+            this.isWarningMessage = true;
+            this.isOptionMessage = false;
+            this.openDialog();
+          } else {
+            console.log(error.status);
+          }
+        });
+    } else {
+      this.type = "Error";
+      this.title = "Can not register the account to the system";
+      this.detail = "Confirm-Password not matching with Password";
+      this.isWarningMessage = true;
+      this.isOptionMessage = false;
       this.openDialog();
     }
   }
 
-  checkMatchingPassword(confirmPassword: String , password: String): Boolean{
-    if(confirmPassword === password){
-      console.log("checkMatchingPassword "+true);
+  checkMatchingPassword(confirmPassword: String, password: String): Boolean {
+    if (confirmPassword === password) {
       return true;
-    }else{
-      console.log("checkMatchingPassword "+false);
+    } else {
       return false;
     }
   }
 
-  sendEmail(param: string): any{
+  sendEmail(param: string): any {
     this.accountDataServerService.sendEmail(param)
-      .subscribe((res: any)=>{
-        if(res){
+      .subscribe((res: any) => {
+        if (res) {
           setTimeout(() => {
             this.router.navigate(['/waiting']);
           }, 100);
-        }else{return this.sendEmail(param);}
+        } else {
+          return this.sendEmail(param);
+        }
       });
   }
 

@@ -1,9 +1,36 @@
+<!--
 <h4 mat-dialog-title>{{data.type}}</h4>
 <div mat-dialog-content>
   <div>{{data.title}} </div>
   <div>
     : {{data.detail}}
   </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClick()" [mat-dialog-close]="true">Ok</button>
+</div>
+-->
+
+<h4 mat-dialog-title>{{data.type}}</h4>
+<div mat-dialog-content>
+  <div>{{data.title}}</div>
+
+  <div *ngIf="data.isWarningMessage">
+    : {{data.detail}}
+  </div>
+
+  <div *ngIf="data.isOptionMessage">
+    <mat-form-field>
+
+      <mat-radio-group class="example-radio-group">
+        <mat-radio-button class="example-radio-button" *ngFor="let reason of reasons" [value]="reason">
+          {{reason}}
+        </mat-radio-button>
+      </mat-radio-group>
+
+    </mat-form-field>
+  </div>
+
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onClick()" [mat-dialog-close]="true">Ok</button>

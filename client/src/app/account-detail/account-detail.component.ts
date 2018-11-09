@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Account} from "../entity/Account";
+import {Component, OnInit} from '@angular/core';
+import {Account} from "../model/Account.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
+import {MatDialog} from "@angular/material";
+import {DialogComponent} from "../dialog/dialog.component";
 
 @Component({
   selector: 'app-account-detail',
@@ -10,60 +12,94 @@ import {AccountDataServerService} from "../service/account-data-server.service";
 })
 export class AccountDetailComponent implements OnInit {
 
-  account : Account;
+  account: Account;
   refParam: string;
-  constructor(private router: Router, private route:ActivatedRoute, private accountDataServerService: AccountDataServerService) { }
+
+  type: string;
+  title: string;
+  detail: string;
+  isWarningMessage: boolean;
+  isOptionMessage: boolean;
+
+  constructor(private router: Router, private route: ActivatedRoute,
+              private accountDataServerService: AccountDataServerService,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params: Params) =>{
+    this.route.params.subscribe((params: Params) => {
       this.refParam = params['key'];
       this.accountDataServerService.getAccountByParam(params['key'])
-        .subscribe((res: any)=>{
+        .subscribe((res: any) => {
             this.account = res;
-          },err => {
+            console.log(this.account.imageUrl);
+          }, err => {
             //this.reSendEmail(params['key']);
           }
         );
     });
   }
 
-  accept(){
-    this.account.status = "approved";
-    this.accountDataServerService.updateStatus(this.account)
-      .subscribe((res: any)=> {
-        if(res){
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam,"approved")
-            .subscribe((result:any) =>{
-              if(result){
-                this.router.navigate(['/staffDashboard']);
-              }
-            });
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '480px',
+      disableClose: true,
+      data: {type: this.type,
+            title: this.title,
+            detail: this.detail,
+            isWarningMessage: this.isWarningMessage,
+            isOptionMessage: this.isOptionMessage}
+    });
 
-        }else {
-          this.accept();
-        }
-      },(error: any) => {
-        console.log(error);
-      })
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+
   }
 
-  reject(){
-    this.account.status = "disapproved";
+  accept() {
+    this.account.status = 'approved';
     this.accountDataServerService.updateStatus(this.account)
-      .subscribe((res: any)=> {
-        if(res){
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam,"disapproved")
-            .subscribe((result:any) =>{
-              if(result){
+      .subscribe((res: any) => {
+        if (res) {
+          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved')
+            .subscribe((result: any) => {
+              if (result) {
                 this.router.navigate(['/staffDashboard']);
               }
             });
-        }else {
+
+        } else {
+          this.accept();
+        }
+      }, (error: any) => {
+        console.log(error);
+      });
+  }
+
+  reject() {
+    this.type = 'Selete one';
+    this.title = 'What are the reason to reject this account?'
+    this.detail = 'test';
+    this.isWarningMessage = false;
+    this.isOptionMessage = true;
+    this.openDialog();
+
+    this.account.status = 'disapproved';
+    this.accountDataServerService.updateStatus(this.account)
+      .subscribe((res: any) => {
+        if (res) {
+          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'disapproved')
+            .subscribe((result: any) => {
+              if (result) {
+                this.router.navigate(['/staffDashboard']);
+              }
+            });
+        } else {
           this.reject();
         }
-      },(error: any) => {
+      }, (error: any) => {
         console.log(error);
-      })
+      });
   }
 
 }

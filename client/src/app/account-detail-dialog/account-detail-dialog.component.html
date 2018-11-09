@@ -1,0 +1,20 @@
+<h4 mat-dialog-title>{{data.type}}</h4>
+<div mat-dialog-content>
+  <div>{{data.title}} </div>
+
+  <div *ngIf="isWarningMessage" >
+      : {{data.detail}}
+  </div>
+
+  <div *ngIf="isOptionMessage">
+    <br/>
+    <mat-radio-group>
+      <mat-radio-button class="example-margin" value="after">Face is blur, not matched with Student card</mat-radio-button>
+      <mat-radio-button class="example-margin" value="before">Student ID not matched with Student card</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClick()" [mat-dialog-close]="true">Ok</button>
+</div>

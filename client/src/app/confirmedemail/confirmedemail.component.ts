@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {collectExternalReferences} from "@angular/compiler";

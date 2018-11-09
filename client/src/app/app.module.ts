@@ -11,7 +11,13 @@ import { ConfirmedEmailComponent } from './confirmedemail/confirmedemail.compone
 import { WaitComponent } from './wait/wait.component';
 import {EmailRegistrationComponent} from './emailregistration/emailregistration.component';
 import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
-import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material";
+import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatAutocompleteModule,
+  MatDialogModule,
+  MatNativeDateModule,
+  MatRadioModule
+} from "@angular/material";
 import { DialogComponent } from './dialog/dialog.component';
 import { InforegistrationComponent } from './inforegistration/inforegistration.component';
 import { WebcamComponent } from './webcam/webcam.component';
@@ -34,6 +40,8 @@ import {WebcamModule} from "ngx-webcam";
 import {FirebaseService} from "./service/firebase.service";
 import {AngularFireDatabase, AngularFireDatabaseModule} from "@angular/fire/database";
 import {AngularFireStorageModule} from "@angular/fire/storage";
+import {FaceRecognitionService} from "./service/face-recognition.service";
+import { AccountDetailDialogComponent } from './account-detail-dialog/account-detail-dialog.component';
 
 
 
@@ -54,19 +62,24 @@ import {AngularFireStorageModule} from "@angular/fire/storage";
     EmailLoginComponent,
     StaffDashboardComponent,
     AccountDetailComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    AccountDetailDialogComponent
   ],
   entryComponents: [
     DialogComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     MatDialogModule,
+    MatAutocompleteModule,
+    MatRadioModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
     NoopAnimationsModule,
     VgCoreModule,
     VgControlsModule,
@@ -77,7 +90,11 @@ import {AngularFireStorageModule} from "@angular/fire/storage";
     AngularFireStorageModule,
     WebcamModule
   ],
-  providers: [AccountDataServerService,  {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}, AuthenticationService, FirebaseService],
+  providers: [AccountDataServerService,
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    AuthenticationService,
+    FirebaseService,
+    FaceRecognitionService],
   bootstrap: [AppComponent],
   schemas:[NO_ERRORS_SCHEMA],
 })

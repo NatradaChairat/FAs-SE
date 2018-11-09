@@ -23,7 +23,9 @@ export class VideoregistrationComponent implements OnInit,AfterViewInit {
 
   @ViewChild(InforegistrationComponent) viewInfoComp;
 
-  constructor(private route:ActivatedRoute,private router:Router, private accountDataServerService: AccountDataServerService) { }
+  constructor(private route:ActivatedRoute,
+              private router:Router,
+              private accountDataServerService: AccountDataServerService) { }
 
   ngOnInit() {
     this.randomtext = this.randomText();

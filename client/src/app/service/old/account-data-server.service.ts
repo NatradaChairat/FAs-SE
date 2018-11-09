@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {Account} from "../../entity/Account";
+import {Account} from "../../model/Account.model";
 import {Observable} from "rxjs/internal/Observable";
 import {catchError, map, tap} from "rxjs/operators";
 import {throwError} from "rxjs/internal/observable/throwError";

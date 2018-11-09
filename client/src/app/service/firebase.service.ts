@@ -1,31 +1,31 @@
 import {Injectable} from "@angular/core";
 import * as firebase from 'firebase/app';
 import '@firebase/storage';
+import {formatDate} from "@angular/common";
+import {reject} from "q";
 
 @Injectable()
 export class FirebaseService {
 
-  constructor(){ }
+  constructor() { }
 
-  saveImageToStorage(imageUpload: string, childPath: string){
+  saveImageToStorage(imageUpload: string, fullPath: string) {
     return new Promise<any>((resolve, reject) => {
-      firebase.storage().ref().child(childPath).putString(imageUpload, 'data_url')
+      firebase.storage().ref().child(fullPath).putString(imageUpload, 'data_url')
         .then(res => {
-          this.getImageUrl(childPath)
-          resolve(res)
-        }, err => reject(err))
-    })
+          resolve(res);
+        }, err => reject(err));
+    });
 
   }
 
-  getImageUrl(childPath: string){
-    firebase.storage().ref().child(childPath).getDownloadURL()
+  getImageUrl(childPath: string) {
+    return new Promise<any> ((resolve, reject) => {
+      firebase.storage().ref().child(childPath).getDownloadURL()
       .then(res => {
-        console.log(res)
-      }, err => console.log(err))
-
-
-    return
+        resolve(res);
+      }, err => reject(err));
+    });
   }
 
 }

@@ -3,13 +3,10 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 import {DialogComponent} from "../dialog/dialog.component";
-export interface DialogData{
-  type: string;
-  title: string
-  detail: string;
-}
+
+
 @Component({
   selector: 'app-inforegistration',
   templateUrl: './inforegistration.component.html',
@@ -19,27 +16,39 @@ export class InforegistrationComponent implements OnInit {
   account: any = {};
   refParam: string;
   infoRegistrerForm: FormGroup;
+
   type: string;
   title: string;
   detail: string;
+  isWarningMessage: boolean;
+  isOptionMessage: boolean;
 
   @Input() childAccount: Account;
 
-  constructor(private route:ActivatedRoute, private formBuilder: FormBuilder, private router: Router, private accountDataServerService: AccountDataServerService, private dialog: MatDialog ) { }
+  constructor(private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private accountDataServerService: AccountDataServerService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.account = new Account();
-    this.route.params.subscribe((param: Params) =>{
+    this.route.params.subscribe((param: Params) => {
       this.refParam = (param['param']);
     })
     console.log(this.refParam);
   }
 
-  openDialog():void{
+  openDialog(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: this.type,title:this.title, detail: this.detail}
+      data: {type: this.type,
+            title: this.title,
+            detail: this.detail,
+            isWarningMessage: this.isWarningMessage,
+            isOptionMessage: this.isOptionMessage}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -47,7 +56,7 @@ export class InforegistrationComponent implements OnInit {
     });
   }
 
-  onSubmit(account:Account){
+  onSubmit(account: Account) {
     //console.log(account);
     //checkStudentIdIsRepeat
     /*if(this.checkDuplicatedStudentId(account)){
@@ -90,17 +99,19 @@ export class InforegistrationComponent implements OnInit {
 
   }
 
-  checkDuplicatedStudentId(account: Account): any{
+  checkDuplicatedStudentId(account: Account): any {
     this.accountDataServerService.checkDuplicatedStudentId(account.studentId)
-      .subscribe(data=>{
+      .subscribe(data => {
         //console.log(data);
-        if(data){
+        if (data) {
           //return true;
           this.type = "Error";
-          this.title= "Can not submit the form."
-          this.detail="Student ID is duplicated."
+          this.title = "Can not submit the form."
+          this.detail = "Student ID is duplicated."
+          this.isWarningMessage = true;
+          this.isOptionMessage = false;
           this.openDialog();
-        }else{
+        } else {
           //return false;
           this.checkDuplicatedPhonenumber(account);
         }
@@ -108,33 +119,37 @@ export class InforegistrationComponent implements OnInit {
 
   }
 
-  checkDuplicatedPhonenumber(account: Account): any{
+  checkDuplicatedPhonenumber(account: Account): any {
     //save account to @Input
     this.childAccount = account;
 
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
-      .subscribe(data=>{
+      .subscribe(data => {
         //console.log(data);
-        if(data){
+        if (data) {
           //return true;
           this.type = "Error";
-          this.title= "Can not submit the form."
-          this.detail="Phone number is duplicated."
+          this.title = "Can not submit the form."
+          this.detail = "Phone number is duplicated."
+          this.isWarningMessage = true;
+          this.isOptionMessage = false;
           this.openDialog();
-        }else{
+        } else {
           //return false;
-          this.accountDataServerService.sendPersonalAccount(account,this.refParam)
-            .subscribe((res: any)=>{
+          this.accountDataServerService.sendPersonalAccount(account, this.refParam)
+            .subscribe((res: any) => {
               //console.log(res);
-              if(res){
+              if (res) {
                 setTimeout(() => {
-                  this.router.navigate(['/videoRegistration/'+this.refParam]);
+                  this.router.navigate(['/videoRegistration/' + this.refParam]);
                 }, 1000);
               }
-            },error1 => {
+            }, error1 => {
               this.type = "Error";
-              this.title= "Can not submit the form."
-              this.detail="Please try submit again."
+              this.title = "Can not submit the form."
+              this.detail = "Please try submit again."
+              this.isWarningMessage = true;
+              this.isOptionMessage = false;
               this.openDialog();
             });
         }
@@ -189,8 +204,6 @@ export class InforegistrationComponent implements OnInit {
         }
       });
   }*/
-
-
 
 
 }

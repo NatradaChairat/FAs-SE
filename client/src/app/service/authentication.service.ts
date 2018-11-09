@@ -12,8 +12,7 @@ export class AuthenticationService {
 
   }
 
-  loginWithFace(imageUrl: string){
-    console.log(imageUrl)
+  loginWithFace(imageUrl: string) {
     return this.http.post(`${this.authUrl}`+`/faceLogin`,imageUrl);
 
   }

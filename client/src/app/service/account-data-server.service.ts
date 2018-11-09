@@ -2,13 +2,14 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/internal/Observable";
 import {throwError} from "rxjs/internal/observable/throwError";
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 import {catchError, tap} from "rxjs/operators";
 import {any} from "codelyzer/util/function";
 
 const httpOptions = {
   headers: new HttpHeaders(
-    { 'Content-Type': 'application/json ; charset=utf-8; application/x-www-form-urlencoded ; text/plain',
+    {
+      'Content-Type': 'application/json ; charset=utf-8; application/x-www-form-urlencoded ; text/plain',
       'Cache-Control': 'no-cache',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS, REQUEST",
@@ -23,65 +24,67 @@ const httpOptions = {
     providedIn: 'root'
   }
 )
-export class AccountDataServerService{
+export class AccountDataServerService {
   /* private accountUrl = 'api/account';
    private headers = new Headers({'Content-Type': 'application/json'});
    */
 
   private baseUrl = 'http://localhost:8080/account';
-  //private baseUrl = '/api';
-  constructor(private http: HttpClient){}
 
-  sendAccount(account:Account): Observable<Object> {
-    return this.http.post(`${this.baseUrl}`+`/create`, account,{ observe: 'response',responseType: 'text'});
+  //private baseUrl = '/api';
+  constructor(private http: HttpClient) {
   }
 
-  sendPersonalAccount(account: Account, refParam: string): Observable<Object>{
+  sendAccount(account: Account): Observable<Object> {
+    return this.http.post(`${this.baseUrl}` + `/create`, account, {observe: 'response', responseType: 'text'});
+  }
+
+  sendPersonalAccount(account: Account, refParam: string): Observable<Object> {
     //console.log(account);
     account.uid = refParam;
-    return this.http.post(`${this.baseUrl}`+`/update/`/*+encodeURIComponent(refParam)*/,account,{ observe: 'response'});
+    return this.http.post(`${this.baseUrl}` + `/update/`/*+encodeURIComponent(refParam)*/, account, {observe: 'response'});
   }
 
-  getAccountByParam(param: string){
-    return this.http.get(`${this.baseUrl}`+`/get/`+encodeURIComponent(param),httpOptions);
+  getAccountByParam(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/get/` + encodeURIComponent(param), httpOptions);
   }
 
-  getAccountByStatus(status: String){
-    return this.http.get(`${this.baseUrl}`+ `/get/account/`+status,httpOptions);
+  getAccountByStatus(status: String) {
+    return this.http.get(`${this.baseUrl}` + `/get/account/` + status, httpOptions);
   }
 
-  sendEmail(param: string){
-    return this.http.get(`${this.baseUrl}`+`/send/email/`+encodeURIComponent(param),httpOptions);
+  sendEmail(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param), httpOptions);
   }
 
-  sendResultAuthenProcessToEmail(param: string, status: string){
-    return this.http.get(`${this.baseUrl}`+`/send/email/`+encodeURIComponent(param)+`/`+encodeURIComponent(status),httpOptions);
+  sendResultAuthenProcessToEmail(param: string, status: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param) + `/` + encodeURIComponent(status), httpOptions);
   }
 
 
-  updateStatusByParam(id: string,token: string){
+  updateStatusByParam(id: string, token: string) {
     //console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
-    return this.http.get(`${this.baseUrl}`+`/update/status/?id=`+encodeURIComponent(id)+"&time="+encodeURIComponent(token));
+    return this.http.get(`${this.baseUrl}` + `/update/status/?id=` + encodeURIComponent(id) + "&time=" + encodeURIComponent(token));
   }
 
-  updateStatusByVerifyPhone(id: string){
-    return this.http.get(`${this.baseUrl}`+`/update/status/`+encodeURIComponent(id));
+  updateStatusByVerifyPhone(id: string) {
+    return this.http.get(`${this.baseUrl}` + `/update/status/` + encodeURIComponent(id));
   }
 
-  updateStatus(account: Account): Observable<Object>{
-    return this.http.post(`${this.baseUrl}`+`/update/status/`,account);
+  updateStatus(account: Account): Observable<Object> {
+    return this.http.post(`${this.baseUrl}` + `/update/status/`, account);
   }
 
-  checkDuplicatedStudentId(studentId: string){
-    return this.http.get(`${this.baseUrl}`+ `/get/studentId/`+studentId);
+  checkDuplicatedStudentId(studentId: string) {
+    return this.http.get(`${this.baseUrl}` + `/get/studentId/` + studentId);
   }
 
-  checkDuplicatedPhonenumber(phonenumber: string){
-    return this.http.get(`${this.baseUrl}`+ `/get/phonenumber/`+phonenumber);
+  checkDuplicatedPhonenumber(phonenumber: string) {
+    return this.http.get(`${this.baseUrl}` + `/get/phonenumber/` + phonenumber);
   }
 
-  getVerifyPhonenumberCode(param: string){
-    return this.http.get(`${this.baseUrl}`+`/send/phonenumber/`+encodeURIComponent(param),{observe: 'response'});
+  getVerifyPhonenumberCode(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param), {observe: 'response'});
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -95,8 +98,6 @@ export class AccountDataServerService{
     return throwError(
       'Something bad happened; please try again later.');
   };
-
-
 
 
 }

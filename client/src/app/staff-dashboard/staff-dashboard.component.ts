@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {Router} from "@angular/router";
-import {Account} from "../entity/Account";
+import {Account} from "../model/Account.model";
 
 @Component({
   selector: 'app-staff-dashboard',
