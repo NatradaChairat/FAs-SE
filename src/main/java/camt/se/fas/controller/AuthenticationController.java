@@ -25,7 +25,7 @@ public class AuthenticationController {
     public ResponseEntity faceLogin(@RequestParam String imageUrl) {
         try {
 
-            pythonService.runScript(imageUrl);
+            pythonService.runScript(imageUrl,"");
             return ResponseEntity.ok().build();
         }  catch (Exception e) {
             e.printStackTrace();

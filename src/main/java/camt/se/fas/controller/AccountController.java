@@ -290,7 +290,7 @@ public class AccountController {
     public ResponseEntity calculate(){
         PythonService pythonService = new PythonServiceImpl();
         try {
-            pythonService.runScript("");
+            pythonService.runScript("","");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,6 +12,9 @@ import {EmailLoginComponent} from "./email-login/email-login.component";
 import {FaceLoginComponent} from "./face-login/face-login.component";
 import {StaffDashboardComponent} from "./staff-dashboard/staff-dashboard.component";
 import {AccountDetailComponent} from "./account-detail/account-detail.component";
+import {FaceLoginSuccessComponent} from "./face-login-success/face-login-success.component";
+import {EmailLoginSuccessComponent} from "./email-login-success/email-login-success.component";
+import {SubmitSuccessComponent} from "./submit-success/submit-success.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -25,6 +28,9 @@ const appRoutes: Routes = [
   {path: 'confirmedemail/:key', component: ConfirmedEmailComponent},
   {path: 'emailLogin', component: EmailLoginComponent},
   {path: 'faceLogin', component: FaceLoginComponent},
+  {path: 'faceLoginSuccess', component: FaceLoginSuccessComponent},
+  {path: 'emailLoginSuccess', component: EmailLoginSuccessComponent},
+  {path: 'submitSuccess', component: SubmitSuccessComponent},
   {path: 'staffDashboard', component: StaffDashboardComponent},
   {path: 'detail/:key', component: AccountDetailComponent},
   {path: '**', component: FilenotfoundComponent}
@@ -38,5 +44,5 @@ const appRoutes: Routes = [
     RouterModule
   ]
 })
-export class AppRoutingModule{ 
+export class AppRoutingModule{
 }
