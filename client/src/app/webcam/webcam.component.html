@@ -15,7 +15,7 @@
   <div class="snapshot" *ngIf="webcamImage">
     <img [src]="webcamImage.imageAsDataUrl"/>
     <br/>
-    <button class="actionBtn" (click)="triggerSnapshot()" >Taking again</button>
+    <button class="actionBtn" (click)="retakePhoto()" >Retake a photo</button>
   </div>
 </div>
 

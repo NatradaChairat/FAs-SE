@@ -12,6 +12,7 @@ import {
 import {WebcamInitError} from "./domain/webcam-init-error";
 import {WebcamImage} from "./domain/webcam-images";
 import {Observable} from "rxjs/Observable";
+import {Router} from "@angular/router"
 import {Subscription} from "rxjs/Subscription";
 import {Subject} from '../../../node_modules/rxjs';
 import {WebcamUtil} from '../../../node_modules/ngx-webcam';
@@ -24,6 +25,8 @@ import {FaceLoginComponent} from "../face-login/face-login.component";
 })
 
 export class WebcamComponent implements OnInit {
+
+  constructor(private router: Router) {}
 
   @Input() isSnapshot = false;
 
@@ -57,6 +60,15 @@ export class WebcamComponent implements OnInit {
       this.showWebCamImage = true;
       this.isSnapshot = true;
 
+  }
+
+  retakePhoto() {
+    if(window.confirm("Do you want to retake a photo?")){
+      this.showWebcam = true;
+      this.showWebCamImage = false;
+    } else {
+
+    }
   }
 
   public handleInitError(error: WebcamInitError): void {

@@ -42,6 +42,9 @@ import {AngularFireDatabase, AngularFireDatabaseModule} from "@angular/fire/data
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {FaceRecognitionService} from "./service/face-recognition.service";
 import { AccountDetailDialogComponent } from './account-detail-dialog/account-detail-dialog.component';
+import { SubmitSuccessComponent } from './submit-success/submit-success.component';
+import { FaceLoginSuccessComponent } from './face-login-success/face-login-success.component';
+import { EmailLoginSuccessComponent } from './email-login-success/email-login-success.component';
 
 
 
@@ -63,7 +66,10 @@ import { AccountDetailDialogComponent } from './account-detail-dialog/account-de
     StaffDashboardComponent,
     AccountDetailComponent,
     FileSelectDirective,
-    AccountDetailDialogComponent
+    AccountDetailDialogComponent,
+    SubmitSuccessComponent,
+    FaceLoginSuccessComponent,
+    EmailLoginSuccessComponent
   ],
   entryComponents: [
     DialogComponent
