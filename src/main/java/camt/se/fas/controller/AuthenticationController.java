@@ -25,7 +25,11 @@ public class AuthenticationController {
     public ResponseEntity faceLogin(@RequestParam String imageUrl) {
         try {
 
+<<<<<<< Updated upstream
             pythonService.runScript(imageUrl,"");
+=======
+            pythonService.runScript("","");
+>>>>>>> Stashed changes
             return ResponseEntity.ok().build();
         }  catch (Exception e) {
             e.printStackTrace();

@@ -4,13 +4,11 @@ export class WebcamImage {
   private _imageAsDataUrl: string = null;
 
 
-
   public constructor(imageAsDataUrl: string, mimeType: string) {
     this._mimeType = mimeType;
     this._imageAsDataUrl = imageAsDataUrl;
 
   }
-
 
 
   public get imageAsBase64(): string {
@@ -19,14 +17,13 @@ export class WebcamImage {
 
   }
 
-
   public get imageAsDataUrl(): string {
-    return this._imageAsDataUrl
+    return this._imageAsDataUrl;
 
   }
 
   private getDataFromDataUrl(dataUrl: string) {
-    return dataUrl.replace("data:" + this._mimeType + ";base64,", "")
+    return dataUrl.replace('data:' + this._mimeType + ';base64,', '');
 
   }
 

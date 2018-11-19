@@ -44,5 +44,9 @@ const appRoutes: Routes = [
     RouterModule
   ]
 })
+<<<<<<< Updated upstream
 export class AppRoutingModule{
 }
+=======
+export class AppRoutingModule { }
+>>>>>>> Stashed changes

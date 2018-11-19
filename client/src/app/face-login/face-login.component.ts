@@ -27,7 +27,7 @@ export class FaceLoginComponent implements OnInit {
 
   login() {
     let imageUrl: string;
-    let fullPath = "faceLogin/" + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')
+    let fullPath = 'faceLogin/' + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')
     this.firebaseService.saveImageToStorage(this.webCam.webcamImage.imageAsDataUrl, fullPath)
       .then(res => {
         console.log(res)
@@ -35,7 +35,10 @@ export class FaceLoginComponent implements OnInit {
           .then(response => {
             console.log(response)
             imageUrl = response;
-            this.authenticationService.loginWithFace(imageUrl);
+            this.authenticationService.loginWithFace(imageUrl)
+              .subscribe( data => {
+                console.log(data);
+              });
           });
       });
     // โยงหน้าเว็ปเฉยๆยังไม่ได้เปรียบเทียบหน้า รอเปรียบเทียบหน้าเสร็จเอ่อันนี้ไปต่อเพื่อลิงค์หน้าเว็ปได้เลย

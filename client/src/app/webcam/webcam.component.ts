@@ -83,6 +83,7 @@ export class WebcamComponent implements OnInit {
   }
 
   public handleImage(webcamImage: WebcamImage): void {
+    webcamImage.imageAsBase64;
     console.info('received webcam image', webcamImage);
     this.webcamImage = webcamImage;
   }
