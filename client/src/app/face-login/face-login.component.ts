@@ -48,9 +48,9 @@ export class FaceLoginComponent implements OnInit {
     successRate = 50;
 
     if (successRate >= 80) {
-      this.router.navigate(['/faceLoginSuccess'])
+      this.router.navigate(['/faceLoginSuccess']);
     } else {
-      if (window.confirm("Face login fail \nDo you want to login by email?")) {
+      if (window.confirm('Face login fail \nDo you want to login by email?')) {
         this.router.navigate(['/emailLogin']);
       }
     }

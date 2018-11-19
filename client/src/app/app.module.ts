@@ -3,8 +3,8 @@ import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {AppComponent} from './app.component';
 import {HomepageComponent} from './homepage/homepage.component';
 import {FilenotfoundComponent} from './filenotfound/filenotfound.component';
-import {AppRoutingModule} from "./app-routing.module";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {AppRoutingModule} from './app-routing.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import {AccountDataServerService} from "./service/old/account-data-server.service";
 import {ConfirmedEmailComponent} from './confirmedemail/confirmedemail.component';
@@ -38,18 +38,12 @@ import {AngularFireAuthModule} from "@angular/fire/auth";
 import {AuthenticationService} from "./service/authentication.service";
 import {WebcamModule} from "ngx-webcam";
 import {FirebaseService} from "./service/firebase.service";
-import {AngularFireDatabase, AngularFireDatabaseModule} from "@angular/fire/database";
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {FaceRecognitionService} from "./service/face-recognition.service";
-<<<<<<< Updated upstream
-import { AccountDetailDialogComponent } from './account-detail-dialog/account-detail-dialog.component';
-import { SubmitSuccessComponent } from './submit-success/submit-success.component';
-import { FaceLoginSuccessComponent } from './face-login-success/face-login-success.component';
-import { EmailLoginSuccessComponent } from './email-login-success/email-login-success.component';
-
-=======
 import {AccountDetailDialogComponent} from './account-detail-dialog/account-detail-dialog.component';
->>>>>>> Stashed changes
+import {SubmitSuccessComponent} from './submit-success/submit-success.component';
+import {FaceLoginSuccessComponent} from './face-login-success/face-login-success.component';
+import {EmailLoginSuccessComponent} from './email-login-success/email-login-success.component';
 
 
 @NgModule({
