@@ -26,7 +26,8 @@ import {FaceLoginComponent} from "../face-login/face-login.component";
 
 export class WebcamComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   @Input() isSnapshot = false;
 
@@ -43,7 +44,7 @@ export class WebcamComponent implements OnInit {
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-  private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
+  private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
 
 
   public ngOnInit(): void {
@@ -53,17 +54,17 @@ export class WebcamComponent implements OnInit {
       });
   }
 
-   triggerSnapshot(): void {
+  triggerSnapshot(): void {
 
-      this.trigger.next();
-      this.showWebcam = false;
-      this.showWebCamImage = true;
-      this.isSnapshot = true;
+    this.trigger.next();
+    this.showWebcam = false;
+    this.showWebCamImage = true;
+    this.isSnapshot = true;
 
   }
 
   retakePhoto() {
-    if(window.confirm("Do you want to retake a photo?")){
+    if (window.confirm("Do you want to retake a photo?")) {
       this.showWebcam = true;
       this.showWebCamImage = false;
     } else {
@@ -75,7 +76,7 @@ export class WebcamComponent implements OnInit {
     this.errors.push(error);
   }
 
-  public showNextWebcam(directionOrDeviceId: boolean|string): void {
+  public showNextWebcam(directionOrDeviceId: boolean | string): void {
     // true => move forward through devices
     // false => move backwards through devices
     // string => move to device with given deviceId
@@ -96,7 +97,7 @@ export class WebcamComponent implements OnInit {
     return this.trigger.asObservable();
   }
 
-  public get nextWebcamObservable(): Observable<boolean|string> {
+  public get nextWebcamObservable(): Observable<boolean | string> {
     return this.nextWebcam.asObservable();
   }
 

@@ -1,29 +1,34 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
-import * as firebase from 'firebase/app'
+import * as firebase from 'firebase/app';
 import '@firebase/auth';
 import {HttpClient} from "@angular/common/http";
+import {FaceRecognitionService} from "./face-recognition.service";
 
 @Injectable()
 export class AuthenticationService {
   private authUrl = 'http://localhost:8080/auth';
 
-  constructor( private angularFireAuthen: AngularFireAuth, private http: HttpClient) {
+  constructor(private angularFireAuthen: AngularFireAuth,
+              private http: HttpClient,
+              private faceRegnitionService: FaceRecognitionService) {
 
   }
 
   loginWithFace(imageUrl: string) {
-    return this.http.post(`${this.authUrl}`+`/faceLogin`,imageUrl);
+    // return this.http.post(`${this.authUrl}` + `/faceLogin`, imageUrl);
+    console.log('loginWithFace');
+    return this.faceRegnitionService.scanImage(imageUrl);
 
   }
 
-  login(email: string, password: string){
+  login(email: string, password: string) {
     return new Promise<any>((resolve, reject) => {
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then(res => {
           resolve(res);
-        }, err => reject(err))
-    })
+        }, err => reject(err));
+    });
     /*return this.http.post(this.authUrl, JSON.stringify({
       username: username,
       password: password
@@ -60,7 +65,7 @@ export class AuthenticationService {
 
   getCurrentUser() {
     let details = localStorage.getItem('userDetails');
-    if (details == null || details.length == 0) {
+    if (details === null || details.length === 0) {
       return null;
     }
     return JSON.parse(localStorage.getItem('userDetails'));
@@ -74,7 +79,7 @@ export class AuthenticationService {
         let authList = user.authorities;
         let userRole = 'ROLE_' + roleList[j].trim().toUpperCase();
         for (let i = 0; i < authList.length; i++) {
-          if (authList[i].name == userRole) {
+          if (authList[i].name === userRole) {
             return true;
           }
         }

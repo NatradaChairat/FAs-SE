@@ -174,10 +174,17 @@ public class AccountDaoImpl implements AccountDao{
             account.setFirstname((String)document.get("firstname"));
             account.setLastname((String)document.get("lastname"));
             account.setDateofbirth((String) document.get("dateofbirth"));
+            account.setStudentId((String) document.get("studentId"));
+            account.setRandomText((String) document.get("randomText"));
+            List<String> listImage = new ArrayList<>();
+            String image = (String) document.get("image");
+            listImage.add(image);
+            account.setImages(listImage);
+
+
             LOGGER.info("GET Account "+account);
-            return account;
         }
-        return null;
+        return account;
     }
 
     @Override

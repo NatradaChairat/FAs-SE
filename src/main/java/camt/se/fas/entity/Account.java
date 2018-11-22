@@ -49,6 +49,9 @@ public class Account {
     @JsonView/*(View.Login.class)*/
     String status;
 
+    @JsonView
+    String randomText;
+
    /* String[] videos;
     String[] images;*/
     @JsonView
