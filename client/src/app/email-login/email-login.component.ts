@@ -17,14 +17,13 @@ export class EmailLoginComponent implements OnInit {
   }
 
   tryLogin(email: string, password: string){
-    console.log("tryLogin")
     this.authenticationService.login(email, password)
       .then(res => {
         console.log(res);
 
       }, err => {
         console.log(err);
-      })
+      });
   }
 
 }

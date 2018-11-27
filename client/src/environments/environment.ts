@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  faceAPIEndPoint: 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect',
+  faceAPIEndPoint: 'https://southeastasia.api.cognitive.microsoft.com/face/v1.0/',
   firebase: {
     apiKey: "AIzaSyCCyG-WrKzIY1_ByG2fXeV8aZ5i9mg7Mqo",
     authDomain: "facialauthentication-camt.firebaseapp.com",

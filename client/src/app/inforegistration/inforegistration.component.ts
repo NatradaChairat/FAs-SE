@@ -44,11 +44,13 @@ export class InforegistrationComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: this.type,
-            title: this.title,
-            detail: this.detail,
-            isWarningMessage: this.isWarningMessage,
-            isOptionMessage: this.isOptionMessage}
+      data: {
+        type: this.type,
+        title: this.title,
+        detail: this.detail,
+        isWarningMessage: this.isWarningMessage,
+        isOptionMessage: this.isOptionMessage
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -125,9 +127,7 @@ export class InforegistrationComponent implements OnInit {
 
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data => {
-        //console.log(data);
         if (data) {
-          //return true;
           this.type = "Error";
           this.title = "Can not submit the form."
           this.detail = "Phone number is duplicated."
@@ -135,10 +135,8 @@ export class InforegistrationComponent implements OnInit {
           this.isOptionMessage = false;
           this.openDialog();
         } else {
-          //return false;
           this.accountDataServerService.sendPersonalAccount(account, this.refParam)
-            .subscribe((res: any) => {
-              //console.log(res);
+            .subscribe(res => {
               if (res) {
                 setTimeout(() => {
                   this.router.navigate(['/videoRegistration/' + this.refParam]);
