@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {FaceLoginComponent} from '../face-login/face-login.component';
 
 @Component({
   selector: 'app-face-login-success',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FaceLoginSuccessComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild(FaceLoginComponent) faceLoginComponent: FaceLoginComponent;
 
-  ngOnInit() {
+  showConfidence: string;
+  showStudentId: string
+
+  constructor() {
   }
+
+  ngOnInit() { }
+
 
 }

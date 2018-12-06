@@ -31,7 +31,15 @@ export class AuthenticationService {
                 const identifyResponse: any = identifyRes[0];
                 const candidatesResponse: any = identifyResponse.candidates;
                 const confidence = candidatesResponse[0].confidence;
-                resolve(confidence);
+                const personId = candidatesResponse[0].personId;
+                if (confidence >= 0.7) {
+                  this.faceRecognitionService.getPersonInLargePersonGroup(personId)
+                    .subscribe((getPersonRes) => {
+                      const nameRes: any =  getPersonRes.name;
+                      console.log(nameRes);
+                      resolve([nameRes, confidence]);
+                    });
+                }
               } catch (e) {
                 resolve(0);
               }

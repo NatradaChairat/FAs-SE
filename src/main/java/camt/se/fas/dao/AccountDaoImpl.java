@@ -56,6 +56,13 @@ public class AccountDaoImpl implements AccountDao{
         if(account.getLastname() !=null) {
             accountTableMap.put("lastname", account.getLastname());
         }
+
+        if(account.getImages().size() !=0){
+            ArrayList<Object> arrayImages = new ArrayList<>();
+            Collections.addAll(arrayImages, account.getImages().get(0));
+            accountTableMap.put("images", arrayImages);
+        }
+
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", account.getUid()).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot document : documents) {
@@ -64,7 +71,6 @@ public class AccountDaoImpl implements AccountDao{
             LOGGER.info(referenceApiFuture.get().getUpdateTime().toString());
             if (referenceApiFuture.isDone()) {
                 return true;
-                //ApiFuture<QuerySnapshot> videoFuture = db.collection("video")
             } else {
                 return false;
             }
@@ -169,17 +175,20 @@ public class AccountDaoImpl implements AccountDao{
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", uid).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot document : documents) {
-            //LOGGER.info("GET sub Doc " +document.getReference().collection("videos").document("2q1VfQbT2SM5S3zfH1h1").getId());
             account.setUid((String)document.get("uid"));
             account.setFirstname((String)document.get("firstname"));
             account.setLastname((String)document.get("lastname"));
             account.setDateofbirth((String) document.get("dateofbirth"));
             account.setStudentId((String) document.get("studentId"));
             account.setRandomText((String) document.get("randomText"));
-            List<String> listImage = new ArrayList<>();
-            String image = (String) document.get("image");
-            listImage.add(image);
-            account.setImages(listImage);
+            ApiFuture<QuerySnapshot> futureImage = document.getReference().collection("image").get();
+            List<QueryDocumentSnapshot> documentImages = futureImage.get().getDocuments();
+            for (DocumentSnapshot documentSnapshot : documentImages){
+                List<String> listImage = new ArrayList<>();
+                String image = (String) documentSnapshot.get("imageUrl");
+                listImage.add(image);
+                account.setImages(listImage);
+            }
 
 
             LOGGER.info("GET Account "+account);

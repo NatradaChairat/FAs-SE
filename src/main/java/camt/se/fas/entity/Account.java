@@ -52,10 +52,6 @@ public class Account {
     @JsonView
     String randomText;
 
-   /* String[] videos;
-    String[] images;*/
-    @JsonView
-    List<String> videos;
     @JsonView
     List<String> images;
 

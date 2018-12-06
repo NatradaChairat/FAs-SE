@@ -21,6 +21,8 @@ export class AccountDetailComponent implements OnInit {
   isWarningMessage: boolean;
   isOptionMessage: boolean;
 
+  showImageUrl: string;
+
   constructor(private router: Router, private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
               private dialog: MatDialog) { }
@@ -31,7 +33,9 @@ export class AccountDetailComponent implements OnInit {
       this.accountDataServerService.getAccountByParam(params['key'])
         .subscribe((res: any) => {
             this.account = res;
-            console.log(this.account.imageUrl);
+            const images = this.account.images;
+            this.showImageUrl = images[0];
+            console.log(this.showImageUrl);
           }, err => {
             //this.reSendEmail(params['key']);
           }

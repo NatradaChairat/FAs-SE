@@ -24,7 +24,7 @@ import {FaceLoginComponent} from "../face-login/face-login.component";
   styleUrls: ['./webcam.component.css']
 })
 
-export class WebcamComponent implements OnInit {
+export class  WebcamComponent implements OnInit {
 
   constructor(private router: Router) {
   }

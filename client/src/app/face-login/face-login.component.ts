@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {WebcamComponent} from "../webcam/webcam.component";
-import {AuthenticationService} from "../service/authentication.service";
-import {FirebaseService} from "../service/firebase.service";
+import {WebcamComponent} from '../webcam/webcam.component';
+import {AuthenticationService} from '../service/authentication.service';
+import {FirebaseService} from '../service/firebase.service';
 import {formatDate} from "@angular/common";
 import {Router} from "@angular/router";
 
@@ -17,7 +17,12 @@ export class FaceLoginComponent implements OnInit {
 
   today = new Date();
 
-  constructor(private firebaseService: FirebaseService, private authenticationService: AuthenticationService, private router: Router) {
+  public confidence = 0;
+  public studentId = '';
+
+  constructor(private firebaseService: FirebaseService,
+              private authenticationService: AuthenticationService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -34,9 +39,11 @@ export class FaceLoginComponent implements OnInit {
             console.log(response)
             imageUrl = response;
             this.authenticationService.loginWithFace(imageUrl)
-              .then(confidence => {
-                console.log(confidence);
-                if (confidence >= 0.7) {
+              .then(([name, confidence]) => {
+                this.confidence = confidence;
+                this.studentId = name;
+                console.log(name, confidence);
+                if (this.confidence >= 0.7) {
                   this.router.navigate(['/faceLoginSuccess']);
                 } else {
                   if (window.confirm('Face login fail \nDo you want to login by email?')) {

@@ -61,6 +61,7 @@ public class AccountController {
 
     @PostMapping("/account/update")//
     public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
+        LOGGER.info(account.toString());
         String encryptUID = account.getUid();
         try {
             LOGGER.info(encryptUID);
@@ -81,10 +82,12 @@ public class AccountController {
         }
     }
 
-    @PostMapping(value="/account/upload/video")
-    public ResponseEntity uploadVideo(@RequestParam("file") MultipartFile file){
-        if(file.isEmpty()){
+    @PostMapping(value="/account/upload/image")
+    public ResponseEntity uploadImage(@RequestParam("imageUrl") String imageUrl){
+        if(imageUrl.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+            //accountService.
         }
         return ResponseEntity.ok(null);
     }
@@ -211,15 +214,12 @@ public class AccountController {
         }
     }
 
-    @PostMapping("account/update/status/{filepath}")
-    public ResponseEntity updateStatus(@RequestBody Account account, @PathVariable("filepath") String filepath){
+    @PostMapping("account/update/status/")
+    public ResponseEntity updateStatus(@RequestBody Account account){
         try {
             boolean result = accountService.updateStatus(account);
             if(account.getStatus().equalsIgnoreCase("approved")){
 
-                VideoService videoService = new VideoServiceImpl();
-                //videoService.captureFramesFromVideo("C:\\Users\\natrada.chairat\\SEProject\\FAs\\FAs-SE\\src\\main\\resources\\iPhoneXS.mp4");
-                videoService.captureFramesFromVideo(filepath);
             }
             LOGGER.info("Result "+result);
             return ResponseEntity.ok(result);
@@ -285,32 +285,6 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
-
-    @GetMapping("account/get")
-    public ResponseEntity calculate(){
-        PythonService pythonService = new PythonServiceImpl();
-        try {
-            pythonService.runScript("","");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("account/test")
-    public ResponseEntity test(){
-        PythonService pythonService = new PythonServiceImpl();
-        try {
-            VideoService videoService = new VideoServiceImpl();
-            videoService.captureFramesFromVideo("C:\\Users\\natrada.chairat\\SEProject\\FAs\\FAs-SE\\src\\main\\resources\\iPhoneXS.mp4");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok().build();
-    }
-
-    
 
 
 

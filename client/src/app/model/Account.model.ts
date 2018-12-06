@@ -9,7 +9,7 @@ export class Account {
   phonenumber: string;
   status: string;
   randomText: string;
-  imageUrl: string;
+  images: Array<string> = [];
 
 
 }

@@ -29,7 +29,8 @@ export class AccountDataServerService {
 
   private baseUrl = 'http://localhost:8080/account';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   sendAccount(account: Account): Observable<Object> {
     return this.http.post(`${this.baseUrl}` + `/create`, account, {observe: 'response', responseType: 'text'});
@@ -58,7 +59,7 @@ export class AccountDataServerService {
 
 
   updateStatusByParam(id: string, token: string) {
-    //console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
+    // console.log("Get param: "+encodeURIComponent(id)+" "+encodeURIComponent(token));
     return this.http.get(`${this.baseUrl}` + `/update/status/?id=` + encodeURIComponent(id) + `&time=` + encodeURIComponent(token));
   }
 
