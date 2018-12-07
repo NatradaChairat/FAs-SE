@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 
 export interface DialogData {
   type: string;
@@ -9,6 +9,7 @@ export interface DialogData {
   isWarningMessage: boolean;
   isOptionMessage: boolean;
 }
+
 @Component({
   selector: 'app-emailregistration-diolog',
   templateUrl: './dialog.component.html',
@@ -16,14 +17,17 @@ export interface DialogData {
 })
 export class DialogComponent {
 
-  reasons: string[] = ['Face is blur, not matched with Student card', 'Student ID not matched with Student card'];
+  form = new FormGroup({
+    reason: new FormControl('1'),
+  });
 
   constructor(
     private dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
 
   onClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.form.value);
 
   }
 

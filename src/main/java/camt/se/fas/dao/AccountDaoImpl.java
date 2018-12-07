@@ -263,4 +263,33 @@ public class AccountDaoImpl implements AccountDao {
         }
         return accounts;
     }
+
+    @Override
+    public Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException {
+
+        Firestore db = FirestoreClient.getFirestore();
+        Map<String, Object> accountTableMap = new HashMap<>();
+        accountTableMap.put("reason", reason);
+        accountTableMap.put("uid", uid);
+        ApiFuture<DocumentReference> documentReferenceApiFuture = db.collection("reason").add(accountTableMap);
+        LOGGER.info("UpdateTime Resaon " + documentReferenceApiFuture.get().getId());
+        LOGGER.info("Status Result Reason" + documentReferenceApiFuture.isDone());
+        if (documentReferenceApiFuture.isDone()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public String getReasonByUID(String uid) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection("reason").whereEqualTo("uid", uid).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot document : documents) {
+            return (String) document.get("reason");
+        }
+        return null;
+    }
 }

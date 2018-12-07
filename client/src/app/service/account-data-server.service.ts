@@ -53,8 +53,9 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param), httpOptions);
   }
 
-  sendResultAuthenProcessToEmail(param: string, status: string) {
-    return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param) + `/` + encodeURIComponent(status), httpOptions);
+  sendResultAuthenProcessToEmail(param: string, status: string, reason: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/` +
+      encodeURIComponent(param) + `/` + encodeURIComponent(status) + `/` + reason, httpOptions);
   }
 
 
@@ -81,6 +82,14 @@ export class AccountDataServerService {
 
   getVerifyPhonenumberCode(param: string, phonenumber: string) {
     return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param) + `/` + phonenumber, {observe: 'response'});
+  }
+
+  saveReasonByParam(reason: string, param: string) {
+    return this.http.post(`${this.baseUrl}` + `/reason/` + encodeURIComponent(param) + `/` + reason, httpOptions);
+  }
+
+  getReasonByParam(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/reason/` + encodeURIComponent(param));
   }
 
 

@@ -20,4 +20,7 @@ public interface AccountService {
     Boolean updateStatus(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
 
     Account getAccountByUID(String uid) throws ExecutionException, InterruptedException;
+
+    Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException;
+    String getReasonByUID(String uid) throws ExecutionException, InterruptedException;
 }

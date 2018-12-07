@@ -97,7 +97,8 @@ public class AccountController {
 
 
     @GetMapping("account/send/phonenumber/{param}/{phonenumber}")
-    public ResponseEntity sendPhonenumber(@PathVariable("param") String param, @PathVariable("phonenumber") String phonenumber) {
+    public ResponseEntity sendPhonenumber(@PathVariable("param") String param,
+                                          @PathVariable("phonenumber") String phonenumber) {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
         LOGGER.info("UID " + param);
@@ -137,15 +138,17 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account/send/email/{param}/{result}")
-    public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param, @PathVariable("result") String result) {
+    @GetMapping("account/send/email/{param}/{result}/{reason}")
+    public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param,
+                                                         @PathVariable("result") String result,
+                                                         @PathVariable("reason") String reason) {
         try {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
             LOGGER.info("Email " + email);
-            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result);
+            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result, reason);
             if (resultSending) {
                 return ResponseEntity.ok(true);
             } else {
@@ -295,6 +298,43 @@ public class AccountController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    @PostMapping("account/reason/{id}/{reason}")
+    public ResponseEntity uploadReason(@PathVariable("id") String id,
+                                       @PathVariable("reason") String reason){
+        try{
+            LOGGER.info("Encoded Key: " + id);
+            String decodeUID = aes.decrypt(id);
+            LOGGER.info("Decoded Key: " + decodeUID);
+            boolean result = accountService.saveReasonByUID(reason, decodeUID);
+            if(result){
+                return ResponseEntity.ok(true);
+            }else {
+                return ResponseEntity.ok(false);
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    @GetMapping("account/reason/{id}")
+    public ResponseEntity getReason(@PathVariable("id") String id){
+        try{
+            LOGGER.info("Encoded Key: " + id);
+            String decodeUID = aes.decrypt(id);
+            LOGGER.info("Decoded Key: " + decodeUID);
+            String result = accountService.getReasonByUID(decodeUID);
+            if(!result.isEmpty()){
+                return ResponseEntity.ok(result);
+            }else {
+                return ResponseEntity.ok(null);
+            }
+
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }

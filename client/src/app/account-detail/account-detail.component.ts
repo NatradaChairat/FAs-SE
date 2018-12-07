@@ -60,8 +60,11 @@ export class AccountDetailComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+      const reason = res.reason;
+      console.log(reason);
+      this.updateRejectStatus(reason);
     });
 
   }
@@ -72,7 +75,7 @@ export class AccountDetailComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res);
         const personIdRes = res.personId;
-        const length = this.account.images.length
+        const length = this.account.images.length;
         this.faceRecognitionService.addFaceInLargePersonGroup(personIdRes, this.account.images[length - 1])
           .subscribe(persistedFaceId => {
             console.log(persistedFaceId);
@@ -82,7 +85,7 @@ export class AccountDetailComponent implements OnInit {
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
         if (res) {
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved')
+          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved', "")
             .subscribe((result: any) => {
               if (result) {
                 this.router.navigate(['/staffDashboard']);
@@ -104,16 +107,22 @@ export class AccountDetailComponent implements OnInit {
     this.isWarningMessage = false;
     this.isOptionMessage = true;
     this.openDialog();
+  }
 
+  updateRejectStatus(reason: string) {
     this.account.status = 'disapproved';
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
         if (res) {
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'disapproved')
-            .subscribe((result: any) => {
-              if (result) {
-                this.router.navigate(['/staffDashboard']);
-              }
+          this.accountDataServerService.saveReasonByParam(reason, this.refParam)
+            .subscribe((response: any) => {
+              console.log(response);
+              this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'disapproved', reason)
+                .subscribe((result: any) => {
+                  if (result) {
+                    this.router.navigate(['/staffDashboard']);
+                  }
+                });
             });
         } else {
           this.reject();

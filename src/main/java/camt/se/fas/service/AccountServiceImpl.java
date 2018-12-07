@@ -23,7 +23,6 @@ public class AccountServiceImpl implements AccountService {
         LOGGER.info("UID "+uid);
         account.setUid(uid);
         account.setStatus("registered");
-        //boolean result = accountDao.addStatus(account);
         boolean result = accountDao.changeAccountStatus(account);
         if(result) {
             return uid;
@@ -76,5 +75,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByUID(String uid) throws ExecutionException, InterruptedException {
         return accountDao.getAccountByUID(uid);
+    }
+
+    @Override
+    public Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException {
+        return accountDao.saveReasonByUID(reason, uid);
+    }
+
+    @Override
+    public String getReasonByUID(String uid) throws ExecutionException, InterruptedException {
+        return accountDao.getReasonByUID(uid);
     }
 }

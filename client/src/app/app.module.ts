@@ -40,7 +40,6 @@ import {WebcamModule} from "ngx-webcam";
 import {FirebaseService} from "./service/firebase.service";
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {FaceRecognitionService} from "./service/face-recognition.service";
-import {AccountDetailDialogComponent} from './account-detail-dialog/account-detail-dialog.component';
 import {SubmitSuccessComponent} from './submit-success/submit-success.component';
 import {FaceLoginSuccessComponent} from './face-login-success/face-login-success.component';
 import {EmailLoginSuccessComponent} from './email-login-success/email-login-success.component';
@@ -65,7 +64,6 @@ import {IntermediaryService} from "./service/intermediary.service";
     StaffDashboardComponent,
     AccountDetailComponent,
     FileSelectDirective,
-    AccountDetailDialogComponent,
     SubmitSuccessComponent,
     FaceLoginSuccessComponent,
     EmailLoginSuccessComponent

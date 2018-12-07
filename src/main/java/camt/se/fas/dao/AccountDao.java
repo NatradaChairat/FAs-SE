@@ -24,6 +24,6 @@ public interface AccountDao{
 
     List<Account> getAccountByStatus(String status) throws ExecutionException, InterruptedException;
 
-    //Account updateStatusByAccountId(String accountId, String status);
-
+    Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException;
+    String getReasonByUID(String uid) throws ExecutionException, InterruptedException;
 }

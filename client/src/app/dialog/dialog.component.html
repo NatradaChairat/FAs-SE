@@ -20,18 +20,43 @@
   </div>
 
   <div *ngIf="data.isOptionMessage">
-    <mat-form-field>
 
-      <mat-radio-group class="example-radio-group">
-        <mat-radio-button class="example-radio-button" *ngFor="let reason of reasons" [value]="reason">
-          {{reason}}
-        </mat-radio-button>
-      </mat-radio-group>
+    <!--<mat-form-field>-->
+    <!--<mat-radio-group>-->
+    <!--<mat-radio-button *ngFor="let reason of reasons" [value]="reason"> {{reason}} </mat-radio-button>-->
+    <!--</mat-radio-group>-->
+    <!--</mat-form-field>-->
 
-    </mat-form-field>
+    <form [formGroup]="form">
+      <!-- Material inline 1 -->
+      <div class="form-check form-check-inline">
+        <input type="radio" formControlName="reason" [value]="1" class="form-check-input" id="1" name="reason" mdbInputDirective>
+        <label class="form-check-label" for="1">Face is blur, not matched with Student card</label>
+      </div>
+
+      <!-- Material inline 2 -->
+      <div class="form-check form-check-inline">
+        <input type="radio" formControlName="reason" [value]="2" class="form-check-input" id="2" name="reason" mdbInputDirective>
+        <label class="form-check-label" for="2">Student ID not matched with Student card</label>
+      </div>
+
+      <!-- Material inline 3 -->
+      <div class="form-check form-check-inline">
+        <input type="radio" formControlName="reason" [value]="3" class="form-check-input" id="3" name="reason" mdbInputDirective>
+        <label class="form-check-label" for="3">No Random text</label>
+      </div>
+    </form>
+
+    <!--<form [formGroup]="form">-->
+    <!--<input matInput type="radio" formControlName="reason" value="1" > Face is blur, not matched with Student card-->
+    <!--<input matInput type="radio" formControlName="reason" value="2"> Student ID not matched with Student card-->
+    <!--<input matInput type="radio" formControlName="reason" value="3"> No Random text-->
+
+    <!--</form>-->
+
   </div>
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onClick()" [mat-dialog-close]="true">Ok</button>
+  <button mat-button (click)="onClick()" [mat-dialog-close]="">Ok</button>
 </div>
