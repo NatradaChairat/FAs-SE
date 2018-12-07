@@ -33,16 +33,19 @@ public class AccountController {
     public void setAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
+
     @Autowired
-    public void setEmailService(EmailService emailService){
+    public void setEmailService(EmailService emailService) {
         this.emailService = emailService;
     }
+
     @Autowired
-    public void setSmsService(SMSService smsService){
+    public void setSmsService(SMSService smsService) {
         this.smsService = smsService;
     }
+
     @Autowired
-    public void setAesService(AESService aesService){
+    public void setAesService(AESService aesService) {
         this.aes = aesService;
     }
 
@@ -53,7 +56,7 @@ public class AccountController {
             /*AES aes = new AES();*/
             LOGGER.info("Return account:" + aes.encrypt(uid));
             return ResponseEntity.ok(aes.encrypt(uid));
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -67,12 +70,12 @@ public class AccountController {
             LOGGER.info(encryptUID);
             /*AES aes = new AES();*/
             String uid = aes.decrypt(encryptUID);
-            LOGGER.info("update "+uid);
+            LOGGER.info("update " + uid);
             account.setUid(uid);
             boolean result = accountService.registerAccountInfo(account);
-            if(result){
+            if (result) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 //return ResponseEntity.ok(false);
             }
@@ -82,11 +85,11 @@ public class AccountController {
         }
     }
 
-    @PostMapping(value="/account/upload/image")
-    public ResponseEntity uploadImage(@RequestParam("imageUrl") String imageUrl){
-        if(imageUrl.isEmpty()){
+    @PostMapping(value = "/account/upload/image")
+    public ResponseEntity uploadImage(@RequestParam("imageUrl") String imageUrl) {
+        if (imageUrl.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }else {
+        } else {
             //accountService.
         }
         return ResponseEntity.ok(null);
@@ -94,38 +97,39 @@ public class AccountController {
 
 
     @GetMapping("account/send/phonenumber/{param}")
-    public ResponseEntity sendPhonenumber (@PathVariable("param")String param){
+    public ResponseEntity sendPhonenumber(@PathVariable("param") String param) {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
-        LOGGER.info("UID "+param);
+        LOGGER.info("UID " + param);
         try {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
-            LOGGER.info("UID "+uid);
+            LOGGER.info("UID " + uid);
             String phonenumber = accountService.getPhonenumberByUID(uid);
-            smsService.sendSMS(phonenumber,refCode,otp);
+            smsService.sendSMS(phonenumber, refCode, otp);
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("otp",String.valueOf(otp));
-            responseHeaders.set("refCode",String.valueOf(refCode));
-            responseHeaders.set("phonenumber",String.valueOf(phonenumber));
+            responseHeaders.set("otp", String.valueOf(otp));
+            responseHeaders.set("refCode", String.valueOf(refCode));
+            responseHeaders.set("phonenumber", String.valueOf(phonenumber));
             return ResponseEntity.ok(responseHeaders);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
     @GetMapping("account/send/email/{param}")
-    public ResponseEntity sendEmail (@PathVariable("param")String param){
+    public ResponseEntity sendEmail(@PathVariable("param") String param) {
         try {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
-            LOGGER.info("UID "+uid);
+            LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
-            LOGGER.info("Email "+email);
-            boolean result= emailService.sendVerifyEmail(email,uid);
-            if(result){
+            LOGGER.info("Email " + email);
+            boolean result = emailService.sendVerifyEmail(email, uid);
+            if (result) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
             }
         } catch (Exception e) {
@@ -135,17 +139,17 @@ public class AccountController {
     }
 
     @GetMapping("account/send/email/{param}/{result}")
-    public ResponseEntity sendResultAuthenProcessToEmail (@PathVariable("param")String param , @PathVariable("result")String result){
+    public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param, @PathVariable("result") String result) {
         try {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
-            LOGGER.info("UID "+uid);
+            LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
-            LOGGER.info("Email "+email);
-            boolean resultSending = emailService.sendResultAuthenProcessEmail(email,result);
-            if(resultSending){
+            LOGGER.info("Email " + email);
+            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result);
+            if (resultSending) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
             }
         } catch (Exception e) {
@@ -155,10 +159,10 @@ public class AccountController {
     }
 
     @GetMapping("account/update/status/{param}")
-    public ResponseEntity updateStatusByVerifyPhonenumber (@PathVariable("param")String param){
+    public ResponseEntity updateStatusByVerifyPhonenumber(@PathVariable("param") String param) {
         try {
 
-            LOGGER.info("Original Key: " +param);
+            LOGGER.info("Original Key: " + param);
             String decodeKey = aes.decrypt(param);
             LOGGER.info("Encoded Key: " + decodeKey);
             Account account = new Account();
@@ -166,9 +170,9 @@ public class AccountController {
             account.setStatus("verified");
             //boolean result = accountService.updateStatus(account,"verified");
             boolean result = accountService.updateStatus(account);
-            if(result){
+            if (result) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } catch (Exception e) {
@@ -177,8 +181,8 @@ public class AccountController {
         }
     }
 
-    @RequestMapping(value="account/update/status", method=RequestMethod.GET )
-    public ResponseEntity updateStatusByVerifyEmail(@RequestParam Map<String, String> mapIdTime){
+    @RequestMapping(value = "account/update/status", method = RequestMethod.GET)
+    public ResponseEntity updateStatusByVerifyEmail(@RequestParam Map<String, String> mapIdTime) {
         String id = mapIdTime.get("id");
         String time = mapIdTime.get("time");
         try {
@@ -192,11 +196,11 @@ public class AccountController {
             LOGGER.info("Decoded Time: " + decodeTime);
 
             String email = accountService.getEmailByUID(decodeKey);
-            LOGGER.info("Return "+email);
+            LOGGER.info("Return " + email);
             LocalDateTime _localtime = LocalDateTime.parse(decodeTime);
-            LOGGER.info("_localtime "+_localtime);
-            System.out.println("Result: "+LocalDateTime.now().isBefore(_localtime.plusDays(1))+" Origin: "+_localtime+" Now: "+LocalDateTime.now() + " Deadline: "+_localtime.plusDays(1));
-            if(LocalDateTime.now().isBefore(_localtime.plusDays(1))){
+            LOGGER.info("_localtime " + _localtime);
+            System.out.println("Result: " + LocalDateTime.now().isBefore(_localtime.plusDays(1)) + " Origin: " + _localtime + " Now: " + LocalDateTime.now() + " Deadline: " + _localtime.plusDays(1));
+            if (LocalDateTime.now().isBefore(_localtime.plusDays(1))) {
                 Account account = new Account();
                 account.setUid(decodeKey);
                 account.setEmail(email);
@@ -205,7 +209,7 @@ public class AccountController {
                 Account _account = new Account();
                 _account.setEmail(account.getEmail());
                 return ResponseEntity.ok(_account);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
             }
         } catch (Exception e) {
@@ -215,13 +219,13 @@ public class AccountController {
     }
 
     @PostMapping("account/update/status/")
-    public ResponseEntity updateStatus(@RequestBody Account account){
+    public ResponseEntity updateStatus(@RequestBody Account account) {
         try {
             boolean result = accountService.updateStatus(account);
-            if(account.getStatus().equalsIgnoreCase("approved")){
+            if (account.getStatus().equalsIgnoreCase("approved")) {
 
             }
-            LOGGER.info("Result "+result);
+            LOGGER.info("Result " + result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,12 +235,12 @@ public class AccountController {
 
 
     @GetMapping("account/get/phonenumber/{phonenumber}")
-    public ResponseEntity checkDuplicatedPhonenumber (@PathVariable("phonenumber")String phonenumber){
+    public ResponseEntity checkDuplicatedPhonenumber(@PathVariable("phonenumber") String phonenumber) {
         try {
             boolean result = accountService.checkDuplicatedPhonenumber(phonenumber);
-            if(result){
+            if (result) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.ok(false);
             }
         } catch (Exception e) {
@@ -246,12 +250,12 @@ public class AccountController {
     }
 
     @GetMapping("account/get/studentId/{studentId}")
-    public ResponseEntity checkDuplicatedStudentId (@PathVariable("studentId")String studentId){
+    public ResponseEntity checkDuplicatedStudentId(@PathVariable("studentId") String studentId) {
         try {
             boolean result = accountService.checkDuplicatedStudentId(studentId);
-            if(result){
+            if (result) {
                 return ResponseEntity.ok(true);
-            }else{
+            } else {
                 return ResponseEntity.ok(false);
             }
         } catch (Exception e) {
@@ -261,7 +265,7 @@ public class AccountController {
     }
 
     @GetMapping("account/get/account/{status}")
-    public ResponseEntity getAccountByStatus(@PathVariable("status")String status) {
+    public ResponseEntity getAccountByStatus(@PathVariable("status") String status) {
         try {
             List<Account> accounts = accountService.getAccountByStatus(status);
             return ResponseEntity.ok(accounts);
@@ -273,9 +277,9 @@ public class AccountController {
     }
 
     @GetMapping("account/get/{id}")
-    public ResponseEntity getAccountByUid(@PathVariable("id")String id){
+    public ResponseEntity getAccountByUid(@PathVariable("id") String id) {
         try {
-            LOGGER.info("Encoded Key: " +id);
+            LOGGER.info("Encoded Key: " + id);
             String decodeUID = aes.decrypt(id);
             LOGGER.info("Decoded Key: " + decodeUID);
             Account account = accountService.getAccountByUID(decodeUID);
@@ -286,6 +290,14 @@ public class AccountController {
         }
     }
 
-
+    @GetMapping("account/get/randomtext/{id}")
+    public ResponseEntity getRandomTextByUid(@PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
 
 }

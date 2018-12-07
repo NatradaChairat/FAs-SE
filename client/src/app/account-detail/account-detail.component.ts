@@ -4,6 +4,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {DialogComponent} from "../dialog/dialog.component";
+import {FaceRecognitionService} from "../service/face-recognition.service";
 
 @Component({
   selector: 'app-account-detail',
@@ -23,9 +24,12 @@ export class AccountDetailComponent implements OnInit {
 
   showImageUrl: string;
 
-  constructor(private router: Router, private route: ActivatedRoute,
+  constructor(private router: Router,
+              private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
-              private dialog: MatDialog) { }
+              private faceRecognitionService: FaceRecognitionService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -47,11 +51,13 @@ export class AccountDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '480px',
       disableClose: true,
-      data: {type: this.type,
-            title: this.title,
-            detail: this.detail,
-            isWarningMessage: this.isWarningMessage,
-            isOptionMessage: this.isOptionMessage}
+      data: {
+        type: this.type,
+        title: this.title,
+        detail: this.detail,
+        isWarningMessage: this.isWarningMessage,
+        isOptionMessage: this.isOptionMessage
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -62,6 +68,17 @@ export class AccountDetailComponent implements OnInit {
 
   accept() {
     this.account.status = 'approved';
+    this.faceRecognitionService.createPersonInLargePersonGroup(this.account.studentId)
+      .subscribe((res: any) => {
+        console.log(res);
+        const personIdRes = res.personId;
+        const length = this.account.images.length
+        this.faceRecognitionService.addFaceInLargePersonGroup(personIdRes, this.account.images[length - 1])
+          .subscribe(persistedFaceId => {
+            console.log(persistedFaceId);
+            this.faceRecognitionService.trainLargePersonGroup();
+          });
+      });
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
         if (res) {
