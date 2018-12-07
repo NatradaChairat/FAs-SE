@@ -45,8 +45,11 @@ export class PhonenoVerificationComponent implements OnInit {
       this.timeout = true;
     }, 300000);
 
-    this.accountDataServerService.getVerifyPhonenumberCode(this.refParam)
+    this.account = this.intermediaryService.getAccount();
+
+    this.accountDataServerService.getVerifyPhonenumberCode(this.refParam, this.account.phonenumber)
       .subscribe((data: any) => {
+          console.log(data);
           this.account.phonenumber = data.body.phonenumber.toString();
           this.refCode = data.body.refCode.toString();
           this.otp = data.body.otp.toString();
@@ -54,7 +57,6 @@ export class PhonenoVerificationComponent implements OnInit {
         }
       );
 
-    this.account = this.intermediaryService.getAccount();
   }
 
   openDialog(): void {

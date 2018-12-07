@@ -96,8 +96,8 @@ public class AccountController {
     }
 
 
-    @GetMapping("account/send/phonenumber/{param}")
-    public ResponseEntity sendPhonenumber(@PathVariable("param") String param) {
+    @GetMapping("account/send/phonenumber/{param}/{phonenumber}")
+    public ResponseEntity sendPhonenumber(@PathVariable("param") String param, @PathVariable("phonenumber") String phonenumber) {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
         LOGGER.info("UID " + param);
@@ -105,7 +105,6 @@ public class AccountController {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
-            String phonenumber = accountService.getPhonenumberByUID(uid);
             smsService.sendSMS(phonenumber, refCode, otp);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("otp", String.valueOf(otp));

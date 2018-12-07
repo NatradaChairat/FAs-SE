@@ -35,6 +35,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Boolean addAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException {
+        LOGGER.info("TELEPHONE " + account.getPhonenumber().replaceAll("\\s", ""));
         UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(account.getUid())
                 .setPhoneNumber(account.getPhonenumber().replaceAll("\\s", ""));
         UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
@@ -55,6 +56,9 @@ public class AccountDaoImpl implements AccountDao {
         }
         if (account.getLastname() != null) {
             accountTableMap.put("lastname", account.getLastname());
+        }
+        if (account.getRandomText() != null) {
+            accountTableMap.put("randomtext", account.getRandomText());
         }
 
         if (account.getImages().size() != 0) {

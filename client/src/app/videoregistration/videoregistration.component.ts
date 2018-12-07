@@ -65,7 +65,7 @@ export class VideoregistrationComponent implements OnInit, AfterViewInit {
     //     console.log(personId);
     //     this.faceRecognitionService.addFaceInLargePersonGroup()
     //   })
-
+    this.account.randomText = this.randomtext;
     console.log(this.account);
     let imageUrl: string;
     const fullPath = 'faceRegister/' + this.webCamComp.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')

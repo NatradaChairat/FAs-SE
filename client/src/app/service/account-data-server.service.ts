@@ -79,8 +79,8 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/get/phonenumber/` + phonenumber);
   }
 
-  getVerifyPhonenumberCode(param: string) {
-    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param), {observe: 'response'});
+  getVerifyPhonenumberCode(param: string, phonenumber: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param) + `/` + phonenumber, {observe: 'response'});
   }
 
 
