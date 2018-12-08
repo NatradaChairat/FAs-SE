@@ -24,6 +24,9 @@ export class AccountDetailComponent implements OnInit {
 
   showImageUrl: string;
 
+  isDisapproved = false;
+  reasonText: string;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
@@ -39,9 +42,25 @@ export class AccountDetailComponent implements OnInit {
             this.account = res;
             const images = this.account.images;
             this.showImageUrl = images[0];
-            console.log(this.showImageUrl);
+            console.log(this.account.status)
+            if (this.account.status === 'disapproved') {
+              this.isDisapproved = true;
+              this.accountDataServerService.getReasonByParam(this.refParam)
+                .subscribe((response: any) => {
+                  const reasonRes: number = response;
+                  console.log(reasonRes)
+                  if (reasonRes === 1) {
+                    this.reasonText = 'Face is blur, not matched with Student card';
+                  } else if (reasonRes === 2) {
+                    this.reasonText = 'Student ID not matched with Student card';
+                  } else if (reasonRes === 3) {
+                    this.reasonText = 'No Random text';
+                  }
+                  console.log(this.reasonText);
+                });
+            }
           }, err => {
-            //this.reSendEmail(params['key']);
+            // this.reSendEmail(params['key']);
           }
         );
     });

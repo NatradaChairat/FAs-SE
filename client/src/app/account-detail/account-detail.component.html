@@ -9,6 +9,9 @@
         <p class="card-text">  StudentID : {{account?.studentId}}</p>
         <p class="card-text">  Date of birth: {{account?.dateofbirth}}</p>
         <p class="card-text">  Random text: {{account?.randomText}}</p>
+        <div *ngIf="isDisapproved">
+          <p class="card-text">  Reason to rejected: {{reasonText}}</p>
+        </div>
       </div>
 
         <!--<vg-player>

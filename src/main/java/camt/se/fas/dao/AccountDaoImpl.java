@@ -187,6 +187,7 @@ public class AccountDaoImpl implements AccountDao {
             account.setDateofbirth((String) document.get("dateofbirth"));
             account.setStudentId((String) document.get("studentId"));
             account.setRandomText((String) document.get("randomtext"));
+            account.setStatus((String) document.get("status"));
             List<String> groupImage = (List<String>) document.get("images");
             account.setImages(groupImage);
 //            ApiFuture<QuerySnapshot> futureImage = document.getReference().collection("images").get();
@@ -268,18 +269,34 @@ public class AccountDaoImpl implements AccountDao {
     public Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException {
 
         Firestore db = FirestoreClient.getFirestore();
+
+        ApiFuture<QuerySnapshot> future = db.collection("reason").whereEqualTo("uid", uid).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        LOGGER.debug("REASON |Check reason document "+documents.isEmpty());
         Map<String, Object> accountTableMap = new HashMap<>();
         accountTableMap.put("reason", reason);
-        accountTableMap.put("uid", uid);
-        ApiFuture<DocumentReference> documentReferenceApiFuture = db.collection("reason").add(accountTableMap);
-        LOGGER.info("UpdateTime Resaon " + documentReferenceApiFuture.get().getId());
-        LOGGER.info("Status Result Reason" + documentReferenceApiFuture.isDone());
-        if (documentReferenceApiFuture.isDone()) {
-            return true;
-        } else {
-            return false;
+        if (documents.isEmpty()){
+            accountTableMap.put("uid", uid);
+            ApiFuture<DocumentReference> documentReferenceApiFuture = db.collection("reason").add(accountTableMap);
+            LOGGER.info("REASON |UpdateTime Resaon " + documentReferenceApiFuture.get().getId());
+            LOGGER.info("REASON |Status Result Reason" + documentReferenceApiFuture.isDone());
+            if (documentReferenceApiFuture.isDone()) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            for (DocumentSnapshot document : documents) {
+                ApiFuture<WriteResult> writeResultApiFuture = db.collection("reason").document(document.getId()).update(accountTableMap);
+                LOGGER.info("REASON |UpdateTime " + writeResultApiFuture.get().getUpdateTime());
+                if (writeResultApiFuture.isDone()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
-
+        return false;
     }
 
     @Override
