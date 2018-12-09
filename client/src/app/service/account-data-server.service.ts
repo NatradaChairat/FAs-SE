@@ -92,5 +92,9 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/reason/` + encodeURIComponent(param));
   }
 
+  uploadImage(account: Account) {
+    return this.http.post(`${this.baseUrl}` + `/upload/image`, account);
+  }
+
 
 }

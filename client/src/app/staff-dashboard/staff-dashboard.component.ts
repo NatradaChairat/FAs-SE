@@ -12,25 +12,30 @@ export class StaffDashboardComponent implements OnInit {
 
   verifiedAccounts: Account[];
   disapprovedAccounts: Account[];
+  trainingAccounts: Account[];
 
   constructor(private accountDataServerService: AccountDataServerService, private router: Router) {
   }
 
   ngOnInit() {
-    this.accountDataServerService.getAccountByStatus("verified")
-      .subscribe((accounts: any) => {
-        this.verifiedAccounts = accounts;
-        this.accountDataServerService.getAccountByStatus("disapproved")
-          .subscribe((accounts: any) => {
-            this.disapprovedAccounts = accounts;
+    this.accountDataServerService.getAccountByStatus('verified')
+      .subscribe((approvedAccounts: any) => {
+        this.verifiedAccounts = approvedAccounts;
+        this.accountDataServerService.getAccountByStatus('disapproved')
+          .subscribe((rejectedAccounts: any) => {
+            this.disapprovedAccounts = rejectedAccounts;
+            this.accountDataServerService.getAccountByStatus('training')
+              .subscribe((training: any) => {
+                this.trainingAccounts = training;
+              });
           }, (error) => {
             if (error.status === 401) {
-              console.log("no content");
+              console.log('no content');
             }
           });
       }, (error) => {
         if (error.status === 401) {
-          console.log("no content");
+          console.log('no content');
         }
       });
 

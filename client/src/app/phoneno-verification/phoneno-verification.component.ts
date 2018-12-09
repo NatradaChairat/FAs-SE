@@ -5,7 +5,6 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {DialogComponent} from "../dialog/dialog.component";
-import {InforegistrationComponent} from "../inforegistration/inforegistration.component";
 import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
@@ -73,7 +72,7 @@ export class PhonenoVerificationComponent implements OnInit {
   onSubmit(otp: string) {
     console.log('show isTimeout ' + this.timeout);
     if (this.otp === otp && !this.timeout) {
-      console.log(this.account)
+      console.log(this.account);
       this.accountDataServerService.sendPersonalAccount(this.account, this.refParam)
         .subscribe(res => {
           if (res) {
@@ -83,9 +82,9 @@ export class PhonenoVerificationComponent implements OnInit {
       this.accountDataServerService.updateStatusByVerifyPhone(this.refParam)
         .subscribe((res: any) => {
           if (res) {
-            this.type = "Success!";
-            this.title = "Registration are success!"
-            this.detail = "The system will redirect to homepage."
+            this.type = 'Success!';
+            this.title = 'Registration are success!';
+            this.detail = 'The system will redirect to homepage.';
             this.openDialog();
             setTimeout(() => {
               this.dialog.closeAll();

@@ -10,7 +10,17 @@ export class IntermediaryService {
 
   private phoneNumber: string;
 
+  private uid: string;
+
   constructor() {
+  }
+
+  setUid(uid: string) {
+    this.uid = uid;
+  }
+
+  getUid() {
+    return this.uid;
   }
 
   setPhoneNumber(phoneNumber: string) {

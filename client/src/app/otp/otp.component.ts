@@ -27,6 +27,7 @@ export class OtpComponent implements OnInit {
 
   ngOnInit() {
     console.log('OTP');
+    this.timeout = false;
     this.refCode = '';
     this.otp = '';
     this.account = new Account();

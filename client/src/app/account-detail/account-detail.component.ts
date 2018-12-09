@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Account} from "../model/Account.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
@@ -27,6 +27,8 @@ export class AccountDetailComponent implements OnInit {
   isDisapproved = false;
   reasonText: string;
 
+  imageSources;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
@@ -42,6 +44,7 @@ export class AccountDetailComponent implements OnInit {
             this.account = res;
             const images = this.account.images;
             this.showImageUrl = images[0];
+            this.imageSources = images;
             console.log(this.account.status)
             if (this.account.status === 'disapproved') {
               this.isDisapproved = true;

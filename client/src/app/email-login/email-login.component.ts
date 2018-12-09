@@ -29,6 +29,8 @@ export class EmailLoginComponent implements OnInit {
         console.log(userRes)
         const phoneNumber = userRes.phoneNumber;
         console.log(phoneNumber);
+        const uid = userRes.uid;
+        this.intermediaryService.setUid(uid);
         this.intermediaryService.setPhoneNumber(phoneNumber);
         this.router.navigate(['/oneTimePassword']);
 

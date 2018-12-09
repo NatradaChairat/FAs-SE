@@ -46,6 +46,7 @@ import {EmailLoginSuccessComponent} from './email-login-success/email-login-succ
 import {IntermediaryService} from "./service/intermediary.service";
 import { TrainImageComponent } from './train-image/train-image.component';
 import { OtpComponent } from './otp/otp.component';
+import {SlideshowModule} from "ng-simple-slideshow";
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { OtpComponent } from './otp/otp.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireStorageModule,
-    WebcamModule
+    WebcamModule,
+    SlideshowModule
   ],
   providers: [AccountDataServerService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
