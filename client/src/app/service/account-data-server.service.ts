@@ -53,6 +53,10 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param), httpOptions);
   }
 
+  sendSuccessRegisterProcessToEmail(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/success/` + encodeURIComponent(param), httpOptions);
+  }
+
   sendResultAuthenProcessToEmail(param: string, status: string, reason: string) {
     return this.http.get(`${this.baseUrl}` + `/send/email/` +
       encodeURIComponent(param) + `/` + encodeURIComponent(status) + `/` + reason, httpOptions);

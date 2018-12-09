@@ -17,6 +17,7 @@ export class OtpComponent implements OnInit {
   account: any = {};
   otp: string;
   refCode: string;
+  model: string;
   refParam: string;
 
   constructor(private route: ActivatedRoute,
@@ -30,6 +31,7 @@ export class OtpComponent implements OnInit {
     this.timeout = false;
     this.refCode = '';
     this.otp = '';
+    this.model = '';
     this.account = new Account();
     this.account.phonenumber = this.intermediaryService.getPhoneNumber();
 

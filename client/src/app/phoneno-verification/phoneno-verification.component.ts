@@ -82,16 +82,21 @@ export class PhonenoVerificationComponent implements OnInit {
       this.accountDataServerService.updateStatusByVerifyPhone(this.refParam)
         .subscribe((res: any) => {
           if (res) {
+
+            this.accountDataServerService.sendSuccessRegisterProcessToEmail(this.refParam)
+              .subscribe((sendingRes: any) => {
+                console.log(sendingRes);
+              });
             this.type = 'Success!';
             this.title = 'Registration are success!';
             this.detail = 'The system will redirect to homepage.';
             this.openDialog();
             setTimeout(() => {
               this.dialog.closeAll();
-            }, 3000);
+            }, 1000);
             setTimeout(() => {
-              this.router.navigate(['/homepage']);
-            }, 3500);
+              this.router.navigate(['/submitSuccess']);
+            }, 3000);
           } else {
             console.log('update status ' + false);
           }
