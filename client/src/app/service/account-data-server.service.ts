@@ -76,6 +76,10 @@ export class AccountDataServerService {
     return this.http.post(`${this.baseUrl}` + `/update/status/`, account);
   }
 
+  checkIsStaff(uid: string) {
+    return this.http.get(`${this.baseUrl}` + `/isStaff/` + uid);
+  }
+
   checkDuplicatedStudentId(studentId: string) {
     return this.http.get(`${this.baseUrl}` + `/get/studentId/` + studentId);
   }
