@@ -38,6 +38,10 @@ export class FaceRecognitionService {
     );
   }
 
+  updateFaceInLargePersonFroup(personId: string, persistedFaceId: string) {
+
+  }
+
   trainLargePersonGroup() {
     const headers = this.getHeaders(this.subscriptionKey);
     const params = this.getParams();

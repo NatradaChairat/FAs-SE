@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FaceLoginComponent} from '../face-login/face-login.component';
+import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
   selector: 'app-face-login-success',
@@ -8,15 +9,21 @@ import {FaceLoginComponent} from '../face-login/face-login.component';
 })
 export class FaceLoginSuccessComponent implements OnInit {
 
-  @ViewChild(FaceLoginComponent) faceLoginComponent: FaceLoginComponent;
+  showConfidence: number;
+  showStudentId: string;
 
-  showConfidence: string;
-  showStudentId: string
+  value: number;
+  mode = 'determinate';
+  color = 'primary';
+  bufferValue = 75;
 
-  constructor() {
+  constructor(private intermediaryService: IntermediaryService) {
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.showConfidence = this.intermediaryService.getConfidence();
+    this.value = this.showConfidence * 100;
+  }
 
 
 }

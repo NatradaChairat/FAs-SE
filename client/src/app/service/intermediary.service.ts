@@ -6,7 +6,27 @@ export class IntermediaryService {
 
   private account: Account;
 
+  private confidence: number;
+
+  private phoneNumber: string;
+
   constructor() {
+  }
+
+  setPhoneNumber(phoneNumber: string) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  getPhoneNumber(): string {
+    return this.phoneNumber;
+  }
+
+  setConfidence(confidence: number) {
+    this.confidence = confidence;
+  }
+
+  getConfidence(): number {
+    return this.confidence;
   }
 
   setAccount(account: Account) {

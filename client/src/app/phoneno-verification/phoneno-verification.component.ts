@@ -47,7 +47,7 @@ export class PhonenoVerificationComponent implements OnInit {
 
     this.account = this.intermediaryService.getAccount();
 
-    this.accountDataServerService.getVerifyPhonenumberCode(this.refParam, this.account.phonenumber)
+    this.accountDataServerService.getVerifyPhonenumberCode(this.account.phonenumber)
       .subscribe((data: any) => {
           console.log(data);
           this.account.phonenumber = data.body.phonenumber.toString();
@@ -94,13 +94,13 @@ export class PhonenoVerificationComponent implements OnInit {
               this.router.navigate(['/homepage']);
             }, 3500);
           } else {
-            console.log("update status " + false);
+            console.log('update status ' + false);
           }
         });
     } else {
-      this.type = "Error";
-      this.title = "Verification code is invalid."
-      this.detail = "The system will sending new one-time password to " + this.account.phonenumber + " again."
+      this.type = 'Error';
+      this.title = 'Verification code is invalid.';
+      this.detail = 'The system will sending new one-time password to ' + this.account.phonenumber + ' again.';
       this.openDialog();
       setTimeout(() => {
         this.dialog.closeAll();

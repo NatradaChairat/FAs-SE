@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../service/authentication.service";
-import {Account} from '../model/Account.model';
+import {Router} from "@angular/router";
+import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
   selector: 'app-email-login',
@@ -11,18 +12,31 @@ export class EmailLoginComponent implements OnInit {
 
   email: string
   password: string
-  constructor(private authenticationService: AuthenticationService) { }
+
+  constructor(private router: Router,
+              private intermediaryService: IntermediaryService,
+              private authenticationService: AuthenticationService) {
+  }
 
   ngOnInit() {
   }
 
-  tryLogin(email: string, password: string){
+  tryLogin(email: string, password: string) {
     this.authenticationService.login(email, password)
       .then(res => {
         console.log(res);
+        const userRes = res.user;
+        console.log(userRes)
+        const phoneNumber = userRes.phoneNumber;
+        console.log(phoneNumber);
+        this.intermediaryService.setPhoneNumber(phoneNumber);
+        this.router.navigate(['/oneTimePassword']);
 
       }, err => {
         console.log(err);
+        if (window.confirm('Your email or password is incorrect')) {
+          this.password = '';
+        }
       });
   }
 

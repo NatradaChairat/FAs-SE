@@ -80,8 +80,8 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/get/phonenumber/` + phonenumber);
   }
 
-  getVerifyPhonenumberCode(param: string, phonenumber: string) {
-    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param) + `/` + phonenumber, {observe: 'response'});
+  getVerifyPhonenumberCode(phonenumber: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + phonenumber, {observe: 'response'});
   }
 
   saveReasonByParam(reason: string, param: string) {

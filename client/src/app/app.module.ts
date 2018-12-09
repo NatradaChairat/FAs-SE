@@ -15,7 +15,7 @@ import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MatAutocompleteModule,
   MatDialogModule,
-  MatNativeDateModule,
+  MatNativeDateModule, MatProgressBarModule,
   MatRadioModule
 } from "@angular/material";
 import {DialogComponent} from './dialog/dialog.component';
@@ -44,6 +44,8 @@ import {SubmitSuccessComponent} from './submit-success/submit-success.component'
 import {FaceLoginSuccessComponent} from './face-login-success/face-login-success.component';
 import {EmailLoginSuccessComponent} from './email-login-success/email-login-success.component';
 import {IntermediaryService} from "./service/intermediary.service";
+import { TrainImageComponent } from './train-image/train-image.component';
+import { OtpComponent } from './otp/otp.component';
 
 
 @NgModule({
@@ -66,10 +68,13 @@ import {IntermediaryService} from "./service/intermediary.service";
     FileSelectDirective,
     SubmitSuccessComponent,
     FaceLoginSuccessComponent,
-    EmailLoginSuccessComponent
+    EmailLoginSuccessComponent,
+    TrainImageComponent,
+    OtpComponent
   ],
   entryComponents: [
-    DialogComponent
+    DialogComponent,
+    FaceLoginSuccessComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +87,7 @@ import {IntermediaryService} from "./service/intermediary.service";
     MatAutocompleteModule,
     MatRadioModule,
     MatNativeDateModule,
+    MatProgressBarModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
     VgCoreModule,

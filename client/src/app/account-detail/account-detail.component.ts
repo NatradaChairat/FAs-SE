@@ -103,8 +103,9 @@ export class AccountDetailComponent implements OnInit {
       });
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
+        console.log(res);
         if (res) {
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved', "")
+          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved', '0')
             .subscribe((result: any) => {
               if (result) {
                 this.router.navigate(['/staffDashboard']);
