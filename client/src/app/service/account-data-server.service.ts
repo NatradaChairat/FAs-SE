@@ -9,7 +9,7 @@ const httpOptions = {
     {
       'Content-Type': 'application/json ; charset=utf-8; application/x-www-form-urlencoded ; text/plain',
       'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
       'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS, REQUEST",
       'Access-Control-Allow-Headers': "Origin, Content-Type, X-Auth-Token",
       'responseType': "text",
@@ -42,6 +42,10 @@ export class AccountDataServerService {
   }
 
   getAccountByParam(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/get/` + param, httpOptions);
+  }
+
+  getAccountByEncodeParam(param: string) {
     return this.http.get(`${this.baseUrl}` + `/get/` + encodeURIComponent(param), httpOptions);
   }
 
@@ -101,6 +105,7 @@ export class AccountDataServerService {
   }
 
   uploadImage(account: Account) {
+    console.log(account);
     return this.http.post(`${this.baseUrl}` + `/upload/image`, account);
   }
 

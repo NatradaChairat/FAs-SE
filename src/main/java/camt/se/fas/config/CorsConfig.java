@@ -14,7 +14,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 System.out.println("CorConfig working");
                 registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins("http://localhost:4200")
                 .allowedMethods("GET","POST","PUT","DELETE","OPTIONS");
             }
         };

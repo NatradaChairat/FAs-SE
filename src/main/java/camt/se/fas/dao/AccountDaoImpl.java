@@ -269,10 +269,10 @@ public class AccountDaoImpl implements AccountDao {
         for (DocumentSnapshot document : documents) {
             Account account = new Account();
             AESService aesService = new AESServiceImpl();
-            String encodeUID = aesService.encrypt((String) document.get("uid"));
-            account.setUid(encodeUID);
+            //String encodeUID = aesService.encrypt((String) document.get("uid"));
+            account.setUid((String) document.get("uid"));
             account.setFirstname((String) document.get("firstname"));
-            //account.setLastname((String)document.get("lastname"));
+            account.setLastname((String)document.get("lastname"));
             //account.setDateofbirth((String) document.get("dateofbirth"));
             accounts.add(account);
             LOGGER.info("GET Account " + account);

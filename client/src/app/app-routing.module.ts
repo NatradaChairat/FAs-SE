@@ -36,7 +36,7 @@ const appRoutes: Routes = [
   {path: 'staffDashboard', component: StaffDashboardComponent},
   {path: 'detail/:key', component: AccountDetailComponent},
   {path: 'oneTimePassword', component: OtpComponent},
-  {path: 'trainFace/:key', component: TrainImageComponent},
+  {path: 'trainFace/:param', component: TrainImageComponent},
   {path: '**', component: FilenotfoundComponent}
 ];
 

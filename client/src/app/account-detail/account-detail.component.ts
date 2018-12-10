@@ -39,6 +39,7 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.refParam = params['key'];
+      console.log(this.refParam);
       this.accountDataServerService.getAccountByParam(params['key'])
         .subscribe((res: any) => {
             this.account = res;

@@ -57,7 +57,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public Boolean sendResultAuthenProcessEmail(String email,
                                                 String status,
-                                                String reason) {
+                                                String reason,
+                                                String uid) {
         String[] receiver = {email}; // list of recipient email addresses
         String subject = "Facial Authentication: Result of Authentication";
         String result = "";
@@ -79,7 +80,8 @@ public class EmailServiceImpl implements EmailService {
         }
         String body = "Email Address: " + email +
                 "\nResult of Authentication process is " + result +
-                "\n" + option;
+                "\n" + option +"" +
+                "\nclick this link to new register your face: http://localhost:4200/trainFace/" + uid;
 
         return sending(receiver, subject, body);
     }

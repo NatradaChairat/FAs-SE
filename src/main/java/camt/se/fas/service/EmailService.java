@@ -7,5 +7,6 @@ public interface EmailService {
 
     Boolean sendSuccessEmail(String email);
 
-    Boolean sendResultAuthenProcessEmail(String email, String status, String reason);
+    Boolean sendResultAuthenProcessEmail(String email, String status,
+                                         String reason, String uid);
 }

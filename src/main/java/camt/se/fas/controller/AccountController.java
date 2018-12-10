@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController("/account")
 public class AccountController {
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
@@ -91,11 +92,24 @@ public class AccountController {
     public ResponseEntity uploadImage(@RequestBody Account account) {
         LOGGER.info(account.toString());
         try {
-            Boolean result = accountService.uploadImage(account);
-            return ResponseEntity.ok(result);
+            String encryptUID = URLEncoder.encode(account.getUid(), "UTF-8");
+            String uid = aes.decrypt(encryptUID);
+            LOGGER.info("Upload| "+uid);
+            if(uid == null){
+                Boolean result = accountService.uploadImage(account);
+                return ResponseEntity.ok(result);
+            }else{
+                LOGGER.info("update " + uid);
+                account.setUid(uid);
+                Boolean result = accountService.uploadImage(account);
+                return ResponseEntity.ok(result);
+            }
         } catch (ExecutionException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -167,10 +181,10 @@ public class AccountController {
             /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
-            String email = accountService.getEmailByUID(uid);
+            String email = accountService.getEmailByUID(param);
             LOGGER.info("Email " + email);
             LOGGER.info("SEND MAIL| "+reason);
-            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result, reason);
+            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result, reason, param);
             if (resultSending) {
                 return ResponseEntity.ok(true);
             } else {
@@ -318,10 +332,14 @@ public class AccountController {
     @GetMapping("account/get/{id}")
     public ResponseEntity getAccountByUid(@PathVariable("id") String id) {
         try {
-            LOGGER.info("Encoded Key: " + id);
-            String decodeUID = aes.decrypt(id);
-            LOGGER.info("Decoded Key: " + decodeUID);
-            Account account = accountService.getAccountByUID(decodeUID);
+//            LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
+//            String decodeUID = aes.decrypt(URLEncoder.encode(id, "UTF-8"));
+//            LOGGER.info("Decoded Key: " + decodeUID);
+//            Account account = accountService.getAccountByUID(decodeUID);
+//            LOGGER.info("GET ACCOUNT | "+ account);
+
+            Account account = accountService.getAccountByUID(id);
+            LOGGER.info("GET ACCOUNT | "+ account);
             return ResponseEntity.ok(account);
         } catch (Exception e) {
             e.printStackTrace();

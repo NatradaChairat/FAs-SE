@@ -32,6 +32,7 @@ export class OtpComponent implements OnInit {
     this.refCode = '';
     this.otp = '';
     this.model = '';
+    this.refParam = this.intermediaryService.getUid();
     this.account = new Account();
     this.account.phonenumber = this.intermediaryService.getPhoneNumber();
 
@@ -54,7 +55,7 @@ export class OtpComponent implements OnInit {
     console.log('show isTimeout ' + this.timeout);
     if (this.otp === otp && !this.timeout) {
       console.log(this.account);
-      this.router.navigate(['/trainFace/1']);
+      this.router.navigate(['/trainFace/' + this.refParam]);
     } else {
       if (window.confirm('Verification code is invalid.\n ' +
         'The system will sending new one-time password to ' + this.account.phonenumber + ' again.')) {
