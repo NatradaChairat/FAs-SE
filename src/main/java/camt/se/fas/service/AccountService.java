@@ -10,6 +10,7 @@ public interface AccountService {
     String registerAccount(Account account) throws FirebaseAuthException, ExecutionException, InterruptedException;
     Boolean registerAccountInfo(Account account) throws ExecutionException, InterruptedException, FirebaseAuthException;
 
+    Boolean checkIsStaff(String uid) throws ExecutionException, InterruptedException;
     Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException;
     Boolean checkDuplicatedPhonenumber(String phonenumber) throws ExecutionException, InterruptedException;
 
@@ -23,4 +24,6 @@ public interface AccountService {
 
     Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException;
     String getReasonByUID(String uid) throws ExecutionException, InterruptedException;
+
+    Boolean uploadImage(Account account) throws ExecutionException, InterruptedException;
 }

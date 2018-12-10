@@ -18,6 +18,7 @@ import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
 @CrossOrigin
@@ -64,6 +65,7 @@ public class AccountController {
 
     @PostMapping("/account/update")//
     public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
+        LOGGER.info("Update ");
         LOGGER.info(account.toString());
         String encryptUID = account.getUid();
         try {
@@ -85,27 +87,28 @@ public class AccountController {
         }
     }
 
-    @PostMapping(value = "/account/upload/image")
-    public ResponseEntity uploadImage(@RequestParam("imageUrl") String imageUrl) {
-        if (imageUrl.isEmpty()) {
+    @PostMapping("/account/upload/image")
+    public ResponseEntity uploadImage(@RequestBody Account account) {
+        LOGGER.info(account.toString());
+        try {
+            Boolean result = accountService.uploadImage(account);
+            return ResponseEntity.ok(result);
+        } catch (ExecutionException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            //accountService.
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(null);
+
     }
 
 
-    @GetMapping("account/send/phonenumber/{param}/{phonenumber}")
-    public ResponseEntity sendPhonenumber(@PathVariable("param") String param,
-                                          @PathVariable("phonenumber") String phonenumber) {
+    @GetMapping("account/send/phonenumber/{phonenumber}")
+    public ResponseEntity sendPhonenumber(@PathVariable("phonenumber") String phonenumber) {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
-        LOGGER.info("UID " + param);
         try {
             /*AES aes = new AES();*/
-            String uid = aes.decrypt(param);
-            LOGGER.info("UID " + uid);
             smsService.sendSMS(phonenumber, refCode, otp);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("otp", String.valueOf(otp));
@@ -121,12 +124,30 @@ public class AccountController {
     @GetMapping("account/send/email/{param}")
     public ResponseEntity sendEmail(@PathVariable("param") String param) {
         try {
-            /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
             LOGGER.info("Email " + email);
             boolean result = emailService.sendVerifyEmail(email, uid);
+            if (result) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+    }
+
+    @GetMapping("account/send/email/success/{param}")
+    public ResponseEntity sendSuccessEmail(@PathVariable("param") String param) {
+        try {
+            String uid = aes.decrypt(param);
+            LOGGER.info("UID " + uid);
+            String email = accountService.getEmailByUID(uid);
+            LOGGER.info("Email " + email);
+            boolean result = emailService.sendSuccessEmail(email);
             if (result) {
                 return ResponseEntity.ok(true);
             } else {
@@ -148,6 +169,7 @@ public class AccountController {
             LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
             LOGGER.info("Email " + email);
+            LOGGER.info("SEND MAIL| "+reason);
             boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result, reason);
             if (resultSending) {
                 return ResponseEntity.ok(true);
@@ -235,6 +257,21 @@ public class AccountController {
         }
     }
 
+    @GetMapping("account/isStaff/{uid}")
+    public ResponseEntity checkIsStaff(@PathVariable("uid") String uid) {
+        try {
+            boolean result = accountService.checkIsStaff(uid);
+            LOGGER.info(uid);
+            if (result) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.ok(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @GetMapping("account/get/phonenumber/{phonenumber}")
     public ResponseEntity checkDuplicatedPhonenumber(@PathVariable("phonenumber") String phonenumber) {
@@ -338,5 +375,7 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
+
+
 
 }

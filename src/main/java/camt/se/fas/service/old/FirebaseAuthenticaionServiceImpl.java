@@ -1,4 +1,4 @@
-package camt.se.fas.service;
+package camt.se.fas.service.old;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;

@@ -20,12 +20,12 @@ import java.io.InputStream;
 //@Component
 public class FirebaseConfig {
     Logger LOGGER = LoggerFactory.getLogger(FirebaseConfig.class.getName());
-    @Bean
-    public DatabaseReference firebaseDatabase(){
-        LOGGER.info("firebaseDatabase() working");
-        DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
-        return firebase;
-    }
+//    @Bean
+//    public DatabaseReference firebaseDatabase(){
+//        LOGGER.info("firebaseDatabase() working");
+//        DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
+//        return firebase;
+//    }
 
     @Value("${firebase.database-url}")
     String firebaseDatabaseUrl;

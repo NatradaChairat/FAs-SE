@@ -34,6 +34,20 @@ public class AccountServiceImpl implements AccountService {
         return accountDao.addAccountInfo(account);
     }
 
+    @Override
+    public Boolean checkIsStaff(String uid) throws ExecutionException, InterruptedException {
+        List<Account> staffAccounts = accountDao.getAccountByType("staff");
+        for(int i = 0 ; i<= (staffAccounts.size()-1) ;i++){
+            String checker =staffAccounts.get(i).getUid();
+            if(uid.equals(checker)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public Boolean checkDuplicatedStudentId(String studentId) throws ExecutionException, InterruptedException {
@@ -85,5 +99,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String getReasonByUID(String uid) throws ExecutionException, InterruptedException {
         return accountDao.getReasonByUID(uid);
+    }
+
+    @Override
+    public Boolean uploadImage(Account account) throws ExecutionException, InterruptedException {
+        return accountDao.saveImage(account);
     }
 }
