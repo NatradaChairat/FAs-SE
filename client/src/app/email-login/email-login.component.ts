@@ -23,7 +23,7 @@ export class EmailLoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  tryLogin(email: string, password: string) {
+  login(email: string, password: string) {
     this.authenticationService.login(email, password)
       .then(res => {
         const userRes = res.user;

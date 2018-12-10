@@ -329,8 +329,8 @@ public class AccountController {
 
     }
 
-    @GetMapping("account/get/{id}")
-    public ResponseEntity getAccountByUid(@PathVariable("id") String id) {
+    @GetMapping("account/get/{uid}")
+    public ResponseEntity getAccountByUID(@PathVariable("uid") String uid) {
         try {
 //            LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
 //            String decodeUID = aes.decrypt(URLEncoder.encode(id, "UTF-8"));
@@ -338,7 +338,7 @@ public class AccountController {
 //            Account account = accountService.getAccountByUID(decodeUID);
 //            LOGGER.info("GET ACCOUNT | "+ account);
 
-            Account account = accountService.getAccountByUID(id);
+            Account account = accountService.getAccountByUID(uid);
             LOGGER.info("GET ACCOUNT | "+ account);
             return ResponseEntity.ok(account);
         } catch (Exception e) {
