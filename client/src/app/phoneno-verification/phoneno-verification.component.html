@@ -29,7 +29,7 @@
 
 
         <div class="row form-group">
-          <label class="col-2 text-right">OTP </label>
+          <label class="col-2 text-right">OTP: </label>
           <div class="col-6">
             <input type="email" class="form-control" id="otp" name="otp"
                    [(ngModel)]="model" #oTP="ngModel"
@@ -46,7 +46,12 @@
           </div>
         </div>-->
 
-        <button [disabled]="!otpForm.form.valid"  type="submit" class="btn btn-primary mx-2" >submit</button>
+        <div class="row form-group">
+          <label class="col-2 text-right"> </label>
+          <div class="col-6 text-right">
+          <button [disabled]="!otpForm.form.valid"  type="submit" class="btn btn-primary mx-2" >submit</button>
+          </div>
+        </div>
 
       </form>
     </div>

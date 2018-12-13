@@ -45,7 +45,7 @@ export class EmailLoginComponent implements OnInit {
 
       }, err => {
         console.log(err);
-        if (window.confirm('Your email or password is incorrect')) {
+        if (window.confirm('Email or password is invalid')) {
           this.password = '';
         }
       });

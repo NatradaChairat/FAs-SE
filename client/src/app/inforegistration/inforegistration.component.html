@@ -17,7 +17,7 @@
                          required pattern="^[a-zA-Z]{2,32}$"/>
               </div>
               <div class="col-8 offset-2">
-                  <small *ngIf="!firstName.valid && firstName.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Firstname must be 2-32 characters,  a-Z, cannot repeat and empty</small>
+                  <small *ngIf="!firstName.valid && firstName.touched" style="color: red">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;First name must be 2-32 characters, a-z, A-Z, cannot empty</small>
               </div>
             </div>
 
@@ -30,7 +30,7 @@
                        required pattern="^[a-zA-Z]{2,32}$"/>
               </div>
               <div class="col-8 offset-2">
-                <small *ngIf="!lastName.valid && lastName.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Lastname must be 2-32 characters,  a-Z, cannot repeat and empty</small>
+                <small *ngIf="!lastName.valid && lastName.touched" style="color: red">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Last name must be 2-32 characters, a-z, A-Z, cannot empty</small>
               </div>
             </div>
 
@@ -43,7 +43,7 @@
                        required pattern="^[0-9]{9}$"/>
               </div>
               <div class="col-8 offset-2">
-                <small *ngIf="!studentID.valid && studentID.touched">&emsp;&nbsp;&nbsp;&nbsp;&emsp;Student ID must be 9 characters, only 0-9, cannot repeat and empty</small>
+                <small *ngIf="!studentID.valid && studentID.touched" style="color: red">&emsp;&nbsp;&nbsp;&nbsp;&emsp;Student ID must be 9 characters, only 0-9, cannot repeat and empty</small>
               </div>
             </div>
 
@@ -59,7 +59,7 @@
                        [(ngModel)]="account.dateofbirth" #dateOfBirth="ngModel"/>
               </div>
               <div class="col-8 offset-2">
-                <small *ngIf="!dateOfBirth.valid && dateOfBirth.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Date of Birth must be yyyy-mm-dd format and cannot empty</small>
+                <small *ngIf="!dateOfBirth.valid && dateOfBirth.touched" style="color: red">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Date of Birth year must be in CE and cannot empty.</small>
               </div>
             </div>
 
@@ -72,12 +72,12 @@
                        required pattern="^[\+]\d{2}\d{9}"/>
               </div>
               <div class="col-9 offset-2">
-                <small *ngIf="!phoneNumber.valid && phoneNumber.touched">&emsp;&nbsp;&emsp;&nbsp;Phonenumber must be only 0-9, cannot repeat and empty. eg. +66929998877</small>
+                <small *ngIf="!phoneNumber.valid && phoneNumber.touched" style="color: red">&emsp;&nbsp;&emsp;&nbsp;Phone number must be +66XXXXXXXXX format, cannot repeat and empty.</small>
               </div>
             </div>
 
             <div class="row form-group">
-              <button type="submit" class="btn btn-primary mx-2" [disabled]="!infoRegisterForm.form.valid">Next</button>
+                <button type="submit" class="btn btn-primary mx-2" [disabled]="!infoRegisterForm.form.valid">Next</button>
             </div>
 
         </form>
