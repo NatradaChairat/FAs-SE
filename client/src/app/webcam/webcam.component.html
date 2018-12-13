@@ -5,7 +5,8 @@
           (initError)="handleInitError($event)"
   ></webcam>
   <br/>
-  <button class="actionBtn" (click)="triggerSnapshot();">Take A Photo</button>
+  <p></p>
+  <button class="actionBtn btn btn-primary mx-2" (click)="triggerSnapshot();">Take A Photo</button>
   <br/>
   <!--<br/>-->
   <!--DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px">-->
@@ -15,7 +16,7 @@
   <div class="snapshot" *ngIf="webcamImage">
     <img [src]="webcamImage.imageAsDataUrl"/>
     <p> </p>
-    <button class="actionBtn" (click)="retakePhoto()" >Retake a photo</button>
+    <button class="actionBtn btn btn-primary mx-2" (click)="retakePhoto()" >Retake a photo</button>
   </div>
 </div>
 

@@ -88,4 +88,8 @@ export class TrainImageComponent implements OnInit {
       });
   }
 
+  skip(){
+    this.router.navigate(['/emailLoginSuccess']);
+  }
+
 }

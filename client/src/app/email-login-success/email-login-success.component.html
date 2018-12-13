@@ -1,5 +1,10 @@
 <div class="container">
   <div class="row justify-content-center">
-    <h2>Login Success!!</h2>
+    <h2>Welcome back {{uid}}!!</h2>
+
   </div>
+
+  <button mat-fab class="mat-fab mat-fab-bottom-right" id="fab-button" color="warn" (click)="logout()" >
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
 </div>

@@ -5,10 +5,15 @@
       <div>
         <app-webcam></app-webcam>
         <br/>
-        <button class="actionBtn" [disabled]="isProcessing" (click)="train();">Train Face</button>
+        <button class="actionBtn btn btn-primary mx-2" [disabled]="isProcessing" (click)="train();">Train Face</button>
         <br/>
       </div>
 
     </div>
+
   </div>
+
+  <button mat-fab class="mat-fab mat-fab-bottom-right" id="fab-button" color="warn" (click)="skip()" >
+    <mat-icon>arrow_forward_ios</mat-icon>
+  </button>
 </div>

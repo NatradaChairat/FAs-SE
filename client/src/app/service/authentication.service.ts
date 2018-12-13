@@ -88,7 +88,6 @@ export class AuthenticationService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('userDetails');
 
-    this
   }
 
   getCurrentUser() {
