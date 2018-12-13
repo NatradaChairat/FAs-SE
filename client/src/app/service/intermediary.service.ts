@@ -12,7 +12,17 @@ export class IntermediaryService {
 
   private uid: string;
 
+  private studentId: string;
+
   constructor() {
+  }
+
+  setStudentId(studentId: string) {
+    this.studentId = studentId;
+  }
+
+  getStudentId(): string {
+    return this.studentId;
   }
 
   setUid(uid: string) {

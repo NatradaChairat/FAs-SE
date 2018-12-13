@@ -35,16 +35,15 @@ export class FaceLoginComponent implements OnInit {
     const fullPath = 'faceLogin/' + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')
     this.firebaseService.saveImageToStorage(this.webCam.webcamImage.imageAsDataUrl, fullPath)
       .then(res => {
-        console.log(res)
         this.firebaseService.getImageUrl(fullPath)
           .then(response => {
-            console.log(response)
             imageUrl = response;
             this.authenticationService.loginWithFace(imageUrl)
-              .then(([name, confidence]) => {
+              .then(([nameRes, confidence]) => {
                 this.confidence = confidence;
-                this.studentId = name;
+                this.studentId = nameRes;
                 this.intermediaryService.setConfidence(this.confidence);
+                this.intermediaryService.setStudentId(this.studentId);
                 if (this.confidence >= 0.7) {
                   this.router.navigate(['/faceLoginSuccess']);
                 } else {

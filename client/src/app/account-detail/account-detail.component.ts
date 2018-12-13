@@ -31,6 +31,10 @@ export class AccountDetailComponent implements OnInit {
 
   imageSources;
 
+  isHasOneItem = false;
+
+  oldPersonId: string;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
@@ -48,13 +52,16 @@ export class AccountDetailComponent implements OnInit {
             const images = this.account.images;
             this.showImageUrl = images[0];
             this.imageSources = images;
-            console.log(this.account.status)
+            if (this.imageSources.length <= 1) {
+              this.isHasOneItem = true;
+            }
+            console.log(this.account.status);
             if (this.account.status === 'disapproved') {
               this.isDisapproved = true;
               this.accountDataServerService.getReasonByParam(this.refParam)
                 .subscribe((response: any) => {
                   const reasonRes: number = response;
-                  console.log(reasonRes)
+                  console.log(reasonRes);
                   if (reasonRes === 1) {
                     this.reasonText = 'Face is blur, not matched with Student card';
                   } else if (reasonRes === 2) {
@@ -70,6 +77,7 @@ export class AccountDetailComponent implements OnInit {
           }
         );
     });
+
   }
 
   openDialog(): void {
@@ -97,22 +105,33 @@ export class AccountDetailComponent implements OnInit {
   accept() {
     this.isProcessing = true;
     this.account.status = 'approved';
+    const index = this.account.images.length - 1;
     console.log(this.account);
-    this.faceRecognitionService.getPersonListInLargePersonGroup().
-      subscribe((getLIstResponse: any) => {
-        console.log(getLIstResponse);
-    });
-    this.faceRecognitionService.createPersonInLargePersonGroup(this.account.studentId)
-      .subscribe((res: any) => {
-        console.log(res);
-        const personIdRes = res.personId;
-        const length = this.account.images.length;
-        this.faceRecognitionService.addFaceInLargePersonGroup(personIdRes, this.account.images[length - 1])
+    this.isContainGroup().then(resolve => {
+      console.log(resolve);
+      if (resolve) {
+        console.log(this.account.images[index]);
+        this.faceRecognitionService.detectImage(this.account.images[index])
+          .subscribe(r => {
+            console.log(r);
+          })
+        this.faceRecognitionService.addFaceInLargePersonGroup(this.oldPersonId, this.account.images[index])
           .subscribe(persistedFaceId => {
             console.log(persistedFaceId);
-            this.faceRecognitionService.trainLargePersonGroup();
           });
-      });
+      } else {
+        this.faceRecognitionService.createPersonInLargePersonGroup(this.account.studentId)
+          .subscribe((res: any) => {
+            console.log(res);
+            const personIdRes = res.personId;
+            this.faceRecognitionService.addFaceInLargePersonGroup(personIdRes, this.account.images[index])
+              .subscribe(persistedFaceId => {
+                console.log(persistedFaceId);
+              });
+          });
+      }
+    });
+
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
         console.log(res);
@@ -130,12 +149,14 @@ export class AccountDetailComponent implements OnInit {
       }, (error: any) => {
         console.log(error);
       });
+
+    this.faceRecognitionService.trainLargePersonGroup();
   }
 
   reject() {
     this.isProcessing = true;
-    this.type = 'Selete one';
-    this.title = 'What are the reason to reject this account?'
+    this.type = 'Select one';
+    this.title = 'What are the reason to reject this account?';
     this.detail = 'test';
     this.isWarningMessage = false;
     this.isOptionMessage = true;
@@ -163,6 +184,28 @@ export class AccountDetailComponent implements OnInit {
       }, (error: any) => {
         console.log(error);
       });
+  }
+
+  isContainGroup() {
+    return new Promise<any>((resolve) => {
+      this.faceRecognitionService.getPersonListInLargePersonGroup()
+        .subscribe((getLIstResponse: any) => {
+          console.log(getLIstResponse);
+          for (let i = 0; i <= getLIstResponse.length; i++) {
+            const obj = getLIstResponse[i];
+            const name = obj.name;
+            console.log(name);
+            if (name === this.account.studentId) {
+              const personId = getLIstResponse[i].personId;
+              console.log('LISTINGROUP contain true ' + personId);
+              this.oldPersonId = personId;
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          }
+        });
+    });
   }
 
 }

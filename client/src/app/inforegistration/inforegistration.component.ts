@@ -1,11 +1,10 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {Account} from "../model/Account.model";
 import {DialogComponent} from "../dialog/dialog.component";
-import {DatePipe} from "@angular/common";
 import {IntermediaryService} from "../service/intermediary.service";
 
 
@@ -37,7 +36,7 @@ export class InforegistrationComponent implements OnInit {
     this.account = new Account();
     this.route.params.subscribe((param: Params) => {
       this.refParam = (param['param']);
-    })
+    });
   }
 
   openDialog(): void {
@@ -84,7 +83,6 @@ export class InforegistrationComponent implements OnInit {
   checkDuplicatedPhonenumber(account: Account): any {
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data => {
-        console.log(data)
         if (data) {
           this.type = 'Error';
           this.title = 'Can not submit the form.';
@@ -94,7 +92,7 @@ export class InforegistrationComponent implements OnInit {
           this.openDialog();
         } else {
           this.intermediaryService.setAccount(account);
-          this.router.navigate(['/videoRegistration/' + this.refParam]);
+          this.router.navigate(['/faceRegistration/' + this.refParam]);
         }
       });
   }

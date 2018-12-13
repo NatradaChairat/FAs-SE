@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Account} from "../model/Account.model";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
@@ -16,28 +16,32 @@ export class ConfirmedEmailComponent implements OnInit {
   account: any = {};
   isNoData: boolean;
   buttonDisabled = true;
-  refParam : string;
-  constructor( private route:ActivatedRoute, private router: Router, private accountDataServerService: AccountDataServerService) {
+  refParam: string;
+
+  constructor(private route: ActivatedRoute, private router: Router, private accountDataServerService: AccountDataServerService) {
 
   }
 
   ngOnInit() {
     this.account = new Account();
-    //console.log(window.location.href);
-    this.route.queryParams.subscribe((params: Params) =>{
-      //console.log(params['id']+ "/"+ params['time'])
-      this.refParam = params['id'];
-      this.accountDataServerService.updateStatusByParam(params['id'],params['time'])
-        .subscribe((res: any)=>{
+    this.route.queryParams.subscribe((params: Params) => {
+        this.refParam = params['id'];
+        this.accountDataServerService.updateStatusByParam(params['id'], params['time'])
+          .subscribe((res: any) => {
               this.account = res;
               this.buttonDisabled = false;
-          },err => {
-            this.isNoData = true;
-            this.reSendEmail(this.refParam);
-            //this.reSendEmail(params['key']);
-          }
-        );
-    });
+              setTimeout(() => {
+                  this.router.navigate(['/infoRegistration/' + encodeURIComponent(this.refParam)]);
+                },
+                3000);
+
+            }, err => {
+              this.isNoData = true;
+              this.reSendEmail(this.refParam);
+            }
+          );
+      }
+    );
     /*this.route.params.subscribe((params: Params) =>{
       console.log(params['key']+ "/"+ params['localtime'])
       this.accountDataServerService.updateAccountByParam(params['key'], params['localtime'])
@@ -61,20 +65,23 @@ export class ConfirmedEmailComponent implements OnInit {
 
 
   }
-  reSendEmail(key: string){
+
+  reSendEmail(key
+                :
+                string
+  ) {
     this.accountDataServerService.sendEmail(key).subscribe(
-      (account: Account)=>{
-        setTimeout(() =>
-          {
+      (account: Account) => {
+        setTimeout(() => {
             this.router.navigate(['/waiting']);
           },
           3000);
       });
   }
 
-  infoRegistration(){
+  infoRegistration() {
     /*console.log("go to register step2 "+encodeURIComponent(this.refParam));*/
-    this.router.navigate(['/infoRegistration/'+encodeURIComponent(this.refParam)]);
+    this.router.navigate(['/infoRegistration/' + encodeURIComponent(this.refParam)]);
 
   }
 }

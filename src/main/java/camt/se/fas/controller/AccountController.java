@@ -329,7 +329,7 @@ public class AccountController {
 
     @GetMapping("account/get/account/{status}")
     public ResponseEntity getAccountByStatus(@PathVariable("status") String status) {
-        LOGGER.info("GETAccount BY STATUS___________________________");
+        LOGGER.info("GETAccount BY STATUS___________________________ "+ status);
         try {
             List<Account> accounts = accountService.getAccountByStatus(status);
             return ResponseEntity.ok(accounts);
@@ -382,9 +382,8 @@ public class AccountController {
         LOGGER.info("GET REason___________________________");
         try{
             LOGGER.info("Encoded Key: " + id);
-            String decodeUID = aes.decrypt(id);
-            LOGGER.info("Decoded Key: " + decodeUID);
-            String result = accountService.getReasonByUID(decodeUID);
+
+            String result = accountService.getReasonByUID(id);
             if(!result.isEmpty()){
                 return ResponseEntity.ok(result);
             }else {

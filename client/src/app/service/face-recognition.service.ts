@@ -46,7 +46,7 @@ export class FaceRecognitionService {
     const headers = this.getHeaders(this.subscriptionKey);
     const params = this.getParams();
     return this.httpClient.post<FaceRecognitionResponse>(
-      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/train/',
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/train',
       '',
       {
         params,

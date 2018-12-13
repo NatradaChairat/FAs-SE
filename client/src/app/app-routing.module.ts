@@ -23,7 +23,7 @@ const appRoutes: Routes = [
   {path: 'homepage', component: HomepageComponent},
   {path: 'emailRegistration', component: EmailRegistrationComponent},
   {path: 'infoRegistration/:param', component: InforegistrationComponent},
-  {path: 'videoRegistration/:param', component: FaceregistrationComponent},
+  {path: 'faceRegistration/:param', component: FaceregistrationComponent},
   {path: 'phonenoVerification/:param', component: PhonenoVerificationComponent},
   {path: 'waiting', component: WaitComponent},
   /*{path: 'confirmedemail/:email/:username/:localtime', component: ConfirmedEmailComponent},*/

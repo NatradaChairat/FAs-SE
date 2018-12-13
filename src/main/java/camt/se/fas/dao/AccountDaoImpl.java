@@ -59,7 +59,6 @@ public class AccountDaoImpl implements AccountDao {
         if (account.getRandomText() != null) {
             accountTableMap.put("randomtext", account.getRandomText());
         }
-
         if (account.getImages().size() != 0) {
             ArrayList<Object> arrayImages = new ArrayList<>();
             Collections.addAll(arrayImages, account.getImages().get(0));

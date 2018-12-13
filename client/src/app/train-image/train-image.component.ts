@@ -57,7 +57,7 @@ export class TrainImageComponent implements OnInit {
               .subscribe((getAccountRes: Account) => {
                 console.log('GetAccount Res: ');
                 console.log(getAccountRes);
-                if (getAccountRes.status !== 'disapproved') {
+                if (getAccountRes.status === 'disapproved') {
                   console.log('isRejectedAccount');
                   this.accountDataServerService.uploadImage(this.account)
                     .subscribe(uploadResponse => {

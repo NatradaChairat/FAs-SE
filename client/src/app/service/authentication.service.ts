@@ -22,10 +22,8 @@ export class AuthenticationService {
         .subscribe((detectRes: any) => {
           const res: any = detectRes[0];
           const faceId = res.faceId;
-          console.log(faceId);
           this.faceRecognitionService.identifyImages(faceId)
             .subscribe((identifyRes) => {
-              console.log(identifyRes);
               try {
                 const identifyResponse: any = identifyRes[0];
                 const candidatesResponse: any = identifyResponse.candidates;
@@ -35,7 +33,6 @@ export class AuthenticationService {
                   this.faceRecognitionService.getPersonInLargePersonGroup(personId)
                     .subscribe((getPersonRes) => {
                       const nameRes: any =  getPersonRes.name;
-                      console.log(nameRes);
                       resolve([nameRes, confidence]);
                     });
                 }
