@@ -5,6 +5,7 @@ import {FirebaseService} from '../service/firebase.service';
 import {formatDate} from "@angular/common";
 import {Router} from "@angular/router";
 import {IntermediaryService} from "../service/intermediary.service";
+import {AccountDataServerService} from "../service/account-data-server.service";
 
 @Component({
   selector: 'app-face-login',
@@ -19,12 +20,13 @@ export class FaceLoginComponent implements OnInit {
   today = new Date();
 
   confidence = 0;
-  studentId = '';
+  uid = '';
 
   isProcessing = false;
 
   constructor(private firebaseService: FirebaseService,
               private authenticationService: AuthenticationService,
+              private accountDataServerService: AccountDataServerService,
               private intermediaryService: IntermediaryService,
               private router: Router) {
   }
@@ -44,9 +46,17 @@ export class FaceLoginComponent implements OnInit {
             this.authenticationService.loginWithFace(imageUrl)
               .then(([nameRes, confidence]) => {
                 this.confidence = confidence;
-                this.studentId = nameRes;
+                this.uid = nameRes;
+                this.accountDataServerService.checkIsStaff(this.uid)
+                  .subscribe(isStaff => {
+                    console.log(isStaff);
+                    if (isStaff) {
+                      this.router.navigate(['/staffDashboard']);
+                    }
+                  });
+
                 this.intermediaryService.setConfidence(this.confidence);
-                this.intermediaryService.setStudentId(this.studentId);
+                this.intermediaryService.setStudentId(this.uid);
                 if (this.confidence >= 0.7) {
                   this.router.navigate(['/faceLoginSuccess']);
                 } else {

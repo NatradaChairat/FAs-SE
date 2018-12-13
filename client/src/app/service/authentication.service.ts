@@ -24,6 +24,7 @@ export class AuthenticationService {
           const faceId = res.faceId;
           this.faceRecognitionService.identifyImages(faceId)
             .subscribe((identifyRes) => {
+              console.log(identifyRes);
               try {
                 const identifyResponse: any = identifyRes[0];
                 const candidatesResponse: any = identifyResponse.candidates;
