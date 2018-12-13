@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {Router} from "@angular/router";
 import {Account} from "../model/Account.model";
+import {AuthenticationService} from "../service/authentication.service";
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -14,7 +15,9 @@ export class StaffDashboardComponent implements OnInit {
   disapprovedAccounts: Account[];
   trainingAccounts: Account[];
 
-  constructor(private accountDataServerService: AccountDataServerService, private router: Router) {
+  constructor(private accountDataServerService: AccountDataServerService,
+              private authenticitionService: AuthenticationService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -43,6 +46,11 @@ export class StaffDashboardComponent implements OnInit {
 
   showDetail(url: String) {
     this.router.navigate(['detail/' + url]);
+  }
+
+  logout(){
+    this.authenticitionService.logout();
+    this.router.navigate(['/homepage']);
   }
 
 }

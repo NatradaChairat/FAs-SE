@@ -13,8 +13,8 @@ import {EmailRegistrationComponent} from './emailregistration/emailregistration.
 import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
-  MatAutocompleteModule,
-  MatDialogModule,
+  MatAutocompleteModule, MatButtonModule,
+  MatDialogModule, MatIconModule,
   MatNativeDateModule, MatProgressBarModule,
   MatRadioModule
 } from "@angular/material";
@@ -89,6 +89,8 @@ import {SlideshowModule} from "ng-simple-slideshow";
     MatRadioModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MatButtonModule,
+    MatIconModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
     VgCoreModule,

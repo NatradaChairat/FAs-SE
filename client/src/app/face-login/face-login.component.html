@@ -5,9 +5,18 @@
       <div>
         <app-webcam></app-webcam>
         <br/>
-        <button class="actionBtn" (click)="login();">Login with Face</button>
+        <button class="actionBtn" [disabled]="isProcessing" (click)="login();">Login with Face</button>
         <br/>
       </div>
+
+    </div>
+
+    <div style="z-index:5; position : fixed;display : flex; align-self : flex-end;bottom : 10%; margin-bottom : 68px;">
+
+      <!--<a md-mini-fab routerLink="." style="margin-right : 14px;" (click)=-->
+        <!--"tShowAdu()">-->
+        <!--<md-icon>add</md-icon>-->
+      <!--</a>-->
 
     </div>
   </div>
