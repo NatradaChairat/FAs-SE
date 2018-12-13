@@ -243,8 +243,8 @@ public class AccountController {
             LOGGER.info("Return " + email);
             LocalDateTime _localtime = LocalDateTime.parse(decodeTime);
             LOGGER.info("_localtime " + _localtime);
-            System.out.println("Result: " + LocalDateTime.now().isBefore(_localtime.plusDays(1)) + " Origin: " + _localtime + " Now: " + LocalDateTime.now() + " Deadline: " + _localtime.plusDays(1));
-            if (LocalDateTime.now().isBefore(_localtime.plusDays(1))) {
+            System.out.println("Result: " + LocalDateTime.now().isBefore(_localtime.plusDays(2)) + " Origin: " + _localtime + " Now: " + LocalDateTime.now() + " Deadline: " + _localtime.plusDays(2));
+            if (LocalDateTime.now().isBefore(_localtime.plusDays(2))) {
                 Account account = new Account();
                 account.setUid(decodeKey);
                 account.setEmail(email);
