@@ -44,6 +44,7 @@ import {AccountDetailDialogComponent} from './account-detail-dialog/account-deta
 import {SubmitSuccessComponent} from './submit-success/submit-success.component';
 import {FaceLoginSuccessComponent} from './face-login-success/face-login-success.component';
 import {EmailLoginSuccessComponent} from './email-login-success/email-login-success.component';
+import {IntermediaryService} from "./service/intermediary.service";
 
 
 @NgModule({
@@ -98,7 +99,8 @@ import {EmailLoginSuccessComponent} from './email-login-success/email-login-succ
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
     AuthenticationService,
     FirebaseService,
-    FaceRecognitionService],
+    FaceRecognitionService,
+    IntermediaryService],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA],
 })

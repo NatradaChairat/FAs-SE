@@ -9,67 +9,70 @@
         <p></p>
         <form #infoRegisterForm="ngForm" (ngSubmit)="onSubmit(account)">
             <div class="row form-group" >
-              <label class="col-2 text-right">First Name </label>
-              <div class="col-6">
+              <label class="col-3 text-right">First Name </label>
+              <div class="col-7">
                 <input type="text" class="form-control" id="firstname"
                          placeholder="eg. Stan" name="firstname"
                          [(ngModel)]="account.firstname" #firstName="ngModel"
                          required pattern="^[a-zA-Z]{2,32}$"/>
               </div>
-              <div class="col-4">
-                  <div *ngIf="!firstName.valid && firstName.touched">Firstname must be 2-32 characters,  a-Z, cannot repeat and empty</div>
+              <div class="col-8 offset-2">
+                  <small *ngIf="!firstName.valid && firstName.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Firstname must be 2-32 characters,  a-Z, cannot repeat and empty</small>
               </div>
             </div>
 
             <div class="row form-group" >
-              <label class="col-2 text-right">Last Name </label>
-              <div class="col-6">
+              <label class="col-3 text-right">Last Name </label>
+              <div class="col-7">
                 <input type="text" class="form-control" id="lastname"
                        placeholder="eg. Smith" name="lastname"
                        [(ngModel)]="account.lastname" #lastName="ngModel"
                        required pattern="^[a-zA-Z]{2,32}$"/>
               </div>
-              <div class="col-4">
-                <div *ngIf="!lastName.valid && lastName.touched">Lastname must be 2-32 characters,  a-Z, cannot repeat and empty</div>
+              <div class="col-8 offset-2">
+                <small *ngIf="!lastName.valid && lastName.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Lastname must be 2-32 characters,  a-Z, cannot repeat and empty</small>
               </div>
             </div>
 
             <div class="row form-group" >
-              <label class="col-2 text-right">Student ID </label>
-              <div class="col-6">
+              <label class="col-3 text-right">Student ID </label>
+              <div class="col-7">
                 <input type="text" class="form-control" id="studentId"
                        placeholder="eg. 582115000" name="studentId"
                        [(ngModel)]="account.studentId" #studentID="ngModel"
                        required pattern="^[0-9]{9}$"/>
               </div>
-              <div class="col-4">
-                <div *ngIf="!studentID.valid && studentID.touched">Student ID must be 9 characters, only 0-9, cannot repeat and empty</div>
+              <div class="col-8 offset-2">
+                <small *ngIf="!studentID.valid && studentID.touched">&emsp;&nbsp;&nbsp;&nbsp;&emsp;Student ID must be 9 characters, only 0-9, cannot repeat and empty</small>
               </div>
             </div>
 
             <div class="row form-group" >
-              <label class="col-2 text-right">Date of birth</label>
-              <div class="col-6">
-                <input type="text" class="form-control" id="dateofbirth"
-                       name="dateofbirth" placeholder="eg. 1997-12-31"
-                       [(ngModel)]="account.dateofbirth" #dateOfBirth="ngModel"
-                       required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"/>
+              <label class="col-3 text-right">Date of birth</label>
+              <div class="col-7">
+                <!--<input type="text" class="form-control" id="dateofbirth"-->
+                       <!--name="dateofbirth" placeholder="eg. 1997-12-31"-->
+                       <!--[(ngModel)]="account.dateofbirth" #dateOfBirth="ngModel"-->
+                       <!--required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"/>-->
+                <input type="date" class="form-control" id="dateofbirth"
+                       name="dateofbirth"
+                       [(ngModel)]="account.dateofbirth" #dateOfBirth="ngModel"/>
               </div>
-              <div class="col-4">
-                <div *ngIf="!dateOfBirth.valid && dateOfBirth.touched">Date of Birth must be yyyy-mm-dd format and cannot empty</div>
+              <div class="col-8 offset-2">
+                <small *ngIf="!dateOfBirth.valid && dateOfBirth.touched">&emsp;&nbsp;&nbsp;&nbsp;&nbsp;Date of Birth must be yyyy-mm-dd format and cannot empty</small>
               </div>
             </div>
 
             <div class="row form-group" >
-              <label class="col-2 text-right">Phone number </label>
-              <div class="col-6">
+              <label class="col-3 text-right">Phone number </label>
+              <div class="col-7">
                 <input type="text" class="form-control" id="phonenumber"
                        placeholder="eg. +66929998877" name="phonenumber"
                        [(ngModel)]="account.phonenumber" #phoneNumber="ngModel"
                        required pattern="^[\+]\d{2}\d{9}"/>
               </div>
-              <div class="col-4">
-                <div *ngIf="!phoneNumber.valid && phoneNumber.touched">Phonenumber must be only 0-9, cannot repeat and empty. eg. +66929998877</div>
+              <div class="col-9 offset-2">
+                <small *ngIf="!phoneNumber.valid && phoneNumber.touched">&emsp;&nbsp;&emsp;&nbsp;Phonenumber must be only 0-9, cannot repeat and empty. eg. +66929998877</small>
               </div>
             </div>
 

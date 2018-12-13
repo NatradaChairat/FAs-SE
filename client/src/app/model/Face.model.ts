@@ -1,4 +1,5 @@
 interface FaceRecognitionResponse {
+  name: string;
   faceId: string;
   faceRectangle: FaceRectangle;
   faceAttributes: FaceAttributes;

@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class SMSServiceImpl implements SMSService {
-    private final String NEXMO_API_KEY = "d6a28091";
-    private final String NEXMO_API_SECRET ="ghkRzSErm90RruNd";
+    private final String NEXMO_API_KEY = "000178dd";
+    private final String NEXMO_API_SECRET ="ErJq8VULiJ4qYutm";
     @Override
     public Boolean sendSMS(String phonenumber, String refCOde, int otp) throws IOException, NexmoClientException {
         AuthMethod auth = new TokenAuthMethod(NEXMO_API_KEY, NEXMO_API_SECRET);

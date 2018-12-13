@@ -5,19 +5,89 @@ import {environment} from "../../environments/environment";
 @Injectable()
 export class FaceRecognitionService {
 
-  subscriptionKey = 'd8572e76b66046b9ac4113d5c94f6b71';
+  subscriptionKey = '8f046261e7b14328b440b5729fce01bb';
 
   constructor(private httpClient: HttpClient) {
   }
 
-  scanImage(imageUrl: string) {
+  // return personId
+  createPersonInLargePersonGroup(personName: string) {
     const headers = this.getHeaders(this.subscriptionKey);
     const params = this.getParams();
     return this.httpClient.post<FaceRecognitionResponse>(
-      environment.faceAPIEndPoint,
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/persons',
+      '{"name": "' + personName + '"}',
+      {
+        params,
+        headers
+      }
+    );
+  }
+
+  // return persistedFaceId
+  addFaceInLargePersonGroup(personId: string, imageUrl: string) {
+    const headers = this.getHeaders(this.subscriptionKey);
+    const params = this.getParams();
+    return this.httpClient.post<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/persons/' + personId + '/persistedfaces',
+      '{"url": "' + imageUrl + '"}',
+      {
+        params,
+        headers
+      }
+    );
+  }
+
+  trainLargePersonGroup() {
+    const headers = this.getHeaders(this.subscriptionKey);
+    const params = this.getParams();
+    return this.httpClient.post<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/train/',
+      '',
+      {
+        params,
+        headers
+      }
+    );
+  }
+
+  detectImage(imageUrl: string) {
+    const headers = this.getHeaders(this.subscriptionKey);
+    const params = this.getParams();
+    return this.httpClient.post<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'detect',
       '{"url": ' + '"' + imageUrl + '"}',
       {
         params,
+        headers
+      }
+    );
+  }
+
+  // return personId candidates that confidence no. under 0.7
+  // use personId to find name
+  identifyImages(faceId: string) {
+    const headers = this.getHeaders(this.subscriptionKey);
+    const params = this.getParams();
+    return this.httpClient.post<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'identify',
+      '{"largePersonGroupId": "sefasproject",' +
+      '"faceIds": ["' + faceId + '"],' +
+      '"maxNumOfCandidatesReturned": 1,' +
+      '"confidenceThreshold": 0.7 }',
+      {
+        params,
+        headers
+      }
+    );
+  }
+
+  // return personId, persistedFaceIds, name, userData
+  getPersonInLargePersonGroup(personId: string) {
+    const headers = this.getHeaders(this.subscriptionKey);
+    return this.httpClient.get<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/persons/' + personId,
+      {
         headers
       }
     );

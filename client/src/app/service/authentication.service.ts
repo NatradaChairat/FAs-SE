@@ -9,17 +9,47 @@ import {FaceRecognitionService} from "./face-recognition.service";
 export class AuthenticationService {
   private authUrl = 'http://localhost:8080/auth';
 
+  detect: any = {}
+
   constructor(private angularFireAuthen: AngularFireAuth,
               private http: HttpClient,
-              private faceRegnitionService: FaceRecognitionService) {
+              private faceRecognitionService: FaceRecognitionService) {
 
   }
 
   loginWithFace(imageUrl: string) {
-    // return this.http.post(`${this.authUrl}` + `/faceLogin`, imageUrl);
-    console.log('loginWithFace');
-    return this.faceRegnitionService.scanImage(imageUrl);
-
+    return new Promise<any>((resolve, reject) => {
+      this.faceRecognitionService.detectImage(imageUrl)
+        .subscribe((detectRes: any) => {
+          const res: any = detectRes[0];
+          const faceId = res.faceId;
+          console.log(faceId);
+          this.faceRecognitionService.identifyImages(faceId)
+            .subscribe((identifyRes) => {
+              console.log(identifyRes);
+              try {
+                const identifyResponse: any = identifyRes[0];
+                const candidatesResponse: any = identifyResponse.candidates;
+                const confidence = candidatesResponse[0].confidence;
+                const personId = candidatesResponse[0].personId;
+                if (confidence >= 0.7) {
+                  this.faceRecognitionService.getPersonInLargePersonGroup(personId)
+                    .subscribe((getPersonRes) => {
+                      const nameRes: any =  getPersonRes.name;
+                      console.log(nameRes);
+                      resolve([nameRes, confidence]);
+                    });
+                }
+              } catch (e) {
+                resolve(0);
+              }
+            }, (error: any) => {
+              reject(error);
+            });
+        }, (error: any) => {
+          reject(error);
+        });
+    });
   }
 
   login(email: string, password: string) {
@@ -52,8 +82,8 @@ export class AuthenticationService {
   }
 
   getToken(): string {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    var token = currentUser && currentUser.token;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const token = currentUser && currentUser.token;
     return token ? token : '';
   }
 
@@ -64,7 +94,7 @@ export class AuthenticationService {
   }
 
   getCurrentUser() {
-    let details = localStorage.getItem('userDetails');
+    const details = localStorage.getItem('userDetails');
     if (details === null || details.length === 0) {
       return null;
     }
@@ -72,12 +102,12 @@ export class AuthenticationService {
   }
 
   hasRole(role: String): boolean {
-    let user: any = this.getCurrentUser();
+    const user: any = this.getCurrentUser();
     if (user) {
-      let roleList: string[] = role.split(',');
+      const roleList: string[] = role.split(',');
       for (let j = 0; j < roleList.length; j++) {
-        let authList = user.authorities;
-        let userRole = 'ROLE_' + roleList[j].trim().toUpperCase();
+        const authList = user.authorities;
+        const userRole = 'ROLE_' + roleList[j].trim().toUpperCase();
         for (let i = 0; i < authList.length; i++) {
           if (authList[i].name === userRole) {
             return true;

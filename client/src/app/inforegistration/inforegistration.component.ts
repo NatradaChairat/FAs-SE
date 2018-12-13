@@ -1,10 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Params, Router, RouterEvent} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {Account} from "../model/Account.model";
 import {DialogComponent} from "../dialog/dialog.component";
+import {DatePipe} from "@angular/common";
+import {IntermediaryService} from "../service/intermediary.service";
 
 
 @Component({
@@ -23,12 +25,11 @@ export class InforegistrationComponent implements OnInit {
   isWarningMessage: boolean;
   isOptionMessage: boolean;
 
-  @Input() childAccount: Account;
-
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private router: Router,
               private accountDataServerService: AccountDataServerService,
+              private intermediaryService: IntermediaryService,
               private dialog: MatDialog) {
   }
 
@@ -44,11 +45,13 @@ export class InforegistrationComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: this.type,
-            title: this.title,
-            detail: this.detail,
-            isWarningMessage: this.isWarningMessage,
-            isOptionMessage: this.isOptionMessage}
+      data: {
+        type: this.type,
+        title: this.title,
+        detail: this.detail,
+        isWarningMessage: this.isWarningMessage,
+        isOptionMessage: this.isOptionMessage
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -57,8 +60,6 @@ export class InforegistrationComponent implements OnInit {
   }
 
   onSubmit(account: Account) {
-    //console.log(account);
-    //checkStudentIdIsRepeat
     /*if(this.checkDuplicatedStudentId(account)){
       console.log("Duplicated StudentID")
     }else{
@@ -95,6 +96,7 @@ export class InforegistrationComponent implements OnInit {
         }
       });*/
 
+    console.log(account.dateofbirth);
     this.checkDuplicatedStudentId(account);
 
   }
@@ -102,9 +104,7 @@ export class InforegistrationComponent implements OnInit {
   checkDuplicatedStudentId(account: Account): any {
     this.accountDataServerService.checkDuplicatedStudentId(account.studentId)
       .subscribe(data => {
-        //console.log(data);
         if (data) {
-          //return true;
           this.type = "Error";
           this.title = "Can not submit the form."
           this.detail = "Student ID is duplicated."
@@ -112,7 +112,6 @@ export class InforegistrationComponent implements OnInit {
           this.isOptionMessage = false;
           this.openDialog();
         } else {
-          //return false;
           this.checkDuplicatedPhonenumber(account);
         }
       });
@@ -121,13 +120,10 @@ export class InforegistrationComponent implements OnInit {
 
   checkDuplicatedPhonenumber(account: Account): any {
     //save account to @Input
-    this.childAccount = account;
-
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data => {
-        //console.log(data);
+        console.log(data)
         if (data) {
-          //return true;
           this.type = "Error";
           this.title = "Can not submit the form."
           this.detail = "Phone number is duplicated."
@@ -135,23 +131,23 @@ export class InforegistrationComponent implements OnInit {
           this.isOptionMessage = false;
           this.openDialog();
         } else {
-          //return false;
-          this.accountDataServerService.sendPersonalAccount(account, this.refParam)
-            .subscribe((res: any) => {
-              //console.log(res);
-              if (res) {
-                setTimeout(() => {
-                  this.router.navigate(['/videoRegistration/' + this.refParam]);
-                }, 1000);
-              }
-            }, error1 => {
-              this.type = "Error";
-              this.title = "Can not submit the form."
-              this.detail = "Please try submit again."
-              this.isWarningMessage = true;
-              this.isOptionMessage = false;
-              this.openDialog();
-            });
+          this.intermediaryService.setAccount(account);
+          this.router.navigate(['/videoRegistration/' + this.refParam]);
+          // this.accountDataServerService.sendPersonalAccount(account, this.refParam)
+          //   .subscribe(res => {
+          //     if (res) {
+          //       setTimeout(() => {
+          //         this.router.navigate(['/videoRegistration/' + this.refParam]);
+          //       }, 1000);
+          //     }
+          //   }, error1 => {
+          //     this.type = "Error";
+          //     this.title = "Can not submit the form."
+          //     this.detail = "Please try submit again."
+          //     this.isWarningMessage = true;
+          //     this.isOptionMessage = false;
+          //     this.openDialog();
+          //   });
         }
       });
   }

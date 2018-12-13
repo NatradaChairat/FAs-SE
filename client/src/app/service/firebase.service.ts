@@ -1,13 +1,14 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import * as firebase from 'firebase/app';
 import '@firebase/storage';
-import {formatDate} from "@angular/common";
-import {reject} from "q";
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class FirebaseService {
 
-  constructor() { }
+  constructor() {
+    firebase.initializeApp(environment.firebase);
+  }
 
   saveImageToStorage(imageUpload: string, fullPath: string) {
     return new Promise<any>((resolve, reject) => {
@@ -20,11 +21,11 @@ export class FirebaseService {
   }
 
   getImageUrl(childPath: string) {
-    return new Promise<any> ((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       firebase.storage().ref().child(childPath).getDownloadURL()
-      .then(res => {
-        resolve(res);
-      }, err => reject(err));
+        .then(res => {
+          resolve(res);
+        }, err => reject(err));
     });
   }
 
