@@ -7,7 +7,9 @@ import {environment} from '../../environments/environment';
 export class FirebaseService {
 
   constructor() {
-    firebase.initializeApp(environment.firebase);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(environment.firebase);
+    }
   }
 
   saveImageToStorage(imageUpload: string, fullPath: string) {

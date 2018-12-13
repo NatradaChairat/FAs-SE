@@ -27,7 +27,7 @@ export class EmailRegistrationComponent implements OnInit {
   isWarningMessage: boolean;
   isOptionMessage: boolean;
 
-  confirmPass: string = '';
+  confirmPass = '';
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
@@ -64,9 +64,9 @@ export class EmailRegistrationComponent implements OnInit {
           this.sendEmail(res.body);
         }, (error: any) => {
           if (error.status === 400) {
-            this.type = "Error";
-            this.title = "Can not register the account to the system"
-            this.detail = "Email is duplicated."
+            this.type = 'Error';
+            this.title = 'Can not register the account to the system';
+            this.detail = 'Email is duplicated.';
             this.isWarningMessage = true;
             this.isOptionMessage = false;
             this.openDialog();
@@ -75,9 +75,9 @@ export class EmailRegistrationComponent implements OnInit {
           }
         });
     } else {
-      this.type = "Error";
-      this.title = "Can not register the account to the system";
-      this.detail = "Confirm-Password not matching with Password";
+      this.type = 'Error';
+      this.title = 'Can not register the account to the system';
+      this.detail = 'Confirm-Password not matching with Password';
       this.isWarningMessage = true;
       this.isOptionMessage = false;
       this.openDialog();
@@ -184,5 +184,5 @@ export class EmailRegistrationComponent implements OnInit {
     // return an observable with a user-facing error message
     return throwError(
       'Something bad happened; please try again later.');
-  };
+  }
 }

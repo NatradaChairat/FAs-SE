@@ -15,7 +15,7 @@ import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MatAutocompleteModule,
   MatDialogModule,
-  MatNativeDateModule,
+  MatNativeDateModule, MatProgressBarModule,
   MatRadioModule
 } from "@angular/material";
 import {DialogComponent} from './dialog/dialog.component';
@@ -40,11 +40,13 @@ import {WebcamModule} from "ngx-webcam";
 import {FirebaseService} from "./service/firebase.service";
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {FaceRecognitionService} from "./service/face-recognition.service";
-import {AccountDetailDialogComponent} from './account-detail-dialog/account-detail-dialog.component';
 import {SubmitSuccessComponent} from './submit-success/submit-success.component';
 import {FaceLoginSuccessComponent} from './face-login-success/face-login-success.component';
 import {EmailLoginSuccessComponent} from './email-login-success/email-login-success.component';
 import {IntermediaryService} from "./service/intermediary.service";
+import { TrainImageComponent } from './train-image/train-image.component';
+import { OtpComponent } from './otp/otp.component';
+import {SlideshowModule} from "ng-simple-slideshow";
 
 
 @NgModule({
@@ -65,13 +67,15 @@ import {IntermediaryService} from "./service/intermediary.service";
     StaffDashboardComponent,
     AccountDetailComponent,
     FileSelectDirective,
-    AccountDetailDialogComponent,
     SubmitSuccessComponent,
     FaceLoginSuccessComponent,
-    EmailLoginSuccessComponent
+    EmailLoginSuccessComponent,
+    TrainImageComponent,
+    OtpComponent
   ],
   entryComponents: [
-    DialogComponent
+    DialogComponent,
+    FaceLoginSuccessComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +88,7 @@ import {IntermediaryService} from "./service/intermediary.service";
     MatAutocompleteModule,
     MatRadioModule,
     MatNativeDateModule,
+    MatProgressBarModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
     VgCoreModule,
@@ -93,7 +98,8 @@ import {IntermediaryService} from "./service/intermediary.service";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireStorageModule,
-    WebcamModule
+    WebcamModule,
+    SlideshowModule
   ],
   providers: [AccountDataServerService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

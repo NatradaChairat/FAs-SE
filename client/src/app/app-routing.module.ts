@@ -15,6 +15,8 @@ import {AccountDetailComponent} from "./account-detail/account-detail.component"
 import {FaceLoginSuccessComponent} from "./face-login-success/face-login-success.component";
 import {EmailLoginSuccessComponent} from "./email-login-success/email-login-success.component";
 import {SubmitSuccessComponent} from "./submit-success/submit-success.component";
+import {TrainImageComponent} from "./train-image/train-image.component";
+import {OtpComponent} from "./otp/otp.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/homepage', pathMatch: 'full'},
@@ -33,6 +35,8 @@ const appRoutes: Routes = [
   {path: 'submitSuccess', component: SubmitSuccessComponent},
   {path: 'staffDashboard', component: StaffDashboardComponent},
   {path: 'detail/:key', component: AccountDetailComponent},
+  {path: 'oneTimePassword', component: OtpComponent},
+  {path: 'trainFace/:param', component: TrainImageComponent},
   {path: '**', component: FilenotfoundComponent}
 ];
 

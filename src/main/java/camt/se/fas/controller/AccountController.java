@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController("/account")
 public class AccountController {
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
@@ -64,6 +66,7 @@ public class AccountController {
 
     @PostMapping("/account/update")//
     public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
+        LOGGER.info("Update ");
         LOGGER.info(account.toString());
         String encryptUID = account.getUid();
         try {
@@ -85,26 +88,41 @@ public class AccountController {
         }
     }
 
-    @PostMapping(value = "/account/upload/image")
-    public ResponseEntity uploadImage(@RequestParam("imageUrl") String imageUrl) {
-        if (imageUrl.isEmpty()) {
+    @PostMapping("/account/upload/image")
+    public ResponseEntity uploadImage(@RequestBody Account account) {
+        LOGGER.info(account.toString());
+        try {
+            String encryptUID = URLEncoder.encode(account.getUid(), "UTF-8");
+            String uid = aes.decrypt(encryptUID);
+            LOGGER.info("Upload| "+uid);
+            if(uid == null){
+                Boolean result = accountService.uploadImage(account);
+                return ResponseEntity.ok(result);
+            }else{
+                LOGGER.info("update " + uid);
+                account.setUid(uid);
+                Boolean result = accountService.uploadImage(account);
+                return ResponseEntity.ok(result);
+            }
+        } catch (ExecutionException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            //accountService.
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(null);
+
     }
 
 
-    @GetMapping("account/send/phonenumber/{param}/{phonenumber}")
-    public ResponseEntity sendPhonenumber(@PathVariable("param") String param, @PathVariable("phonenumber") String phonenumber) {
+    @GetMapping("account/send/phonenumber/{phonenumber}")
+    public ResponseEntity sendPhonenumber(@PathVariable("phonenumber") String phonenumber) {
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
-        LOGGER.info("UID " + param);
         try {
             /*AES aes = new AES();*/
-            String uid = aes.decrypt(param);
-            LOGGER.info("UID " + uid);
             smsService.sendSMS(phonenumber, refCode, otp);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("otp", String.valueOf(otp));
@@ -120,7 +138,6 @@ public class AccountController {
     @GetMapping("account/send/email/{param}")
     public ResponseEntity sendEmail(@PathVariable("param") String param) {
         try {
-            /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
@@ -137,15 +154,37 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account/send/email/{param}/{result}")
-    public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param, @PathVariable("result") String result) {
+    @GetMapping("account/send/email/success/{param}")
+    public ResponseEntity sendSuccessEmail(@PathVariable("param") String param) {
         try {
-            /*AES aes = new AES();*/
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(uid);
             LOGGER.info("Email " + email);
-            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result);
+            boolean result = emailService.sendSuccessEmail(email);
+            if (result) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+    }
+
+    @GetMapping("account/send/email/{param}/{result}/{reason}")
+    public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param,
+                                                         @PathVariable("result") String result,
+                                                         @PathVariable("reason") String reason) {
+        try {
+            /*AES aes = new AES();*/
+            String uid = aes.decrypt(param);
+            LOGGER.info("UID " + uid);
+            String email = accountService.getEmailByUID(param);
+            LOGGER.info("Email " + email);
+            LOGGER.info("SEND MAIL| "+reason);
+            boolean resultSending = emailService.sendResultAuthenProcessEmail(email, result, reason, param);
             if (resultSending) {
                 return ResponseEntity.ok(true);
             } else {
@@ -232,6 +271,21 @@ public class AccountController {
         }
     }
 
+    @GetMapping("account/isStaff/{uid}")
+    public ResponseEntity checkIsStaff(@PathVariable("uid") String uid) {
+        try {
+            boolean result = accountService.checkIsStaff(uid);
+            LOGGER.info(uid);
+            if (result) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.ok(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @GetMapping("account/get/phonenumber/{phonenumber}")
     public ResponseEntity checkDuplicatedPhonenumber(@PathVariable("phonenumber") String phonenumber) {
@@ -275,13 +329,17 @@ public class AccountController {
 
     }
 
-    @GetMapping("account/get/{id}")
-    public ResponseEntity getAccountByUid(@PathVariable("id") String id) {
+    @GetMapping("account/get/{uid}")
+    public ResponseEntity getAccountByUID(@PathVariable("uid") String uid) {
         try {
-            LOGGER.info("Encoded Key: " + id);
-            String decodeUID = aes.decrypt(id);
-            LOGGER.info("Decoded Key: " + decodeUID);
-            Account account = accountService.getAccountByUID(decodeUID);
+//            LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
+//            String decodeUID = aes.decrypt(URLEncoder.encode(id, "UTF-8"));
+//            LOGGER.info("Decoded Key: " + decodeUID);
+//            Account account = accountService.getAccountByUID(decodeUID);
+//            LOGGER.info("GET ACCOUNT | "+ account);
+
+            Account account = accountService.getAccountByUID(uid);
+            LOGGER.info("GET ACCOUNT | "+ account);
             return ResponseEntity.ok(account);
         } catch (Exception e) {
             e.printStackTrace();
@@ -298,5 +356,44 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
+
+    @PostMapping("account/reason/{id}/{reason}")
+    public ResponseEntity uploadReason(@PathVariable("id") String id,
+                                       @PathVariable("reason") String reason){
+        try{
+            LOGGER.info("Encoded Key: " + id);
+            String decodeUID = aes.decrypt(id);
+            LOGGER.info("Decoded Key: " + decodeUID);
+            boolean result = accountService.saveReasonByUID(reason, decodeUID);
+            if(result){
+                return ResponseEntity.ok(true);
+            }else {
+                return ResponseEntity.ok(false);
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    @GetMapping("account/reason/{id}")
+    public ResponseEntity getReason(@PathVariable("id") String id){
+        try{
+            LOGGER.info("Encoded Key: " + id);
+            String decodeUID = aes.decrypt(id);
+            LOGGER.info("Decoded Key: " + decodeUID);
+            String result = accountService.getReasonByUID(decodeUID);
+            if(!result.isEmpty()){
+                return ResponseEntity.ok(result);
+            }else {
+                return ResponseEntity.ok(null);
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+
 
 }

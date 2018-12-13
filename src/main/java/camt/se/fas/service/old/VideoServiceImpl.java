@@ -1,8 +1,5 @@
-package camt.se.fas.service;
+package camt.se.fas.service.old;
 
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.firebase.cloud.StorageClient;
 import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;

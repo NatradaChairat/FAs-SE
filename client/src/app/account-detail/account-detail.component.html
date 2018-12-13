@@ -9,6 +9,9 @@
         <p class="card-text">  StudentID : {{account?.studentId}}</p>
         <p class="card-text">  Date of birth: {{account?.dateofbirth}}</p>
         <p class="card-text">  Random text: {{account?.randomText}}</p>
+        <div *ngIf="isDisapproved">
+          <p class="card-text">  Reason to rejected: {{reasonText}}</p>
+        </div>
       </div>
 
         <!--<vg-player>
@@ -16,8 +19,16 @@
             <source src="https://firebasestorage.googleapis.com/v0/b/facialauthentication-camt.appspot.com/o/ZqWqvktTcOVmFV7N5dMswhc3tGH3%2F2018-22-10.mp4?alt=media&token=b810556b-40a6-4136-8723-e83a10d8b693" type="video/mp4">
           </video>
         </vg-player>-->
-      <div class="col-md-4 col-sm-4">
-        <img src='{{showImageUrl}}'>
+      <div class="col-md-8 col-sm-8">
+        <!--<img src='{{showImageUrl}}'>-->
+        <slideshow
+                   [minHeight]="'525px'"
+                   [autoPlay]="true"
+                   [showArrows]="true"
+                   [imageUrls]="imageSources"
+                   [lazyLoad]="imageSources?.length > 1"
+                   [autoPlayWaitForLazyLoad]="true">
+        </slideshow>
       </div>
 
     </div>

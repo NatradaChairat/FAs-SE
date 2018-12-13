@@ -4,6 +4,7 @@ import {AuthenticationService} from '../service/authentication.service';
 import {FirebaseService} from '../service/firebase.service';
 import {formatDate} from "@angular/common";
 import {Router} from "@angular/router";
+import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
   selector: 'app-face-login',
@@ -17,11 +18,12 @@ export class FaceLoginComponent implements OnInit {
 
   today = new Date();
 
-  public confidence = 0;
-  public studentId = '';
+  confidence = 0;
+  studentId = '';
 
   constructor(private firebaseService: FirebaseService,
               private authenticationService: AuthenticationService,
+              private intermediaryService: IntermediaryService,
               private router: Router) {
   }
 
@@ -42,7 +44,7 @@ export class FaceLoginComponent implements OnInit {
               .then(([name, confidence]) => {
                 this.confidence = confidence;
                 this.studentId = name;
-                console.log(name, confidence);
+                this.intermediaryService.setConfidence(this.confidence);
                 if (this.confidence >= 0.7) {
                   this.router.navigate(['/faceLoginSuccess']);
                 } else {

@@ -26,7 +26,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Autowired
     public void setDatabaseReference (FirebaseConfig firebaseConfig){
-        this.databaseReference = firebaseConfig.firebaseDatabase();
+        //this.databaseReference = firebaseConfig.firebaseDatabase();
     }
 
     @Override

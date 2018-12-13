@@ -7,7 +7,6 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.UserImportHash;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
@@ -187,6 +186,7 @@ public class AccountDaoImpl implements AccountDao {
             account.setDateofbirth((String) document.get("dateofbirth"));
             account.setStudentId((String) document.get("studentId"));
             account.setRandomText((String) document.get("randomtext"));
+            account.setStatus((String) document.get("status"));
             List<String> groupImage = (List<String>) document.get("images");
             account.setImages(groupImage);
 //            ApiFuture<QuerySnapshot> futureImage = document.getReference().collection("images").get();
@@ -245,6 +245,22 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
+    public List<Account> getAccountByType(String type) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("type", type).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<Account> accounts = new ArrayList<>();
+        for (DocumentSnapshot document : documents) {
+            Account account = new Account();
+            account.setUid((String) document.get("uid"));
+            account.setFirstname((String) document.get("firstname"));
+            accounts.add(account);
+            LOGGER.info("GET Account " + account);
+        }
+        return accounts;
+    }
+
+    @Override
     public List<Account> getAccountByStatus(String status) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("status", status).get();
@@ -253,14 +269,79 @@ public class AccountDaoImpl implements AccountDao {
         for (DocumentSnapshot document : documents) {
             Account account = new Account();
             AESService aesService = new AESServiceImpl();
-            String encodeUID = aesService.encrypt((String) document.get("uid"));
-            account.setUid(encodeUID);
+            //String encodeUID = aesService.encrypt((String) document.get("uid"));
+            account.setUid((String) document.get("uid"));
             account.setFirstname((String) document.get("firstname"));
-            //account.setLastname((String)document.get("lastname"));
+            account.setLastname((String)document.get("lastname"));
             //account.setDateofbirth((String) document.get("dateofbirth"));
             accounts.add(account);
             LOGGER.info("GET Account " + account);
         }
         return accounts;
     }
+
+    @Override
+    public Boolean saveReasonByUID(String reason, String uid) throws ExecutionException, InterruptedException {
+
+        Firestore db = FirestoreClient.getFirestore();
+
+        ApiFuture<QuerySnapshot> future = db.collection("reason").whereEqualTo("uid", uid).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        LOGGER.debug("REASON |Check reason document "+documents.isEmpty());
+        Map<String, Object> accountTableMap = new HashMap<>();
+        accountTableMap.put("reason", reason);
+        if (documents.isEmpty()){
+            accountTableMap.put("uid", uid);
+            ApiFuture<DocumentReference> documentReferenceApiFuture = db.collection("reason").add(accountTableMap);
+            LOGGER.info("REASON |UpdateTime Resaon " + documentReferenceApiFuture.get().getId());
+            LOGGER.info("REASON |Status Result Reason" + documentReferenceApiFuture.isDone());
+            if (documentReferenceApiFuture.isDone()) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            for (DocumentSnapshot document : documents) {
+                ApiFuture<WriteResult> writeResultApiFuture = db.collection("reason").document(document.getId()).update(accountTableMap);
+                LOGGER.info("REASON |UpdateTime " + writeResultApiFuture.get().getUpdateTime());
+                if (writeResultApiFuture.isDone()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String getReasonByUID(String uid) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection("reason").whereEqualTo("uid", uid).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot document : documents) {
+            return (String) document.get("reason");
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean saveImage(Account account) throws ExecutionException, InterruptedException {
+        String s = "";
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("uid", account.getUid()).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot document : documents) {
+
+            LOGGER.info(document.getId());
+            ApiFuture<WriteResult> referenceApiFuture = db.collection("account").document(document.getId()).update("images",
+                    FieldValue.arrayUnion(account.getImages().get(0)));
+
+            LOGGER.info(String.valueOf(referenceApiFuture.get()));
+            return true;
+        }
+
+        return null;
+    }
+
 }

@@ -5,7 +5,6 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
 import {MatDialog} from "@angular/material";
 import {DialogComponent} from "../dialog/dialog.component";
-import {InforegistrationComponent} from "../inforegistration/inforegistration.component";
 import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
@@ -47,7 +46,7 @@ export class PhonenoVerificationComponent implements OnInit {
 
     this.account = this.intermediaryService.getAccount();
 
-    this.accountDataServerService.getVerifyPhonenumberCode(this.refParam, this.account.phonenumber)
+    this.accountDataServerService.getVerifyPhonenumberCode(this.account.phonenumber)
       .subscribe((data: any) => {
           console.log(data);
           this.account.phonenumber = data.body.phonenumber.toString();
@@ -73,7 +72,7 @@ export class PhonenoVerificationComponent implements OnInit {
   onSubmit(otp: string) {
     console.log('show isTimeout ' + this.timeout);
     if (this.otp === otp && !this.timeout) {
-      console.log(this.account)
+      console.log(this.account);
       this.accountDataServerService.sendPersonalAccount(this.account, this.refParam)
         .subscribe(res => {
           if (res) {
@@ -83,24 +82,29 @@ export class PhonenoVerificationComponent implements OnInit {
       this.accountDataServerService.updateStatusByVerifyPhone(this.refParam)
         .subscribe((res: any) => {
           if (res) {
-            this.type = "Success!";
-            this.title = "Registration are success!"
-            this.detail = "The system will redirect to homepage."
+
+            this.accountDataServerService.sendSuccessRegisterProcessToEmail(this.refParam)
+              .subscribe((sendingRes: any) => {
+                console.log(sendingRes);
+              });
+            this.type = 'Success!';
+            this.title = 'Registration are success!';
+            this.detail = 'The system will redirect to homepage.';
             this.openDialog();
             setTimeout(() => {
               this.dialog.closeAll();
-            }, 3000);
+            }, 1000);
             setTimeout(() => {
-              this.router.navigate(['/homepage']);
-            }, 3500);
+              this.router.navigate(['/submitSuccess']);
+            }, 3000);
           } else {
-            console.log("update status " + false);
+            console.log('update status ' + false);
           }
         });
     } else {
-      this.type = "Error";
-      this.title = "Verification code is invalid."
-      this.detail = "The system will sending new one-time password to " + this.account.phonenumber + " again."
+      this.type = 'Error';
+      this.title = 'Verification code is invalid.';
+      this.detail = 'The system will sending new one-time password to ' + this.account.phonenumber + ' again.';
       this.openDialog();
       setTimeout(() => {
         this.dialog.closeAll();

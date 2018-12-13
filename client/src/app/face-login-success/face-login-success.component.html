@@ -6,11 +6,15 @@
     <div class="col-6 justify-content-center">
 
       <!--using NgModel instead of {{}}-->
-      <div class="row justify-content-center"><b>Success rate: {{faceLoginComponent.confidence}}% {{faceLoginComponent.studentId}}</b></div>
-      <!--For success rate-->
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="{{faceLoginComponent.confidence}}" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
+      <div class="row justify-content-center"><b>Success rate: {{showConfidence}}% {{showStudentId}}</b></div>
+
+      <mat-progress-bar
+        class="example-margin"
+        [color]="color"
+        [mode]="mode"
+        [value]="value"
+        [bufferValue]="bufferValue">
+      </mat-progress-bar>
     </div>
   </div>
 </div>

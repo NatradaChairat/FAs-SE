@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Account} from "../model/Account.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {AccountDataServerService} from "../service/account-data-server.service";
@@ -24,6 +24,11 @@ export class AccountDetailComponent implements OnInit {
 
   showImageUrl: string;
 
+  isDisapproved = false;
+  reasonText: string;
+
+  imageSources;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private accountDataServerService: AccountDataServerService,
@@ -34,14 +39,32 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.refParam = params['key'];
+      console.log(this.refParam);
       this.accountDataServerService.getAccountByParam(params['key'])
         .subscribe((res: any) => {
             this.account = res;
             const images = this.account.images;
             this.showImageUrl = images[0];
-            console.log(this.showImageUrl);
+            this.imageSources = images;
+            console.log(this.account.status)
+            if (this.account.status === 'disapproved') {
+              this.isDisapproved = true;
+              this.accountDataServerService.getReasonByParam(this.refParam)
+                .subscribe((response: any) => {
+                  const reasonRes: number = response;
+                  console.log(reasonRes)
+                  if (reasonRes === 1) {
+                    this.reasonText = 'Face is blur, not matched with Student card';
+                  } else if (reasonRes === 2) {
+                    this.reasonText = 'Student ID not matched with Student card';
+                  } else if (reasonRes === 3) {
+                    this.reasonText = 'No Random text';
+                  }
+                  console.log(this.reasonText);
+                });
+            }
           }, err => {
-            //this.reSendEmail(params['key']);
+            // this.reSendEmail(params['key']);
           }
         );
     });
@@ -60,8 +83,11 @@ export class AccountDetailComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+      const reason = res.reason;
+      console.log(reason);
+      this.updateRejectStatus(reason);
     });
 
   }
@@ -72,7 +98,7 @@ export class AccountDetailComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res);
         const personIdRes = res.personId;
-        const length = this.account.images.length
+        const length = this.account.images.length;
         this.faceRecognitionService.addFaceInLargePersonGroup(personIdRes, this.account.images[length - 1])
           .subscribe(persistedFaceId => {
             console.log(persistedFaceId);
@@ -81,8 +107,9 @@ export class AccountDetailComponent implements OnInit {
       });
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
+        console.log(res);
         if (res) {
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved')
+          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'approved', '0')
             .subscribe((result: any) => {
               if (result) {
                 this.router.navigate(['/staffDashboard']);
@@ -104,16 +131,22 @@ export class AccountDetailComponent implements OnInit {
     this.isWarningMessage = false;
     this.isOptionMessage = true;
     this.openDialog();
+  }
 
+  updateRejectStatus(reason: string) {
     this.account.status = 'disapproved';
     this.accountDataServerService.updateStatus(this.account)
       .subscribe((res: any) => {
         if (res) {
-          this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'disapproved')
-            .subscribe((result: any) => {
-              if (result) {
-                this.router.navigate(['/staffDashboard']);
-              }
+          this.accountDataServerService.saveReasonByParam(reason, this.refParam)
+            .subscribe((response: any) => {
+              console.log(response);
+              this.accountDataServerService.sendResultAuthenProcessToEmail(this.refParam, 'disapproved', reason)
+                .subscribe((result: any) => {
+                  if (result) {
+                    this.router.navigate(['/staffDashboard']);
+                  }
+                });
             });
         } else {
           this.reject();

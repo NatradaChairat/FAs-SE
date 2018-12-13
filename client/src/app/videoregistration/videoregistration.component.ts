@@ -29,10 +29,8 @@ export class VideoregistrationComponent implements OnInit, AfterViewInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private faceRecognitionService: FaceRecognitionService,
               private firebaseService: FirebaseService,
-              private intermediaryService: IntermediaryService,
-              private accountDataServerService: AccountDataServerService) {
+              private intermediaryService: IntermediaryService) {
   }
 
   ngOnInit() {

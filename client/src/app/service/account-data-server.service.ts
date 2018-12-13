@@ -9,7 +9,7 @@ const httpOptions = {
     {
       'Content-Type': 'application/json ; charset=utf-8; application/x-www-form-urlencoded ; text/plain',
       'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
       'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS, REQUEST",
       'Access-Control-Allow-Headers': "Origin, Content-Type, X-Auth-Token",
       'responseType': "text",
@@ -42,6 +42,10 @@ export class AccountDataServerService {
   }
 
   getAccountByParam(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/get/` + param, httpOptions);
+  }
+
+  getAccountByEncodeParam(param: string) {
     return this.http.get(`${this.baseUrl}` + `/get/` + encodeURIComponent(param), httpOptions);
   }
 
@@ -53,8 +57,13 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param), httpOptions);
   }
 
-  sendResultAuthenProcessToEmail(param: string, status: string) {
-    return this.http.get(`${this.baseUrl}` + `/send/email/` + encodeURIComponent(param) + `/` + encodeURIComponent(status), httpOptions);
+  sendSuccessRegisterProcessToEmail(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/success/` + encodeURIComponent(param), httpOptions);
+  }
+
+  sendResultAuthenProcessToEmail(param: string, status: string, reason: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/email/` +
+      encodeURIComponent(param) + `/` + encodeURIComponent(status) + `/` + reason, httpOptions);
   }
 
 
@@ -71,6 +80,10 @@ export class AccountDataServerService {
     return this.http.post(`${this.baseUrl}` + `/update/status/`, account);
   }
 
+  checkIsStaff(uid: string) {
+    return this.http.get(`${this.baseUrl}` + `/isStaff/` + uid);
+  }
+
   checkDuplicatedStudentId(studentId: string) {
     return this.http.get(`${this.baseUrl}` + `/get/studentId/` + studentId);
   }
@@ -79,8 +92,21 @@ export class AccountDataServerService {
     return this.http.get(`${this.baseUrl}` + `/get/phonenumber/` + phonenumber);
   }
 
-  getVerifyPhonenumberCode(param: string, phonenumber: string) {
-    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + encodeURIComponent(param) + `/` + phonenumber, {observe: 'response'});
+  getVerifyPhonenumberCode(phonenumber: string) {
+    return this.http.get(`${this.baseUrl}` + `/send/phonenumber/` + phonenumber, {observe: 'response'});
+  }
+
+  saveReasonByParam(reason: string, param: string) {
+    return this.http.post(`${this.baseUrl}` + `/reason/` + encodeURIComponent(param) + `/` + reason, httpOptions);
+  }
+
+  getReasonByParam(param: string) {
+    return this.http.get(`${this.baseUrl}` + `/reason/` + encodeURIComponent(param));
+  }
+
+  uploadImage(account: Account) {
+    console.log(account);
+    return this.http.post(`${this.baseUrl}` + `/upload/image`, account);
   }
 
 
