@@ -117,13 +117,11 @@ public class EmailServiceImpl implements EmailService {
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
             return true;
-        } catch (AddressException ae) {
+        } catch (Exception ae) {
             ae.printStackTrace();
             return false;
-        } catch (MessagingException me) {
-            me.printStackTrace();
-            return false;
         }
+
     }
 
 

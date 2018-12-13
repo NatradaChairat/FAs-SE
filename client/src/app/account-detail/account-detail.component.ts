@@ -27,6 +27,8 @@ export class AccountDetailComponent implements OnInit {
   isDisapproved = false;
   reasonText: string;
 
+  isProcessing = false;
+
   imageSources;
 
   constructor(private router: Router,
@@ -93,7 +95,13 @@ export class AccountDetailComponent implements OnInit {
   }
 
   accept() {
+    this.isProcessing = true;
     this.account.status = 'approved';
+    console.log(this.account);
+    this.faceRecognitionService.getPersonListInLargePersonGroup().
+      subscribe((getLIstResponse: any) => {
+        console.log(getLIstResponse);
+    });
     this.faceRecognitionService.createPersonInLargePersonGroup(this.account.studentId)
       .subscribe((res: any) => {
         console.log(res);
@@ -125,6 +133,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   reject() {
+    this.isProcessing = true;
     this.type = 'Selete one';
     this.title = 'What are the reason to reject this account?'
     this.detail = 'test';

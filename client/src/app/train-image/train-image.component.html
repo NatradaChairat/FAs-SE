@@ -5,7 +5,7 @@
       <div>
         <app-webcam></app-webcam>
         <br/>
-        <button class="actionBtn" (click)="train();">Train Face</button>
+        <button class="actionBtn" [disabled]="isProcessing" (click)="train();">Train Face</button>
         <br/>
       </div>
 

@@ -21,7 +21,7 @@ import {
 import {DialogComponent} from './dialog/dialog.component';
 import {InforegistrationComponent} from './inforegistration/inforegistration.component';
 import {WebcamComponent} from './webcam/webcam.component';
-import {VideoregistrationComponent} from './videoregistration/videoregistration.component';
+import {FaceregistrationComponent} from './faceregistration/faceregistration.component';
 import {PhonenoVerificationComponent} from './phoneno-verification/phoneno-verification.component';
 import {FaceLoginComponent} from './face-login/face-login.component';
 import {EmailLoginComponent} from './email-login/email-login.component';
@@ -60,7 +60,7 @@ import {SlideshowModule} from "ng-simple-slideshow";
     DialogComponent,
     InforegistrationComponent,
     WebcamComponent,
-    VideoregistrationComponent,
+    FaceregistrationComponent,
     PhonenoVerificationComponent,
     FaceLoginComponent,
     EmailLoginComponent,

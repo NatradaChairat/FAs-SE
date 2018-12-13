@@ -38,7 +38,6 @@ export class InforegistrationComponent implements OnInit {
     this.route.params.subscribe((param: Params) => {
       this.refParam = (param['param']);
     })
-    console.log(this.refParam);
   }
 
   openDialog(): void {
@@ -60,42 +59,6 @@ export class InforegistrationComponent implements OnInit {
   }
 
   onSubmit(account: Account) {
-    /*if(this.checkDuplicatedStudentId(account)){
-      console.log("Duplicated StudentID")
-    }else{
-      if(this.checkDuplicatedPhonenumber(account)){
-        console.log("Duplicated Phonenumber")
-      }else{
-        this.accountDataServerService.sendPersonalAccount(account)
-          .subscribe((res: any)=>{
-            console.log("sendPersonalAccount "+res);
-            if(res){
-              setTimeout(() => {
-                this.router.navigate(['/videoregidtration/']);
-              }, 1000);
-            }else{console.log("sendPersonalAccount "+false);}
-          });
-      }
-    }*/
-
-    /*this.checkDuplicatedStudentId(account)
-      .then( result=> {
-        if(result){
-          console.log("studentId duplicated");
-        }else{
-          this.checkDuplicatedPhonenumber(account)
-            .then( result2 => {
-              if(result2){
-                console.log("Phonenumber duplicated");
-              }else{
-                setTimeout(() => {
-                  this.router.navigate(['/videoregidtration/']);
-                }, 1000);
-              }
-            });
-        }
-      });*/
-
     console.log(account.dateofbirth);
     this.checkDuplicatedStudentId(account);
 
@@ -105,9 +68,9 @@ export class InforegistrationComponent implements OnInit {
     this.accountDataServerService.checkDuplicatedStudentId(account.studentId)
       .subscribe(data => {
         if (data) {
-          this.type = "Error";
-          this.title = "Can not submit the form."
-          this.detail = "Student ID is duplicated."
+          this.type = 'Error';
+          this.title = 'Can not submit the form.';
+          this.detail = 'StudentId is duplicated.';
           this.isWarningMessage = true;
           this.isOptionMessage = false;
           this.openDialog();
@@ -119,87 +82,23 @@ export class InforegistrationComponent implements OnInit {
   }
 
   checkDuplicatedPhonenumber(account: Account): any {
-    //save account to @Input
     this.accountDataServerService.checkDuplicatedPhonenumber(account.phonenumber)
       .subscribe(data => {
         console.log(data)
         if (data) {
-          this.type = "Error";
-          this.title = "Can not submit the form."
-          this.detail = "Phone number is duplicated."
+          this.type = 'Error';
+          this.title = 'Can not submit the form.';
+          this.detail = 'Phone number is duplicated.';
           this.isWarningMessage = true;
           this.isOptionMessage = false;
           this.openDialog();
         } else {
           this.intermediaryService.setAccount(account);
           this.router.navigate(['/videoRegistration/' + this.refParam]);
-          // this.accountDataServerService.sendPersonalAccount(account, this.refParam)
-          //   .subscribe(res => {
-          //     if (res) {
-          //       setTimeout(() => {
-          //         this.router.navigate(['/videoRegistration/' + this.refParam]);
-          //       }, 1000);
-          //     }
-          //   }, error1 => {
-          //     this.type = "Error";
-          //     this.title = "Can not submit the form."
-          //     this.detail = "Please try submit again."
-          //     this.isWarningMessage = true;
-          //     this.isOptionMessage = false;
-          //     this.openDialog();
-          //   });
         }
       });
   }
 
-  /*onSubmit(account:Account){
-    console.log(account);
-    account.accountId = this.accountId;
-    //checkStudentIdIsRepeat
-    this.accountDataServerService.getAccountByStudentId(account.studentId)
-      .subscribe(data=>{
-        console.log(data);
-        if(data==null){
-          this.checkPhonenumberIsRepeat(account);
-        }else{
-          console.log("Repeated data: StudentId");
-        }
-      });
-  }
-
-  checkPhonenumberIsRepeat(account: Account){
-    this.accountDataServerService.getAccountByPhonenumber(account.phonenumber)
-      .subscribe(data=>{
-        console.log(data);
-        if(data==null){
-          this.accountDataServerService.sendPersonalAccount(account)
-            .subscribe(data => {
-              console.log(data);
-              if(data!=null){
-                console.log("Return data");
-                console.log(data);
-              }else{
-                console.log("Null");
-                this.router.navigate(['/videoregistration/'+this.account.accountId]);
-              }
-            });
-        }else{
-          console.log("Repeated data: phonenumber");
-        }
-      });
-  }*/
-
-  /*checkStudentIdIsRepeat(account: Account){
-    this.accountDataServerService.getAccountByStudentId(account.studentId)
-      .subscribe(data=>{
-        console.log(data);
-        if(data==null){
-          this.checkPhonenumberIsRepeat(account);
-        }else{
-          console.log("Repeated data: StudentId");
-        }
-      });
-  }*/
 
 
 }

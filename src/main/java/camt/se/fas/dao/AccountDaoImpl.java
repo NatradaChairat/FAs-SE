@@ -187,6 +187,7 @@ public class AccountDaoImpl implements AccountDao {
             account.setStudentId((String) document.get("studentId"));
             account.setRandomText((String) document.get("randomtext"));
             account.setStatus((String) document.get("status"));
+            account.setPhonenumber((String) document.get("phonenumber"));
             List<String> groupImage = (List<String>) document.get("images");
             account.setImages(groupImage);
 //            ApiFuture<QuerySnapshot> futureImage = document.getReference().collection("images").get();
@@ -254,6 +255,7 @@ public class AccountDaoImpl implements AccountDao {
             Account account = new Account();
             account.setUid((String) document.get("uid"));
             account.setFirstname((String) document.get("firstname"));
+            account.setLastname((String) document.get("lastname"));
             accounts.add(account);
             LOGGER.info("GET Account " + account);
         }
@@ -265,19 +267,27 @@ public class AccountDaoImpl implements AccountDao {
         Firestore db = FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = db.collection("account").whereEqualTo("status", status).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        List<Account> accounts = new ArrayList<>();
-        for (DocumentSnapshot document : documents) {
-            Account account = new Account();
-            AESService aesService = new AESServiceImpl();
-            //String encodeUID = aesService.encrypt((String) document.get("uid"));
-            account.setUid((String) document.get("uid"));
-            account.setFirstname((String) document.get("firstname"));
-            account.setLastname((String)document.get("lastname"));
-            //account.setDateofbirth((String) document.get("dateofbirth"));
-            accounts.add(account);
-            LOGGER.info("GET Account " + account);
+        if(!documents.isEmpty()) {
+            List<Account> accounts = new ArrayList<>();
+            for (DocumentSnapshot document : documents) {
+                Account account = new Account();
+                account.setUid((String) document.get("uid"));
+                account.setFirstname((String) document.get("firstname"));
+                account.setLastname((String) document.get("lastname"));
+                account.setDateofbirth((String) document.get("dateofbirth"));
+                account.setStudentId((String) document.get("studentId"));
+                account.setRandomText((String) document.get("randomtext"));
+                account.setStatus((String) document.get("status"));
+                account.setPhonenumber((String) document.get("phonenumber"));
+                List<String> groupImage = (List<String>) document.get("images");
+                account.setImages(groupImage);
+                accounts.add(account);
+                LOGGER.info("GET Account " + account);
+            }
+            return accounts;
+        }else{
+            return null;
         }
-        return accounts;
     }
 
     @Override

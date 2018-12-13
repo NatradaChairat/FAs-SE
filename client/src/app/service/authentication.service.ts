@@ -7,7 +7,6 @@ import {FaceRecognitionService} from "./face-recognition.service";
 
 @Injectable()
 export class AuthenticationService {
-  private authUrl = 'http://localhost:8080/auth';
 
   detect: any = {}
 

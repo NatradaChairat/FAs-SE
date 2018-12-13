@@ -12,12 +12,12 @@ import {IntermediaryService} from "../service/intermediary.service";
 
 @Component({
   selector: 'app-videoregistration',
-  templateUrl: './videoregistration.component.html',
-  styleUrls: ['./videoregistration.component.css']
+  templateUrl: './faceregistration.component.html',
+  styleUrls: ['./faceregistration.component.css']
 })
 
 
-export class VideoregistrationComponent implements OnInit, AfterViewInit {
+export class FaceregistrationComponent implements OnInit, AfterViewInit {
 
   account: Account;
   randomtext: string;

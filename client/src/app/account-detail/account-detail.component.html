@@ -34,8 +34,8 @@
     </div>
     <!--</div>-->
     <div class="col-md-12 card-body row">
-      <button type="button" class="btn btn-primary mx-2" (click)="accept()"  >Accept</button>
-      <button type="button" class="btn btn-primary mx-2" (click)="reject()"  >Reject</button>
+      <button type="button" class="btn btn-primary mx-2" [disabled]="isProcessing" (click)="accept()"  >Accept</button>
+      <button type="button" class="btn btn-primary mx-2" [disabled]="isProcessing" (click)="reject()"  >Reject</button>
     </div>
   </div>
 </div>

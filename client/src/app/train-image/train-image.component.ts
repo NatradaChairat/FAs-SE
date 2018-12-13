@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewChild, ɵConsole, ɵGetterFn} from '@angular/core';
-import {IntermediaryService} from "../service/intermediary.service";
-import {WebcamComponent} from "../webcam/webcam.component";
-import {formatDate} from "@angular/common";
-import {FirebaseService} from "../service/firebase.service";
-import {FaceRecognitionService} from "../service/face-recognition.service";
-import {AccountDataServerService} from "../service/account-data-server.service";
-import {Account} from "../model/Account.model";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {IntermediaryService} from '../service/intermediary.service';
+import {WebcamComponent} from '../webcam/webcam.component';
+import {formatDate} from '@angular/common';
+import {FirebaseService} from '../service/firebase.service';
+import {AccountDataServerService} from '../service/account-data-server.service';
+import {Account} from '../model/Account.model';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 @Component({
   selector: 'app-train-image',
@@ -21,12 +20,13 @@ export class TrainImageComponent implements OnInit {
   account: any = {};
   refParam = '';
 
+  isProcessing = false;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private intermediaryService: IntermediaryService,
               private firebaseService: FirebaseService,
-              private accountDataServerService: AccountDataServerService,
-              private faceRecognitionService: FaceRecognitionService) {
+              private accountDataServerService: AccountDataServerService) {
   }
 
   ngOnInit() {
@@ -39,30 +39,31 @@ export class TrainImageComponent implements OnInit {
   }
 
   train() {
+    this.isProcessing = true;
     console.log('train');
-    // this.account.uid = this.intermediaryService.getUid();
     this.account.uid = this.refParam;
     console.log(this.account);
     let imageUrl: string;
-    const fullPath = 'faceTrain/' + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')
+    const fullPath = 'faceTrain/' + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700');
     this.firebaseService.saveImageToStorage(this.webCam.webcamImage.imageAsDataUrl, fullPath)
       .then(res => {
-        console.log(res)
+        console.log(res);
         this.firebaseService.getImageUrl(fullPath)
           .then(response => {
-            console.log(response)
+            console.log(response);
             imageUrl = response;
             this.account.images.push(imageUrl);
             this.accountDataServerService.getAccountByParam(this.refParam)
               .subscribe((getAccountRes: Account) => {
+                console.log('GetAccount Res: ');
                 console.log(getAccountRes);
-                if (getAccountRes.status === 'disapproved') {
+                if (getAccountRes.status !== 'disapproved') {
                   console.log('isRejectedAccount');
                   this.accountDataServerService.uploadImage(this.account)
                     .subscribe(uploadResponse => {
                       console.log(uploadResponse);
                       if (uploadResponse) {
-                        this.router.navigate(['/homepage']);
+                        this.router.navigate(['/emailLoginSuccess']);
                       }
                     });
                 } else {
@@ -75,18 +76,14 @@ export class TrainImageComponent implements OnInit {
                         .subscribe(uploadResponse => {
                           console.log(uploadResponse);
                           if (uploadResponse) {
-                            this.router.navigate(['/emailLoginSuccess']);
+                            if (window.confirm('Waiting for authentication from staff.')) {
+                              this.router.navigate(['/homepage']);
+                            }
                           }
                         });
                     });
                 }
               });
-
-
-            // this.faceRecognitionService.addFaceInLargePersonGroup('', imageUrl)
-            //   .subscribe(apiRes => {
-            //   });
-
           });
       });
   }

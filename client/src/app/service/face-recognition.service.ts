@@ -86,6 +86,16 @@ export class FaceRecognitionService {
     );
   }
 
+  getPersonListInLargePersonGroup() {
+    const headers = this.getHeaders(this.subscriptionKey);
+    return this.httpClient.get<FaceRecognitionResponse>(
+      environment.faceAPIEndPoint + 'largepersongroups/sefasproject/persons?top=1000',
+      {
+        headers
+      }
+    );
+  }
+
   // return personId, persistedFaceIds, name, userData
   getPersonInLargePersonGroup(personId: string) {
     const headers = this.getHeaders(this.subscriptionKey);

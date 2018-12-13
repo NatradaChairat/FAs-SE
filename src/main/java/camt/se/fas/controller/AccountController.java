@@ -53,6 +53,7 @@ public class AccountController {
 
     @PostMapping("/account/create")//
     public ResponseEntity uploadAccount(@RequestBody Account account) {
+        LOGGER.info("UPLOAD ACCOUNT___________________________");
         try {
             String uid = accountService.registerAccount(account);
             /*AES aes = new AES();*/
@@ -66,7 +67,7 @@ public class AccountController {
 
     @PostMapping("/account/update")//
     public ResponseEntity updateAccount(@RequestBody Account account/*,@PathVariable("param")String encryptUID*/) {
-        LOGGER.info("Update ");
+        LOGGER.info("UPDATE ACCOUNT___________________________");
         LOGGER.info(account.toString());
         String encryptUID = account.getUid();
         try {
@@ -90,6 +91,7 @@ public class AccountController {
 
     @PostMapping("/account/upload/image")
     public ResponseEntity uploadImage(@RequestBody Account account) {
+        LOGGER.info("UPLOAD IMAGE___________________________");
         LOGGER.info(account.toString());
         try {
             String encryptUID = URLEncoder.encode(account.getUid(), "UTF-8");
@@ -119,6 +121,7 @@ public class AccountController {
 
     @GetMapping("account/send/phonenumber/{phonenumber}")
     public ResponseEntity sendPhonenumber(@PathVariable("phonenumber") String phonenumber) {
+        LOGGER.info("SEND PHONENUMBER___________________________");
         int otp = ThreadLocalRandom.current().nextInt(100000, 900000);
         String refCode = RandomStringUtils.randomAlphabetic(6);
         try {
@@ -137,6 +140,7 @@ public class AccountController {
 
     @GetMapping("account/send/email/{param}")
     public ResponseEntity sendEmail(@PathVariable("param") String param) {
+        LOGGER.info("SEND EMAIL___________________________");
         try {
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
@@ -156,6 +160,7 @@ public class AccountController {
 
     @GetMapping("account/send/email/success/{param}")
     public ResponseEntity sendSuccessEmail(@PathVariable("param") String param) {
+        LOGGER.info("SEND SUCCESS EMAIL___________________________");
         try {
             String uid = aes.decrypt(param);
             LOGGER.info("UID " + uid);
@@ -177,10 +182,9 @@ public class AccountController {
     public ResponseEntity sendResultAuthenProcessToEmail(@PathVariable("param") String param,
                                                          @PathVariable("result") String result,
                                                          @PathVariable("reason") String reason) {
+        LOGGER.info("SEND RESULT AUTHEN PROCESS___________________________");
         try {
             /*AES aes = new AES();*/
-            String uid = aes.decrypt(param);
-            LOGGER.info("UID " + uid);
             String email = accountService.getEmailByUID(param);
             LOGGER.info("Email " + email);
             LOGGER.info("SEND MAIL| "+reason);
@@ -198,6 +202,7 @@ public class AccountController {
 
     @GetMapping("account/update/status/{param}")
     public ResponseEntity updateStatusByVerifyPhonenumber(@PathVariable("param") String param) {
+        LOGGER.info("UPDATE STATUS BY VErify PHONE___________________________");
         try {
 
             LOGGER.info("Original Key: " + param);
@@ -221,6 +226,7 @@ public class AccountController {
 
     @RequestMapping(value = "account/update/status", method = RequestMethod.GET)
     public ResponseEntity updateStatusByVerifyEmail(@RequestParam Map<String, String> mapIdTime) {
+        LOGGER.info("UPDATE STATUS BY VErify EMAIL___________________________");
         String id = mapIdTime.get("id");
         String time = mapIdTime.get("time");
         try {
@@ -258,6 +264,7 @@ public class AccountController {
 
     @PostMapping("account/update/status/")
     public ResponseEntity updateStatus(@RequestBody Account account) {
+        LOGGER.info("UPDATE STATUS___________________________");
         try {
             boolean result = accountService.updateStatus(account);
             if (account.getStatus().equalsIgnoreCase("approved")) {
@@ -273,6 +280,7 @@ public class AccountController {
 
     @GetMapping("account/isStaff/{uid}")
     public ResponseEntity checkIsStaff(@PathVariable("uid") String uid) {
+        LOGGER.info("CHECK IsSTAFF___________________________");
         try {
             boolean result = accountService.checkIsStaff(uid);
             LOGGER.info(uid);
@@ -289,6 +297,7 @@ public class AccountController {
 
     @GetMapping("account/get/phonenumber/{phonenumber}")
     public ResponseEntity checkDuplicatedPhonenumber(@PathVariable("phonenumber") String phonenumber) {
+        LOGGER.info("CHECK DUP PhoneNUMBER___________________________");
         try {
             boolean result = accountService.checkDuplicatedPhonenumber(phonenumber);
             if (result) {
@@ -304,6 +313,7 @@ public class AccountController {
 
     @GetMapping("account/get/studentId/{studentId}")
     public ResponseEntity checkDuplicatedStudentId(@PathVariable("studentId") String studentId) {
+        LOGGER.info("CHECK DUP STudenTID___________________________");
         try {
             boolean result = accountService.checkDuplicatedStudentId(studentId);
             if (result) {
@@ -319,6 +329,7 @@ public class AccountController {
 
     @GetMapping("account/get/account/{status}")
     public ResponseEntity getAccountByStatus(@PathVariable("status") String status) {
+        LOGGER.info("GETAccount BY STATUS___________________________");
         try {
             List<Account> accounts = accountService.getAccountByStatus(status);
             return ResponseEntity.ok(accounts);
@@ -331,6 +342,7 @@ public class AccountController {
 
     @GetMapping("account/get/{uid}")
     public ResponseEntity getAccountByUID(@PathVariable("uid") String uid) {
+        LOGGER.info("GETAccount BY UID___________________________");
         try {
 //            LOGGER.info("Encoded Key: " + URLEncoder.encode(id, "UTF-8"));
 //            String decodeUID = aes.decrypt(URLEncoder.encode(id, "UTF-8"));
@@ -347,24 +359,13 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account/get/randomtext/{id}")
-    public ResponseEntity getRandomTextByUid(@PathVariable("id") String id) {
-        try {
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-    }
-
     @PostMapping("account/reason/{id}/{reason}")
     public ResponseEntity uploadReason(@PathVariable("id") String id,
                                        @PathVariable("reason") String reason){
+        LOGGER.info("UPLOAD REason___________________________");
         try{
             LOGGER.info("Encoded Key: " + id);
-            String decodeUID = aes.decrypt(id);
-            LOGGER.info("Decoded Key: " + decodeUID);
-            boolean result = accountService.saveReasonByUID(reason, decodeUID);
+            boolean result = accountService.saveReasonByUID(reason, id);
             if(result){
                 return ResponseEntity.ok(true);
             }else {
@@ -378,6 +379,7 @@ public class AccountController {
 
     @GetMapping("account/reason/{id}")
     public ResponseEntity getReason(@PathVariable("id") String id){
+        LOGGER.info("GET REason___________________________");
         try{
             LOGGER.info("Encoded Key: " + id);
             String decodeUID = aes.decrypt(id);
