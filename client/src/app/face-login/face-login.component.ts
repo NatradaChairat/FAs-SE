@@ -35,7 +35,7 @@ export class FaceLoginComponent implements OnInit {
   }
 
   login() {
-    this.isProcessing = true;
+
     let imageUrl: string;
     const fullPath = 'faceLogin/' + this.webCam.deviceId + formatDate(this.today, 'ddMMyyhhmm', 'en-US', '+0700')
     this.firebaseService.saveImageToStorage(this.webCam.webcamImage.imageAsDataUrl, fullPath)

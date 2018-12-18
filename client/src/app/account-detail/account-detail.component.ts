@@ -200,8 +200,6 @@ export class AccountDetailComponent implements OnInit {
               console.log('LISTINGROUP contain true ' + personId);
               this.oldPersonId = personId;
               resolve(true);
-            } else {
-              resolve(false);
             }
           }
         });
