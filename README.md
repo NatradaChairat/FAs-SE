@@ -9,10 +9,6 @@ running well on - node version 8.12
 - install Angular CLI
 - install AngularFire
     
-To running python script 
-- install python
-- python -mpip install -U matplotlib
-- python -mpip install -U pip
-- pip install cognitive_face
-- pip install -U numpy
-- pip install Pillow
+    
+Thank you 
+- ngx-webcam https://github.com/basst314/ngx-webcam-demo
